@@ -1,4 +1,4 @@
-#+TITLE: #+title: hello
+#+TITLE: hello
 #+author: alienzj
 #+email: alienchuj@gmail.com
 #+date: <2020-08-01 02:44>
