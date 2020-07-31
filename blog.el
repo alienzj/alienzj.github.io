@@ -274,7 +274,7 @@ followed by the HTML code for comments."
       (concat
        "Here are some of my latest thoughts..."
        " badge:Made_with|Lisp such as doc:thread-first and doc:loop (•̀ᴗ•́)و"
-       " tweet:https://alhassy.github.io/"))
+       " tweet:https://alienzj.github.io/"))
 
 (setq show-reading-time nil)
 
