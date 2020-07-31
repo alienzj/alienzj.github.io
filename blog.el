@@ -443,4 +443,4 @@ C-u C-u C-c C-b ⇒ Publish entire blog; re-rendering all blog posts
 (s-join "\n" (--map (concat "#+HTML: " it)
                     (s-split "\n" (concat
                                    org-static-blog-page-postamble
-                                   (org-static-blog-post-postamble "~/documents/doraemon/org/blog/alienzj.github.io/hello.org")))))
+                                   (org-static-blog-post-postamble "~/documents/doraemon/org/blog/alienzj.github.io/Hello.org")))))
