@@ -9,7 +9,7 @@
                                    org-static-blog-page-preamble
                                    org-static-blog-page-header))))
 
-(setq org-static-blog-publish-title "Hello World")
+(setq org-static-blog-publish-title "Hello & World")
 (setq org-static-blog-publish-url "https://alienzj.github.io/")
 (setq org-static-blog-publish-directory "~/documents/doraemon/org/blog/alienzj.github.io/")
 (setq org-static-blog-posts-directory "~/documents/doraemon/org/blog/alienzj.github.io/posts/")
@@ -26,7 +26,7 @@
       (concat
        org-html-head-extra  ;; Alterd by ‘org-special-block-extras’
        (concat
-        "<meta name=\"author\" content=\"Musa Al-hassy\">
+        "<meta name=\"author\" content=\"Jie Zhu\">
     <meta name=\"referrer\" content=\"no-referrer\">"
         "<link href=\"styles/usual-org-front-matter.css\" rel=\"stylesheet\" type=\"text/css\" />"
         "<link href=\"styles/org-notes-style.css\" rel=\"stylesheet\" type=\"text/css\" />"

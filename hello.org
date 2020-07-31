@@ -2,12 +2,11 @@
 #+author: alienzj
 #+email: alienchuj@gmail.com
 #+date: <2020-08-01 02:44>
-#+filetags: emacs
+#+filetags: hello
 #+fileimage: hello_world.jpg
-#+include: ../MathJaxPreamble.org
 #+description: emacs
 
 * Abstract :ignore:
-emacs
+hello
 
 * ???
