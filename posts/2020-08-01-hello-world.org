@@ -1,0 +1,15 @@
+#+TITLE: Hello World
+#+date: <2020-08-01 15:09>
+#+filetags: Emacs Programming
+
+#+BEGIN_SRC elisp
+(message "Hello, World!")
+#+END_SRC
+
+#+BEGIN_SRC python
+print("Hello, World!")
+#+END_SRC
+
+#+BEGIN_SRC rust
+println!("Hello, Wordl!")
+#+END_SRC
