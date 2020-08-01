@@ -1,0 +1,5 @@
+#+TITLE: ZJ Blog
+
+#+BEGIN_CENTER
+[[./images/hmp.jpg]]
+#+END_CENTER

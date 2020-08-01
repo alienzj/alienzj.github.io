@@ -1,3 +1,7 @@
-#+TITLE: Hello World
+#+TITLE: Hello World, Hello Genome
 #+date: <2020-08-01 12:28>
-#+filetags: Hello World, Emacs
+#+filetags: Genome
+
+#+BEGIN_CENTER
+[[../images/hmp.jpg]]
+#+END_CENTER
