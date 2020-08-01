@@ -1,5 +1,5 @@
 #+TITLE: ZJ Blog
 
-#+html: <p align="center"> <img src="images/hmp.jpg" width=150 height=150/> </p>
+#+html: <p align="center"> <img src="images/hmp.jpg"/> </p>
 
 Blog here (•̀ᴗ•́)و
