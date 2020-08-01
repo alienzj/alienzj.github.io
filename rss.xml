@@ -8,7 +8,28 @@
 <![CDATA[ZJ Blog]]>
     </description>
     <link>https://alienzj.github.io/</link>
-    <lastBuildDate>Sat, 01 Aug 2020 14:19:46 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 01 Aug 2020 14:28:55 +0800</lastBuildDate>
+    <item>
+      <title>
+<![CDATA[#+title: About]]>
+      </title>
+      <description>
+<![CDATA[
+        <p>Hello, World.</p>
+        <p align="center"><img src="images/hello_world.jpg"></p>
+        <div class="taglist">
+            <a href="https://alienzj.github.io/tags.html">Tags</a>:
+            <a href=
+            "https://alienzj.github.io/tag-about.html">About</a>
+        </div>
+    ]]>
+      </description>
+      <category>
+<![CDATA[About]]>
+      </category>
+      <link>https://alienzj.github.io/about.html</link>
+      <pubDate>Sat, 01 Aug 2020 14:23:00 +0800</pubDate>
+    </item>
     <item>
       <title>
 <![CDATA[Genome]]>
