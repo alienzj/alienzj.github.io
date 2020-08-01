@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>
+<![CDATA[ZJ Blog]]>
+    </title>
+    <description>
+<![CDATA[ZJ Blog]]>
+    </description>
+    <link>https://alienzj.github.io/</link>
+    <lastBuildDate>Sat, 01 Aug 2020 14:19:46 +0800</lastBuildDate>
+    <item>
+      <title>
+<![CDATA[Genome]]>
+      </title>
+      <description>
+<![CDATA[
+        <div class="org-center">
+            <figure>
+                <img src="../images/hmp.jpg" alt="hmp.jpg">
+            </figure>
+        </div>
+        <div class="taglist">
+            <a href="https://alienzj.github.io/tags.html">Tags</a>:
+            <a href=
+            "https://alienzj.github.io/tag-genome.html">Genome</a>
+        </div>
+    ]]>
+      </description>
+      <category>
+<![CDATA[Genome]]>
+      </category>
+      <link>https://alienzj.github.io/2020-08-01-genome.html</link>
+      <pubDate>Sat, 01 Aug 2020 12:28:00 +0800</pubDate>
+    </item>
+  </channel>
+</rss>
