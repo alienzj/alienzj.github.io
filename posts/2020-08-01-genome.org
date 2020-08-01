@@ -1,4 +1,4 @@
-#+TITLE: Hello World, Hello Genome
+#+TITLE: Genome
 #+date: <2020-08-01 12:28>
 #+filetags: Genome
 
