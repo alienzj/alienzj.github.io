@@ -11,5 +11,5 @@ print("Hello, World!")
 #+END_SRC
 
 #+BEGIN_SRC rust
-println!("Hello, Wordl!")
+println!("Hello, World!")
 #+END_SRC
