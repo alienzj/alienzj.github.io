@@ -1,4 +1,4 @@
-#+TITLE: #+title: Algorithm
+#+TITLE: Algorithm
 #+date: <2020-09-07 21:49>
 #+filetags: Algorithm
 
