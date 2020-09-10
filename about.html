@@ -9,8 +9,14 @@
 <title>About</title>
 <meta name="author" content="Jie Zhu">
 <meta name="referrer" content="no-referrer">
-<link href= "styles/style.css" rel="stylesheet" type="text/css" />
-<link rel="icon" href="images/org_logo.png"></head>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="images/org_logo.png">
+<script src="static/katex.min.js"></script>
+<script src="static/auto-render.min.js"></script>
+<link rel="stylesheet" href="static/katex.min.css">
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
 <div id="preamble" class="status">
 <div class="header">
@@ -27,6 +33,18 @@
 I do bioinformatics research, focus on computational metagenomics, very interseted in sequence alignment and genome assembly.
 </p>
 <div class="taglist"><a href="https://alienzj.github.io/tags.html">Tags</a>: <a href="https://alienzj.github.io/tag-about.html">About</a> </div></div>
-<div id="postamble" class="status"><center> <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"> <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png"/> </a> <br /> <span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type"> <em>ZJ Org Blog</em> </span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://alienzj.github.io" property="cc:attributionName" rel="cc:attributionURL"> Jie Zhu </a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"> Creative Commons Attribution-ShareAlike 3.0 Unported License</a></center><div id="disqus_thread"></div><script>/*** RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*//*var disqus_config = function () {this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variablethis.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable};*/(function() { // DON'T EDIT BELOW THIS LINEvar d = document, s = d.createElement('script');s.src = 'https://https-alienzj-github-io.disqus.com/embed.js';s.setAttribute('data-timestamp', +new Date());(d.head || d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
+<div id="postamble" class="status"><center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    function load_disqus() {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = 'https://alienzj.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        document.getElementById('disqus_button').style.visibility = 'hidden';
+    };
+</script>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">ZJ Org Blog</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://alienzj.github.io" property="cc:attributionName" rel="cc:attributionURL">Jie Zhu</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>
