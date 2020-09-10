@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
 <channel>
-<title><![CDATA[ZJ Blog]]></title>
-<description><![CDATA[ZJ Blog]]></description>
+<title><![CDATA[ZJ Org Blog]]></title>
+<description><![CDATA[ZJ Org Blog]]></description>
 <link>https://alienzj.github.io/</link>
-<lastBuildDate>Thu, 10 Sep 2020 17:51:08 +0800</lastBuildDate>
+<lastBuildDate>Thu, 10 Sep 2020 19:28:49 +0800</lastBuildDate>
 <item>
   <title><![CDATA[concurrent]]></title>
   <description><![CDATA[
-<nav id="table-of-contents">
-<h2> <a href="javascript:window.scrollTo(0,0)" style="color: black !important; border-bottom: none !important;" class="tooltip" title="Go to the top of the page"> Ξ </a> </h2>
-<div id="text-table-of-contents">
-<ul>
-<li><a href="#orgb8f3ebf">submit</a></li>
-<li><a href="#org1364529">map</a></li>
-</ul>
-</div>
-</nav>
 <p>
 Today, I learn python concurrent from <a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p08_perform_simple_parallel_programming.html">python3 cookbook</a>.
 </p>
@@ -25,9 +16,9 @@ Today, I learn python concurrent from <a href="https://python3-cookbook.readthed
 Bellow is some exampels for using concurrent.
 </p>
 
-<div id="outline-container-orgb8f3ebf" class="outline-2">
-<h2 id="orgb8f3ebf">submit</h2>
-<div class="outline-text-2" id="text-orgb8f3ebf">
+<div id="outline-container-org5ee527f" class="outline-2">
+<h2 id="org5ee527f">submit</h2>
+<div class="outline-text-2" id="text-org5ee527f">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #ffff870554a1;">import</span> <span style="color: #0000d03ddd20;">concurrent</span>.<span style="color: #0000cfe9ae05;">futures</span>
 
@@ -50,9 +41,9 @@ Bellow is some exampels for using concurrent.
 </div>
 </div>
 
-<div id="outline-container-org1364529" class="outline-2">
-<h2 id="org1364529">map</h2>
-<div class="outline-text-2" id="text-org1364529">
+<div id="outline-container-org9cc7337" class="outline-2">
+<h2 id="org9cc7337">map</h2>
+<div class="outline-text-2" id="text-org9cc7337">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #ffff70d2ba7d;">with</span> <span style="color: #0000d03ddd20;">concurrent</span>.<span style="color: #0000cfe9ae05;">futures</span>.<span style="color: #a254bc8624e4;">ProcessPoolExecutor</span>() <span style="color: #0000cdc3ffff;">as</span> <span style="color: #9a47a4cdffff;">pool</span>:
     <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Example of submitting work to the pool</span>
@@ -74,18 +65,10 @@ Bellow is some exampels for using concurrent.
 <item>
   <title><![CDATA[Algorithm]]></title>
   <description><![CDATA[
-<nav id="table-of-contents">
-<h2> <a href="javascript:window.scrollTo(0,0)" style="color: black !important; border-bottom: none !important;" class="tooltip" title="Go to the top of the page"> Ξ </a> </h2>
-<div id="text-table-of-contents">
-<ul>
-<li><a href="#org4f4ea50">Course</a></li>
-</ul>
-</div>
-</nav>
 
-<div id="outline-container-org4f4ea50" class="outline-2">
-<h2 id="org4f4ea50">Course</h2>
-<div class="outline-text-2" id="text-org4f4ea50">
+<div id="outline-container-orga2a1774" class="outline-2">
+<h2 id="orga2a1774">Course</h2>
+<div class="outline-text-2" id="text-orga2a1774">
 <ul class="org-ul">
 <li><a href="https://www.coursera.org/learn/algorithmic-toolbox/">Algorithm Toolbox</a></li>
 </ul>
