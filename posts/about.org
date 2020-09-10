@@ -2,4 +2,4 @@
 #+date: <2020-08-01 14:23>
 #+filetags: About
 
-I do bioinformatics research, focus on computational metagenomics, very interseted in sequence alignment and genome assembly.
+I do bioinformatics research, focus on computational metagenomics, very interested in sequence alignment and genome assembly.
