@@ -4,7 +4,7 @@
 <title><![CDATA[ZJ Blog]]></title>
 <description><![CDATA[ZJ Blog]]></description>
 <link>https://alienzj.github.io/</link>
-<lastBuildDate>Thu, 10 Sep 2020 17:08:10 +0800</lastBuildDate>
+<lastBuildDate>Thu, 10 Sep 2020 17:51:08 +0800</lastBuildDate>
 <item>
   <title><![CDATA[concurrent]]></title>
   <description><![CDATA[
@@ -12,8 +12,8 @@
 <h2> <a href="javascript:window.scrollTo(0,0)" style="color: black !important; border-bottom: none !important;" class="tooltip" title="Go to the top of the page"> Ξ </a> </h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org2581772">submit</a></li>
-<li><a href="#org232ea0d">map</a></li>
+<li><a href="#orgb8f3ebf">submit</a></li>
+<li><a href="#org1364529">map</a></li>
 </ul>
 </div>
 </nav>
@@ -25,9 +25,9 @@ Today, I learn python concurrent from <a href="https://python3-cookbook.readthed
 Bellow is some exampels for using concurrent.
 </p>
 
-<div id="outline-container-org2581772" class="outline-2">
-<h2 id="org2581772">submit</h2>
-<div class="outline-text-2" id="text-org2581772">
+<div id="outline-container-orgb8f3ebf" class="outline-2">
+<h2 id="orgb8f3ebf">submit</h2>
+<div class="outline-text-2" id="text-orgb8f3ebf">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #ffff870554a1;">import</span> <span style="color: #0000d03ddd20;">concurrent</span>.<span style="color: #0000cfe9ae05;">futures</span>
 
@@ -50,9 +50,9 @@ Bellow is some exampels for using concurrent.
 </div>
 </div>
 
-<div id="outline-container-org232ea0d" class="outline-2">
-<h2 id="org232ea0d">map</h2>
-<div class="outline-text-2" id="text-org232ea0d">
+<div id="outline-container-org1364529" class="outline-2">
+<h2 id="org1364529">map</h2>
+<div class="outline-text-2" id="text-org1364529">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #ffff70d2ba7d;">with</span> <span style="color: #0000d03ddd20;">concurrent</span>.<span style="color: #0000cfe9ae05;">futures</span>.<span style="color: #a254bc8624e4;">ProcessPoolExecutor</span>() <span style="color: #0000cdc3ffff;">as</span> <span style="color: #9a47a4cdffff;">pool</span>:
     <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Example of submitting work to the pool</span>
@@ -74,36 +74,24 @@ Bellow is some exampels for using concurrent.
 <item>
   <title><![CDATA[Algorithm]]></title>
   <description><![CDATA[
-    <nav id="table-of-contents">
-      <h2><a href="javascript:window.scrollTo(0,0)" style=
-      "color: black !important; border-bottom: none !important;"
-      class="tooltip" title="Go to the top of the page">Ξ</a></h2>
-      <div id="text-table-of-contents">
-        <ul>
-          <li>
-            <a href="#org8601e49">Course</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <div id="outline-container-org8601e49" class="outline-2">
-      <h2 id="org8601e49">Course</h2>
-      <div class="outline-text-2" id="text-org8601e49">
-        <ul class="org-ul">
-          <li>
-            <a href=
-            "https://www.coursera.org/learn/algorithmic-toolbox/">Algorithm
-            Toolbox</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="taglist">
-      <a href="https://alienzj.github.io/tags.html">Tags</a>:
-      <a href=
-      "https://alienzj.github.io/tag-algorithm.html">Algorithm</a>
-    </div>
-  ]]></description>
+<nav id="table-of-contents">
+<h2> <a href="javascript:window.scrollTo(0,0)" style="color: black !important; border-bottom: none !important;" class="tooltip" title="Go to the top of the page"> Ξ </a> </h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org4f4ea50">Course</a></li>
+</ul>
+</div>
+</nav>
+
+<div id="outline-container-org4f4ea50" class="outline-2">
+<h2 id="org4f4ea50">Course</h2>
+<div class="outline-text-2" id="text-org4f4ea50">
+<ul class="org-ul">
+<li><a href="https://www.coursera.org/learn/algorithmic-toolbox/">Algorithm Toolbox</a></li>
+</ul>
+</div>
+</div>
+<div class="taglist"><a href="https://alienzj.github.io/tags.html">Tags</a>: <a href="https://alienzj.github.io/tag-algorithm.html">Algorithm</a> </div>]]></description>
   <category><![CDATA[Algorithm]]></category>
   <link>https://alienzj.github.io/2020-09-07-algorithm.html</link>
   <pubDate>Mon, 07 Sep 2020 21:49:00 +0800</pubDate>
@@ -111,34 +99,21 @@ Bellow is some exampels for using concurrent.
 <item>
   <title><![CDATA[Hello World]]></title>
   <description><![CDATA[
-        <div class="org-src-container">
-            <pre class="src src-elisp"><span style=
-            "color: #51afef;">(</span><span style=
-            "color: #a9a1e1;">message</span> <span style=
-            "color: #98be65;">"Hello, World!"</span><span style=
-            "color: #51afef;">)</span>
+<div class="org-src-container">
+<pre class="src src-elisp"><span style="color: #51afef;">(</span><span style="color: #a9a1e1;">message</span> <span style="color: #98be65;">"Hello, World!"</span><span style="color: #51afef;">)</span>
 </pre>
-        </div>
-        <div class="org-src-container">
-            <pre class="src src-python"><span style=
-            "color: #ffff82af5dc2;">print</span>(<span style=
-            "color: #98be65;">"Hello, World!"</span>)
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #ffff82af5dc2;">print</span>(<span style="color: #98be65;">"Hello, World!"</span>)
 </pre>
-        </div>
-        <div class="org-src-container">
-            <pre class="src src-rust"><span style=
-            "color: #c678dd;">println!</span>(<span style=
-            "color: #98be65;">"Hello, World!"</span>)
+</div>
+
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #c678dd;">println!</span>(<span style="color: #98be65;">"Hello, World!"</span>)
 </pre>
-        </div>
-        <div class="taglist">
-            <a href="https://alienzj.github.io/tags.html">Tags</a>:
-            <a href=
-            "https://alienzj.github.io/tag-emacs.html">Emacs</a>
-            <a href=
-            "https://alienzj.github.io/tag-programming.html">Programming</a>
-        </div>
-    ]]></description>
+</div>
+<div class="taglist"><a href="https://alienzj.github.io/tags.html">Tags</a>: <a href="https://alienzj.github.io/tag-emacs.html">Emacs</a> <a href="https://alienzj.github.io/tag-programming.html">Programming</a> </div>]]></description>
   <category><![CDATA[Emacs]]></category>
   <category><![CDATA[Programming]]></category>
   <link>https://alienzj.github.io/2020-08-01-hello-world.html</link>
@@ -147,14 +122,12 @@ Bellow is some exampels for using concurrent.
 <item>
   <title><![CDATA[About]]></title>
   <description><![CDATA[
-        <p>Hello, World.</p>
-        <p align="center"><img src="images/hello_world.jpg"></p>
-        <div class="taglist">
-            <a href="https://alienzj.github.io/tags.html">Tags</a>:
-            <a href=
-            "https://alienzj.github.io/tag-about.html">About</a>
-        </div>
-    ]]></description>
+<p>
+Hello, World.
+</p>
+
+<p align="center"> <img src="images/hello_world.jpg"/> </p>
+<div class="taglist"><a href="https://alienzj.github.io/tags.html">Tags</a>: <a href="https://alienzj.github.io/tag-about.html">About</a> </div>]]></description>
   <category><![CDATA[About]]></category>
   <link>https://alienzj.github.io/about.html</link>
   <pubDate>Sat, 01 Aug 2020 14:23:00 +0800</pubDate>
@@ -162,17 +135,14 @@ Bellow is some exampels for using concurrent.
 <item>
   <title><![CDATA[Genome]]></title>
   <description><![CDATA[
-        <div class="org-center">
-            <figure>
-                <img src="../images/hmp.jpg" alt="hmp.jpg">
-            </figure>
-        </div>
-        <div class="taglist">
-            <a href="https://alienzj.github.io/tags.html">Tags</a>:
-            <a href=
-            "https://alienzj.github.io/tag-genome.html">Genome</a>
-        </div>
-    ]]></description>
+<div class="org-center">
+
+<figure>
+<img src="../images/hmp.jpg" alt="hmp.jpg">
+
+</figure>
+</div>
+<div class="taglist"><a href="https://alienzj.github.io/tags.html">Tags</a>: <a href="https://alienzj.github.io/tag-genome.html">Genome</a> </div>]]></description>
   <category><![CDATA[Genome]]></category>
   <link>https://alienzj.github.io/2020-08-01-genome.html</link>
   <pubDate>Sat, 01 Aug 2020 12:28:00 +0800</pubDate>
