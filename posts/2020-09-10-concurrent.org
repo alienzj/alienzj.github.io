@@ -1,0 +1,49 @@
+#+TITLE: concurrent
+#+date: <2020-09-10 17:06>
+#+filetags: concurrent
+
+Today, I learn python concurrent from [[https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p08_perform_simple_parallel_programming.html][python3 cookbook]].
+
+Bellow is some exampels for using concurrent.
+
+* submit
+
+#+BEGIN_SRC python :results output :session
+import concurrent.futures
+
+# Some function
+do = [[1, 2, 3], [4, 5, 6]]
+
+def work(x):
+    print(f"x: {x}")
+    return x
+
+with concurrent.futures.ProcessPoolExecutor() as pool:
+    # Example of submitting work to the pool
+    future_result = pool.submit(work, do)
+
+    # Obtaining the result (blocks until done)
+    r = future_result.result()
+    print(f"r: {r}")
+#+END_SRC
+
+#+RESULTS:
+: x: [[1, 2, 3], [4, 5, 6]]
+: r: [[1, 2, 3], [4, 5, 6]]
+
+* map
+#+BEGIN_SRC python :results output :session
+with concurrent.futures.ProcessPoolExecutor() as pool:
+    # Example of submitting work to the pool
+    future_result = []
+    for i in pool.map(work, do):
+        future_result.append(i)
+
+    # Obtaining the result (blocks until done)
+    print(f"r: {future_result}")
+#+END_SRC
+
+#+RESULTS:
+: x: [1, 2, 3]
+: x: [4, 5, 6]
+: r: [[1, 2, 3], [4, 5, 6]]

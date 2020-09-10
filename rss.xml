@@ -1,20 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
-  <channel>
-    <title>
-<![CDATA[ZJ Blog]]>
-    </title>
-    <description>
-<![CDATA[ZJ Blog]]>
-    </description>
-    <link>https://alienzj.github.io/</link>
-    <lastBuildDate>Mon, 07 Sep 2020 22:01:38 +0800</lastBuildDate>
-    <item>
-      <title>
-<![CDATA[Algorithm]]>
-      </title>
-      <description>
-<![CDATA[
+<channel>
+<title><![CDATA[ZJ Blog]]></title>
+<description><![CDATA[ZJ Blog]]></description>
+<link>https://alienzj.github.io/</link>
+<lastBuildDate>Thu, 10 Sep 2020 17:08:10 +0800</lastBuildDate>
+<item>
+  <title><![CDATA[concurrent]]></title>
+  <description><![CDATA[
+<nav id="table-of-contents">
+<h2> <a href="javascript:window.scrollTo(0,0)" style="color: black !important; border-bottom: none !important;" class="tooltip" title="Go to the top of the page"> Ξ </a> </h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org2581772">submit</a></li>
+<li><a href="#org232ea0d">map</a></li>
+</ul>
+</div>
+</nav>
+<p>
+Today, I learn python concurrent from <a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p08_perform_simple_parallel_programming.html">python3 cookbook</a>.
+</p>
+
+<p>
+Bellow is some exampels for using concurrent.
+</p>
+
+<div id="outline-container-org2581772" class="outline-2">
+<h2 id="org2581772">submit</h2>
+<div class="outline-text-2" id="text-org2581772">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #ffff870554a1;">import</span> <span style="color: #0000d03ddd20;">concurrent</span>.<span style="color: #0000cfe9ae05;">futures</span>
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Some function</span>
+<span style="color: #ffff770b7bed;">do</span> = [[<span style="color: #da8548; font-weight: bold;">1</span>, <span style="color: #da8548; font-weight: bold;">2</span>, <span style="color: #da8548; font-weight: bold;">3</span>], [<span style="color: #da8548; font-weight: bold;">4</span>, <span style="color: #da8548; font-weight: bold;">5</span>, <span style="color: #da8548; font-weight: bold;">6</span>]]
+
+<span style="color: #8664c22937f5;">def</span> <span style="color: #0000c45effff;">work</span>(<span style="color: #ffff86fb54b6;">x</span>):
+    <span style="color: #ffff82af5dc2;">print</span>(<span style="color: #ffff7a91e24a;">f</span><span style="color: #98be65;">"x: {x}"</span>)
+    <span style="color: #0000cfe6e89b;">return</span> <span style="color: #ffff86fb54b6;">x</span>
+
+<span style="color: #ffff70d2ba7d;">with</span> <span style="color: #0000d03ddd20;">concurrent</span>.<span style="color: #0000cfe9ae05;">futures</span>.<span style="color: #a254bc8624e4;">ProcessPoolExecutor</span>() <span style="color: #0000cdc3ffff;">as</span> <span style="color: #9a47a4cdffff;">pool</span>:
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Example of submitting work to the pool</span>
+    <span style="color: #0170b47affff;">future_result</span> = <span style="color: #9a47a4cdffff;">pool</span>.<span style="color: #e9338c58ffff;">submit</span>(<span style="color: #0000c45effff;">work</span>, <span style="color: #ffff770b7bed;">do</span>)
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Obtaining the result (blocks until done)</span>
+    <span style="color: #17f9b40cffff;">r</span> = <span style="color: #0170b47affff;">future_result</span>.<span style="color: #6d33c5d04881;">result</span>()
+    <span style="color: #ffff82af5dc2;">print</span>(<span style="color: #ffff7a91e24a;">f</span><span style="color: #98be65;">"r: {r}"</span>)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org232ea0d" class="outline-2">
+<h2 id="org232ea0d">map</h2>
+<div class="outline-text-2" id="text-org232ea0d">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #ffff70d2ba7d;">with</span> <span style="color: #0000d03ddd20;">concurrent</span>.<span style="color: #0000cfe9ae05;">futures</span>.<span style="color: #a254bc8624e4;">ProcessPoolExecutor</span>() <span style="color: #0000cdc3ffff;">as</span> <span style="color: #9a47a4cdffff;">pool</span>:
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Example of submitting work to the pool</span>
+    <span style="color: #0170b47affff;">future_result</span> = []
+    <span style="color: #0000c9ceffff;">for</span> <span style="color: #c8f2b1581317;">i</span> <span style="color: #c9ddb105130d;">in</span> <span style="color: #9a47a4cdffff;">pool</span>.<span style="color: #c678dd;">map</span>(<span style="color: #0000c45effff;">work</span>, <span style="color: #ffff770b7bed;">do</span>):
+        <span style="color: #0170b47affff;">future_result</span>.<span style="color: #0000bcf9ffff;">append</span>(<span style="color: #c8f2b1581317;">i</span>)
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Obtaining the result (blocks until done)</span>
+    <span style="color: #ffff82af5dc2;">print</span>(<span style="color: #ffff7a91e24a;">f</span><span style="color: #98be65;">"r: {future_result}"</span>)
+</pre>
+</div>
+</div>
+</div>
+<div class="taglist"><a href="https://alienzj.github.io/tags.html">Tags</a>: <a href="https://alienzj.github.io/tag-concurrent.html">concurrent</a> </div>]]></description>
+  <category><![CDATA[concurrent]]></category>
+  <link>https://alienzj.github.io/2020-09-10-concurrent.html</link>
+  <pubDate>Thu, 10 Sep 2020 17:06:00 +0800</pubDate>
+</item>
+<item>
+  <title><![CDATA[Algorithm]]></title>
+  <description><![CDATA[
     <nav id="table-of-contents">
       <h2><a href="javascript:window.scrollTo(0,0)" style=
       "color: black !important; border-bottom: none !important;"
@@ -44,21 +103,14 @@
       <a href=
       "https://alienzj.github.io/tag-algorithm.html">Algorithm</a>
     </div>
-  ]]>
-      </description>
-      <category>
-<![CDATA[Algorithm]]>
-      </category>
-      <link>
-      https://alienzj.github.io/2020-09-07-algorithm.html</link>
-      <pubDate>Mon, 07 Sep 2020 21:49:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>
-<![CDATA[Hello World]]>
-      </title>
-      <description>
-<![CDATA[
+  ]]></description>
+  <category><![CDATA[Algorithm]]></category>
+  <link>https://alienzj.github.io/2020-09-07-algorithm.html</link>
+  <pubDate>Mon, 07 Sep 2020 21:49:00 +0800</pubDate>
+</item>
+<item>
+  <title><![CDATA[Hello World]]></title>
+  <description><![CDATA[
         <div class="org-src-container">
             <pre class="src src-elisp"><span style=
             "color: #51afef;">(</span><span style=
@@ -86,24 +138,15 @@
             <a href=
             "https://alienzj.github.io/tag-programming.html">Programming</a>
         </div>
-    ]]>
-      </description>
-      <category>
-<![CDATA[Emacs]]>
-      </category>
-      <category>
-<![CDATA[Programming]]>
-      </category>
-      <link>
-      https://alienzj.github.io/2020-08-01-hello-world.html</link>
-      <pubDate>Sat, 01 Aug 2020 15:09:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>
-<![CDATA[About]]>
-      </title>
-      <description>
-<![CDATA[
+    ]]></description>
+  <category><![CDATA[Emacs]]></category>
+  <category><![CDATA[Programming]]></category>
+  <link>https://alienzj.github.io/2020-08-01-hello-world.html</link>
+  <pubDate>Sat, 01 Aug 2020 15:09:00 +0800</pubDate>
+</item>
+<item>
+  <title><![CDATA[About]]></title>
+  <description><![CDATA[
         <p>Hello, World.</p>
         <p align="center"><img src="images/hello_world.jpg"></p>
         <div class="taglist">
@@ -111,20 +154,14 @@
             <a href=
             "https://alienzj.github.io/tag-about.html">About</a>
         </div>
-    ]]>
-      </description>
-      <category>
-<![CDATA[About]]>
-      </category>
-      <link>https://alienzj.github.io/about.html</link>
-      <pubDate>Sat, 01 Aug 2020 14:23:00 +0800</pubDate>
-    </item>
-    <item>
-      <title>
-<![CDATA[Genome]]>
-      </title>
-      <description>
-<![CDATA[
+    ]]></description>
+  <category><![CDATA[About]]></category>
+  <link>https://alienzj.github.io/about.html</link>
+  <pubDate>Sat, 01 Aug 2020 14:23:00 +0800</pubDate>
+</item>
+<item>
+  <title><![CDATA[Genome]]></title>
+  <description><![CDATA[
         <div class="org-center">
             <figure>
                 <img src="../images/hmp.jpg" alt="hmp.jpg">
@@ -135,13 +172,10 @@
             <a href=
             "https://alienzj.github.io/tag-genome.html">Genome</a>
         </div>
-    ]]>
-      </description>
-      <category>
-<![CDATA[Genome]]>
-      </category>
-      <link>https://alienzj.github.io/2020-08-01-genome.html</link>
-      <pubDate>Sat, 01 Aug 2020 12:28:00 +0800</pubDate>
-    </item>
-  </channel>
+    ]]></description>
+  <category><![CDATA[Genome]]></category>
+  <link>https://alienzj.github.io/2020-08-01-genome.html</link>
+  <pubDate>Sat, 01 Aug 2020 12:28:00 +0800</pubDate>
+</item>
+</channel>
 </rss>
