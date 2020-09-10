@@ -2,6 +2,4 @@
 #+date: <2020-08-01 14:23>
 #+filetags: About
 
-Hello, World.
-
-#+html: <p align="center"> <img src="images/hello_world.jpg"/> </p>
+I do bioinformatics research, focus on computational metagenomics, very interseted in sequence alignment and genome assembly.
