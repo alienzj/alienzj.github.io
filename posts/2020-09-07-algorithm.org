@@ -1,6 +1,0 @@
-#+TITLE: Algorithm
-#+date: <2020-09-07 21:49>
-#+filetags: Algorithm
-
-* Course
-- [[https://www.coursera.org/learn/algorithmic-toolbox/][Algorithm Toolbox]]
