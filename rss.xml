@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+<channel>
+<title><![CDATA[ZJ Org Blog]]></title>
+<description><![CDATA[ZJ Org Blog]]></description>
+<link>https://alienzj.github.io/</link>
+<lastBuildDate>Sun, 20 Sep 2020 01:30:43 +0800</lastBuildDate>
+<item>
+  <title><![CDATA[Concurrent]]></title>
+  <description><![CDATA[
+<p>
+Today, I learn python concurrent from <a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p08_perform_simple_parallel_programming.html">python3 cookbook</a>.
+</p>
+
+<p>
+Bellow is some exampels using concurrent.
+</p>
+
+<div id="outline-container-orga379274" class="outline-2">
+<h2 id="orga379274">submit</h2>
+<div class="outline-text-2" id="text-orga379274">
+<div class="org-src-container">
+<pre class="src src-jupyter-python"><span style="color: #ffff870554a1;">import</span> <span style="color: #0000d03ddd20;">concurrent</span>.<span style="color: #0000cfe9ae05;">futures</span>
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Some function</span>
+<span style="color: #ffff770b7bed;">do</span> = [[<span style="color: #da8548; font-weight: bold;">1</span>, <span style="color: #da8548; font-weight: bold;">2</span>, <span style="color: #da8548; font-weight: bold;">3</span>], [<span style="color: #da8548; font-weight: bold;">4</span>, <span style="color: #da8548; font-weight: bold;">5</span>, <span style="color: #da8548; font-weight: bold;">6</span>]]
+
+<span style="color: #8664c22937f5;">def</span> <span style="color: #0000c45effff;">work</span>(<span style="color: #ffff86fb54b6;">x</span>):
+    <span style="color: #ffff82af5dc2;">print</span>(<span style="color: #ffff7a91e24a;">f</span><span style="color: #98be65;">"x: {x}"</span>)
+    <span style="color: #0000cfe6e89b;">return</span> <span style="color: #ffff86fb54b6;">x</span>
+
+<span style="color: #ffff70d2ba7d;">with</span> <span style="color: #0000d03ddd20;">concurrent</span>.<span style="color: #0000cfe9ae05;">futures</span>.<span style="color: #a254bc8624e4;">ProcessPoolExecutor</span>() <span style="color: #0000cdc3ffff;">as</span> <span style="color: #9a47a4cdffff;">pool</span>:
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Example of submitting work to the pool</span>
+    <span style="color: #0170b47affff;">future_result</span> = <span style="color: #9a47a4cdffff;">pool</span>.<span style="color: #e9338c58ffff;">submit</span>(<span style="color: #0000c45effff;">work</span>, <span style="color: #ffff770b7bed;">do</span>)
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Obtaining the result (blocks until done)</span>
+    <span style="color: #17f9b40cffff;">r</span> = <span style="color: #0170b47affff;">future_result</span>.<span style="color: #6d33c5d04881;">result</span>()
+    <span style="color: #ffff82af5dc2;">print</span>(<span style="color: #ffff7a91e24a;">f</span><span style="color: #98be65;">"r: {r}"</span>)
+</pre>
+</div>
+
+<pre class="example">
+x: [[1, 2, 3], [4, 5, 6]]
+r: [[1, 2, 3], [4, 5, 6]]
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-orgac3a618" class="outline-2">
+<h2 id="orgac3a618">map</h2>
+<div class="outline-text-2" id="text-orgac3a618">
+<div class="org-src-container">
+<pre class="src src-jupyter-python"><span style="color: #ffff70d2ba7d;">with</span> <span style="color: #0000d03ddd20;">concurrent</span>.<span style="color: #0000cfe9ae05;">futures</span>.<span style="color: #a254bc8624e4;">ProcessPoolExecutor</span>() <span style="color: #0000cdc3ffff;">as</span> <span style="color: #9a47a4cdffff;">pool</span>:
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Example of submitting work to the pool</span>
+    <span style="color: #0170b47affff;">future_result</span> = []
+    <span style="color: #0000c9ceffff;">for</span> <span style="color: #c8f2b1581317;">i</span> <span style="color: #c9ddb105130d;">in</span> <span style="color: #9a47a4cdffff;">pool</span>.<span style="color: #c678dd;">map</span>(<span style="color: #0000c45effff;">work</span>, <span style="color: #ffff770b7bed;">do</span>):
+        <span style="color: #0170b47affff;">future_result</span>.<span style="color: #0000bcf9ffff;">append</span>(<span style="color: #c8f2b1581317;">i</span>)
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Obtaining the result (blocks until done)</span>
+    <span style="color: #ffff82af5dc2;">print</span>(<span style="color: #ffff7a91e24a;">f</span><span style="color: #98be65;">"r: {future_result}"</span>)
+</pre>
+</div>
+
+<pre class="example">
+x: [1, 2, 3]
+x: [4, 5, 6]
+r: [[1, 2, 3], [4, 5, 6]]
+</pre>
+</div>
+</div>
+<div class="taglist"><a href="https://alienzj.github.io/tags.html">Tags</a>: <a href="https://alienzj.github.io/tag-concurrent.html">Concurrent</a> </div>]]></description>
+  <category><![CDATA[Concurrent]]></category>
+  <link>https://alienzj.github.io/2020-09-10-concurrent.html</link>
+  <pubDate>Thu, 10 Sep 2020 17:06:00 +0800</pubDate>
+</item>
+<item>
+  <title><![CDATA[Algorithm]]></title>
+  <description><![CDATA[
+
+<div id="outline-container-org319d679" class="outline-2">
+<h2 id="org319d679">Course</h2>
+<div class="outline-text-2" id="text-org319d679">
+<ul class="org-ul">
+<li><a href="https://www.coursera.org/learn/algorithmic-toolbox/">Algorithm Toolbox</a></li>
+</ul>
+</div>
+</div>
+<div class="taglist"><a href="https://alienzj.github.io/tags.html">Tags</a>: <a href="https://alienzj.github.io/tag-algorithm.html">Algorithm</a> </div>]]></description>
+  <category><![CDATA[Algorithm]]></category>
+  <link>https://alienzj.github.io/2020-09-07-algorithm.html</link>
+  <pubDate>Mon, 07 Sep 2020 21:49:00 +0800</pubDate>
+</item>
+<item>
+  <title><![CDATA[About]]></title>
+  <description><![CDATA[
+<p>
+About is a about about about.
+</p>
+<div class="taglist"><a href="https://alienzj.github.io/tags.html">Tags</a>: <a href="https://alienzj.github.io/tag-about.html">About</a> </div>]]></description>
+  <category><![CDATA[About]]></category>
+  <link>https://alienzj.github.io/about.html</link>
+  <pubDate>Sat, 01 Aug 2020 14:23:00 +0800</pubDate>
+</item>
+</channel>
+</rss>
