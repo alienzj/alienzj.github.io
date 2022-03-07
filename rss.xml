@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 <title><![CDATA[ZJ Org Blog]]></title>
 <description><![CDATA[ZJ Org Blog]]></description>
 <link>https://alienzj.github.io/</link>
-<lastBuildDate>Sun, 20 Sep 2020 01:30:43 +0800</lastBuildDate>
+<lastBuildDate>Mon, 07 Mar 2022 13:45:00 +0800</lastBuildDate>
 <item>
   <title><![CDATA[Concurrent]]></title>
   <description><![CDATA[
@@ -72,6 +72,7 @@ r: [[1, 2, 3], [4, 5, 6]]
 <div class="taglist"><a href="https://alienzj.github.io/tags.html">Tags</a>: <a href="https://alienzj.github.io/tag-concurrent.html">Concurrent</a> </div>]]></description>
   <category><![CDATA[Concurrent]]></category>
   <link>https://alienzj.github.io/2020-09-10-concurrent.html</link>
+  <guid>https://alienzj.github.io/2020-09-10-concurrent.html</guid>
   <pubDate>Thu, 10 Sep 2020 17:06:00 +0800</pubDate>
 </item>
 <item>
@@ -89,6 +90,7 @@ r: [[1, 2, 3], [4, 5, 6]]
 <div class="taglist"><a href="https://alienzj.github.io/tags.html">Tags</a>: <a href="https://alienzj.github.io/tag-algorithm.html">Algorithm</a> </div>]]></description>
   <category><![CDATA[Algorithm]]></category>
   <link>https://alienzj.github.io/2020-09-07-algorithm.html</link>
+  <guid>https://alienzj.github.io/2020-09-07-algorithm.html</guid>
   <pubDate>Mon, 07 Sep 2020 21:49:00 +0800</pubDate>
 </item>
 <item>
@@ -100,6 +102,7 @@ About is a about about about.
 <div class="taglist"><a href="https://alienzj.github.io/tags.html">Tags</a>: <a href="https://alienzj.github.io/tag-about.html">About</a> </div>]]></description>
   <category><![CDATA[About]]></category>
   <link>https://alienzj.github.io/about.html</link>
+  <guid>https://alienzj.github.io/about.html</guid>
   <pubDate>Sat, 01 Aug 2020 14:23:00 +0800</pubDate>
 </item>
 </channel>
