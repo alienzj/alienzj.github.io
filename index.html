@@ -28,6 +28,87 @@
 </div></div>
 <div id="content">
 
+<div class="post-date">07 3月 2022</div><h1 class="post-title"><a href="https://alienzj.github.io/2022-03-07-rosalind-dna.html">Rosalind DNA</a></h1>
+
+<div id="outline-container-orgdb2babb" class="outline-2">
+<h2 id="orgdb2babb">Problem</h2>
+<div class="outline-text-2" id="text-orgdb2babb">
+<p>
+A string is simply an ordered collection of symbols selected from some alphabet and formed into a word; the length of a string is the number of symbols that it contains.
+An example of a length 21 DNA string (whose alphabet contains the symbols &rsquo;A&rsquo;, &rsquo;C&rsquo;, &rsquo;G&rsquo;, and &rsquo;T&rsquo;) is &ldquo;ATGCTTCAGAAAGGTCTTACG.&rdquo;
+Given: A DNA string s of length at most 1000 nt.
+Return: Four integers (separated by spaces) counting the respective number of times that the symbols &rsquo;A&rsquo;, &rsquo;C&rsquo;, &rsquo;G&rsquo;, and &rsquo;T&rsquo; occur in s.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9d44fff" class="outline-2">
+<h2 id="org9d44fff">Sample Dataset</h2>
+<div class="outline-text-2" id="text-org9d44fff">
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #0000cf9bef42;">AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org879dc4a" class="outline-2">
+<h2 id="org879dc4a">Sample Output</h2>
+<div class="outline-text-2" id="text-org879dc4a">
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #da8548; font-weight: bold;">20</span> <span style="color: #da8548; font-weight: bold;">12</span> <span style="color: #da8548; font-weight: bold;">17</span> <span style="color: #da8548; font-weight: bold;">21</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org096fdf5" class="outline-2">
+<h2 id="org096fdf5">Attempts</h2>
+<div class="outline-text-2" id="text-org096fdf5">
+</div>
+<div id="outline-container-orgfdaad71" class="outline-3">
+<h3 id="orgfdaad71">Rust</h3>
+<div class="outline-text-3" id="text-orgfdaad71">
+<div class="org-src-container">
+<pre class="src src-rust"><span style="color: #ffff791e7586;">use</span> <span style="color: #a9a1e1;">std</span>::<span style="color: #5c47c7a0527e;">env</span>;
+<span style="color: #ffff791e7586;">use</span> <span style="color: #a9a1e1;">std</span>::<span style="color: #a9a1e1;">fs</span>::<span style="color: #ECBE7B;">File</span>;
+<span style="color: #ffff791e7586;">use</span> <span style="color: #a9a1e1;">std</span>::<span style="color: #a9a1e1;">io</span>::<span style="color: #a9a1e1;">prelude</span>::*;
+
+<span style="color: #0000ce4e8dd2;">fn</span> <span style="color: #028ab476ffff;">count_nucleotides</span>(<span style="color: #0000c319ffff;">dna</span>: <span style="color: #ECBE7B;">String</span>) -&gt; [<span style="color: #ECBE7B;">u64</span>; <span style="color: #da8548; font-weight: bold;">5</span>] {
+    <span style="color: #0000cc4fffff;">let</span> <span style="color: #ff52980134de;">mut</span> <span style="color: #0000cc7f77dd;">counts</span>: [<span style="color: #ECBE7B;">u64</span>; <span style="color: #da8548; font-weight: bold;">5</span>] <span style="color: #ffff73f78748;">=</span> [<span style="color: #da8548; font-weight: bold;">0</span>; <span style="color: #da8548; font-weight: bold;">5</span>];
+    <span style="color: #0000c9ceffff;">for</span> <span style="color: #72f1ac2bffff;">nucleotide</span> <span style="color: #c9ddb105130d;">in</span> <span style="color: #0000c319ffff;">dna</span>.<span style="color: #ffff73c38829;">chars</span>() {
+        <span style="color: #0000b911ffff;">match</span> <span style="color: #72f1ac2bffff;">nucleotide</span> {
+            <span style="color: #98be65;">'A'</span> <span style="color: #ffff73f78748;">=</span>&gt; <span style="color: #0000cc7f77dd;">counts</span>[<span style="color: #da8548; font-weight: bold;">0</span>] +<span style="color: #ffff73f78748;">=</span> <span style="color: #da8548; font-weight: bold;">1</span>,
+            <span style="color: #98be65;">'C'</span> <span style="color: #ffff73f78748;">=</span>&gt; <span style="color: #0000cc7f77dd;">counts</span>[<span style="color: #da8548; font-weight: bold;">1</span>] +<span style="color: #ffff73f78748;">=</span> <span style="color: #da8548; font-weight: bold;">1</span>,
+            <span style="color: #98be65;">'G'</span> <span style="color: #ffff73f78748;">=</span>&gt; <span style="color: #0000cc7f77dd;">counts</span>[<span style="color: #da8548; font-weight: bold;">2</span>] +<span style="color: #ffff73f78748;">=</span> <span style="color: #da8548; font-weight: bold;">1</span>,
+            <span style="color: #98be65;">'T'</span> <span style="color: #ffff73f78748;">=</span>&gt; <span style="color: #0000cc7f77dd;">counts</span>[<span style="color: #da8548; font-weight: bold;">3</span>] +<span style="color: #ffff73f78748;">=</span> <span style="color: #da8548; font-weight: bold;">1</span>,
+            <span style="color: #f77a862cfcc8;">_</span> <span style="color: #ffff73f78748;">=</span>&gt; <span style="color: #0000cc7f77dd;">counts</span>[<span style="color: #da8548; font-weight: bold;">4</span>] +<span style="color: #ffff73f78748;">=</span> <span style="color: #da8548; font-weight: bold;">1</span>,
+        }
+    }
+    <span style="color: #0000cc7f77dd;">counts</span>
+}
+
+<span style="color: #0000ce4e8dd2;">fn</span> <span style="color: #ffff78f27608;">main</span>() {
+    <span style="color: #0000cc4fffff;">let</span> <span style="color: #0000c930ffff;">args</span>: <span style="color: #ECBE7B;">Vec</span>&lt;<span style="color: #ECBE7B;">String</span>&gt; <span style="color: #ffff73f78748;">=</span> <span style="color: #a9a1e1;">env</span>::<span style="color: #0000c930ffff;">args</span>().<span style="color: #f72d864ffd0c;">collect</span>();
+    <span style="color: #0000cc4fffff;">let</span> <span style="color: #ffff742ecd42;">filename</span> <span style="color: #ffff73f78748;">=</span> &amp;<span style="color: #0000c930ffff;">args</span>[<span style="color: #da8548; font-weight: bold;">1</span>];
+    <span style="color: #0000cc4fffff;">let</span> <span style="color: #ff52980134de;">mut</span> <span style="color: #ffff7a91e24a;">f</span> <span style="color: #ffff73f78748;">=</span> <span style="color: #ECBE7B;">File</span>::<span style="color: #b1c39f05ffff;">open</span>(<span style="color: #ffff742ecd42;">filename</span>).<span style="color: #0000ce68ffff;">expect</span>(<span style="color: #98be65;">"file not found"</span>);
+    <span style="color: #0000cc4fffff;">let</span> <span style="color: #ff52980134de;">mut</span> <span style="color: #0000c319ffff;">dna</span> <span style="color: #ffff73f78748;">=</span> <span style="color: #ECBE7B;">String</span>::<span style="color: #ffff6fe8ae25;">new</span>();
+    <span style="color: #ffff7a91e24a;">f</span>.<span style="color: #ede6a1bc242b;">read_to_string</span>(&amp;<span style="color: #ff52980134de;">mut</span> <span style="color: #0000c319ffff;">dna</span>).<span style="color: #0000ce68ffff;">expect</span>(<span style="color: #98be65;">"unable to read file"</span>);
+
+    <span style="color: #0000cc4fffff;">let</span> <span style="color: #0000cc7f77dd;">counts</span>: [<span style="color: #ECBE7B;">u64</span>; <span style="color: #da8548; font-weight: bold;">5</span>] <span style="color: #ffff73f78748;">=</span> <span style="color: #028ab476ffff;">count_nucleotides</span>(<span style="color: #0000c319ffff;">dna</span>);
+
+    <span style="color: #c678dd;">println!</span>(<span style="color: #98be65;">"A: </span><span style="color: #98be65; font-style: italic;">{}</span><span style="color: #98be65;">"</span>, <span style="color: #0000cc7f77dd;">counts</span>[<span style="color: #da8548; font-weight: bold;">0</span>]);
+    <span style="color: #c678dd;">println!</span>(<span style="color: #98be65;">"C: </span><span style="color: #98be65; font-style: italic;">{}</span><span style="color: #98be65;">"</span>, <span style="color: #0000cc7f77dd;">counts</span>[<span style="color: #da8548; font-weight: bold;">1</span>]);
+    <span style="color: #c678dd;">println!</span>(<span style="color: #98be65;">"G: </span><span style="color: #98be65; font-style: italic;">{}</span><span style="color: #98be65;">"</span>, <span style="color: #0000cc7f77dd;">counts</span>[<span style="color: #da8548; font-weight: bold;">2</span>]);
+    <span style="color: #c678dd;">println!</span>(<span style="color: #98be65;">"T: </span><span style="color: #98be65; font-style: italic;">{}</span><span style="color: #98be65;">"</span>, <span style="color: #0000cc7f77dd;">counts</span>[<span style="color: #da8548; font-weight: bold;">3</span>]);
+    <span style="color: #c678dd;">println!</span>(<span style="color: #98be65;">"Other: </span><span style="color: #98be65; font-style: italic;">{}</span><span style="color: #98be65;">"</span>, <span style="color: #0000cc7f77dd;">counts</span>[<span style="color: #da8548; font-weight: bold;">4</span>]);
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="taglist"><a href="https://alienzj.github.io/tags.html">Tags</a>: <a href="https://alienzj.github.io/tag-rosalind.html">Rosalind</a> <a href="https://alienzj.github.io/tag-bioinformatics.html">Bioinformatics</a> </div>
 <div class="post-date">10 Sep 2020</div><h1 class="post-title"><a href="https://alienzj.github.io/2020-09-10-concurrent.html">Concurrent</a></h1>
 <p>
 Today, I learn python concurrent from <a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p08_perform_simple_parallel_programming.html">python3 cookbook</a>.
