@@ -27,7 +27,7 @@ sudo nc -lv -p <port>
 nc -nv <server_ip_v4> <port>
 <input something>
 
-# If we can see <input something> from serve, that mean the network of server is accessible.
+# If we can see <input something> from server, that means the network of server is accessible.
 # If not, change port or contact the staff of vultr to know your server better.
 #+END_SRC
 

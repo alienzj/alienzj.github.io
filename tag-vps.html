@@ -38,18 +38,18 @@ One or two, I decided to start using shadowsocks again.
 </p>
 
 
-<div id="outline-container-org8eb4f19" class="outline-2">
-<h2 id="org8eb4f19">Buy vps</h2>
-<div class="outline-text-2" id="text-org8eb4f19">
+<div id="outline-container-orgb1a2849" class="outline-2">
+<h2 id="orgb1a2849">Buy vps</h2>
+<div class="outline-text-2" id="text-orgb1a2849">
 <p>
 First, I shoud to buy a virtual machine which can run a linux system and host a shadowsocks service. There is no doublt, I choose vultr.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org35280d5" class="outline-2">
-<h2 id="org35280d5">Check server&rsquo;s port is OK</h2>
-<div class="outline-text-2" id="text-org35280d5">
+<div id="outline-container-org044d564" class="outline-2">
+<h2 id="org044d564">Check server&rsquo;s port is OK</h2>
+<div class="outline-text-2" id="text-org044d564">
 <p>
 To be honest, thank my little brother <a href="https://github.com/ohmyarch">Michael Pacman</a> so much for helping me to figure out the port issue.
 </p>
@@ -64,16 +64,16 @@ To be honest, thank my little brother <a href="https://github.com/ohmyarch">Mich
 nc -nv &lt;server_ip_v4&gt; &lt;port&gt;
 &lt;input something&gt;
 
-<span style="color: #5B6268;"># </span><span style="color: #5B6268;">If we can see &lt;input something&gt; from serve, that mean the network of server is accessible.</span>
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">If we can see &lt;input something&gt; from server, that means the network of server is accessible.</span>
 <span style="color: #5B6268;"># </span><span style="color: #5B6268;">If not, change port or contact the staff of vultr to know your server better.</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org50eed92" class="outline-2">
-<h2 id="org50eed92">Ok, port is not OK</h2>
-<div class="outline-text-2" id="text-org50eed92">
+<div id="outline-container-org1f7556b" class="outline-2">
+<h2 id="org1f7556b">Ok, port is not OK</h2>
+<div class="outline-text-2" id="text-org1f7556b">
 <p>
 That was true. I meet it.
 So, two thousand years later.
@@ -103,9 +103,9 @@ Just like vultr&rsquo;s staff saied, <b><b>We do not recommend disabling your fi
 </div>
 </div>
 
-<div id="outline-container-orgf9d3b92" class="outline-2">
-<h2 id="orgf9d3b92">Configure shadowsocks</h2>
-<div class="outline-text-2" id="text-orgf9d3b92">
+<div id="outline-container-org41ed15c" class="outline-2">
+<h2 id="org41ed15c">Configure shadowsocks</h2>
+<div class="outline-text-2" id="text-org41ed15c">
 <div class="org-src-container">
 <pre class="src src-bash">pacman -S shadowsocks-rust-opt
 pacman -S shadowsocks-v2ray-plugin
