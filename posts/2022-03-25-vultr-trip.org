@@ -11,7 +11,7 @@ Recently I found that [[https://github.com/geph-official/geph4][geph]] is gettin
 One or two, I decided to start using shadowsocks again.
 
 
-* Buy vps :ATTACH:
+* Buy vps
 First, I shoud to buy a virtual machine which can run a linux system and host a shadowsocks service. There is no doublt, I choose vultr.
 
 * Check server's port is OK
