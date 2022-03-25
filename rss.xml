@@ -4,7 +4,151 @@
 <title><![CDATA[ZJ Org Blog]]></title>
 <description><![CDATA[ZJ Org Blog]]></description>
 <link>https://alienzj.github.io/</link>
-<lastBuildDate>Mon, 07 Mar 2022 13:59:53 +0800</lastBuildDate>
+<lastBuildDate>Sat, 26 Mar 2022 00:38:00 +0800</lastBuildDate>
+<item>
+  <title><![CDATA[Vultr trip]]></title>
+  <description><![CDATA[
+<p>
+Recently I found that <a href="https://github.com/geph-official/geph4">geph</a> is getting less and less useful, such as frequent disconnection, or unable to connect to the main server, or complaining about too many logins. Seriously, the experience was terrible. Once upon a time, I was also a person who surfed the sea of the Internet. Now, starting to miss the days of <a href="https://github.com/shadowsocks/shadowsocks-rust">shadowsocks.</a>
+</p>
+
+<p>
+One or two, I decided to start using shadowsocks again.
+</p>
+
+
+<div id="outline-container-org9d9369a" class="outline-2">
+<h2 id="org9d9369a">Buy vps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ATTACH">ATTACH</span></span></h2>
+<div class="outline-text-2" id="text-org9d9369a">
+<p>
+First, I shoud to buy a virtual machine which can run a linux system and host a shadowsocks service. There is no doublt, I choose vultr.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8038e6e" class="outline-2">
+<h2 id="org8038e6e">Check server&rsquo;s port is OK</h2>
+<div class="outline-text-2" id="text-org8038e6e">
+<p>
+To be honest, thank my little brother <a href="https://github.com/ohmyarch">Michael Pacman</a> so much for helping me to figure out the port issue.
+</p>
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #5B6268;"># </span><span style="color: #5B6268;">install nc on server and client site</span>
+<span style="color: #ECBE7B;">sudo</span> pacman -S openbsd-netcat
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">server: open port &lt;port&gt; on server</span>
+<span style="color: #ECBE7B;">sudo</span> nc -lv -p &lt;port&gt;
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">client: check whether the client network can access it</span>
+nc -nv &lt;server_ip_v4&gt; &lt;port&gt;
+&lt;input something&gt;
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">If we can see &lt;input something&gt; from serve, that mean the network of server is accessible.</span>
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">If not, change port or contact the staff of vultr to know your server better.</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgef627e7" class="outline-2">
+<h2 id="orgef627e7">Ok, port is not OK</h2>
+<div class="outline-text-2" id="text-orgef627e7">
+<p>
+That was true. I meet it.
+So, two thousand years later.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #5B6268;"># </span><span style="color: #5B6268;">Change game rule</span>
+<span style="color: #ECBE7B;">sudo</span> iptables -A INPUT -p tcp --dport &lt;ss_port&gt; -j ACCEPT
+<span style="color: #ECBE7B;">sudo</span> iptables -A INPUT -p udp --dport &lt;ss_port&gt; -j ACCEPT
+<span style="color: #ECBE7B;">sudo</span> iptables -A INPUT -p tcp --dport &lt;ssh_port&gt; -j ACCEPT
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Save it</span>
+<span style="color: #ECBE7B;">sudo</span> iptables-save -f /etc/iptables/iptables.rules
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">Run systemd iptables service</span>
+<span style="color: #ECBE7B;">sudo</span> systemctl start iptables.service
+<span style="color: #ECBE7B;">sudo</span> systemctl status iptables.service
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">OK</span>
+<span style="color: #ECBE7B;">sudo</span> systemctl enable iptables.service
+</pre>
+</div>
+<p>
+For details, you can refer the documentation <a href="https://wiki.archlinux.org/title/Iptables">here.</a>
+Just like vultr&rsquo;s staff saied, <b><b>We do not recommend disabling your firewall</b></b>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org62e068c" class="outline-2">
+<h2 id="org62e068c">Configure shadowsocks</h2>
+<div class="outline-text-2" id="text-org62e068c">
+<div class="org-src-container">
+<pre class="src src-bash">pacman -S shadowsocks-rust-opt
+pacman -S shadowsocks-v2ray-plugin
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">client configuration</span>
+<span style="color: #ECBE7B;">cat</span> /etc/shadowsocks-rust/config.json
+<span style="color: #51afef;">{</span>
+    <span style="color: #98be65;">"server"</span>: <span style="color: #98be65;">"&lt;server_ip&gt;"</span>,
+    <span style="color: #98be65;">"server_port"</span>: &lt;ss_port&gt;,
+    <span style="color: #98be65;">"local_address"</span>: <span style="color: #98be65;">"127.0.0.1"</span>,
+    <span style="color: #98be65;">"local_port"</span>: 1080,
+    <span style="color: #98be65;">"password"</span>: <span style="color: #98be65;">"&lt;passwd&gt;"</span>,
+    <span style="color: #98be65;">"timeout"</span>: 600,
+    <span style="color: #98be65;">"method"</span>: <span style="color: #98be65;">"chacha20-ietf-poly1305"</span>,
+    <span style="color: #98be65;">"plugin"</span>: <span style="color: #98be65;">"v2ray-plugin"</span>,
+<span style="color: #51afef;">}</span>
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">server configuration</span>
+<span style="color: #ECBE7B;">cat</span> /etc/shadowsocks-rust/config.json
+<span style="color: #51afef;">{</span>
+    <span style="color: #98be65;">"server"</span>: <span style="color: #98be65;">"::"</span>,
+    <span style="color: #98be65;">"server_port"</span>: &lt;ss_port&gt;,
+    <span style="color: #98be65;">"password"</span>: <span style="color: #98be65;">"&lt;passwd&gt;"</span>,
+    <span style="color: #98be65;">"timeout"</span>: 600,
+    <span style="color: #98be65;">"method"</span>: <span style="color: #98be65;">"chacha20-ietf-poly1305"</span>,
+    <span style="color: #98be65;">"plugin"</span>: <span style="color: #98be65;">"v2ray-plugin"</span>,
+    <span style="color: #98be65;">"plugin_opts"</span>: <span style="color: #98be65;">"server"</span>
+<span style="color: #51afef;">}</span>
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">on client and server, keep time</span>
+<span style="color: #ECBE7B;">sudo</span> timedatectl set-ntp true
+<span style="color: #ECBE7B;">sudo</span> hwclock --systohc
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">server</span>
+systemctl start shadowsocks-rust-server@config.service
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">client</span>
+systemctl start shadowsocks-rust@config.service
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">OK</span>
+systemctl enable shadowsocks-rust-server@config.service
+systemctl enable shadowsocks-rust@config.service
+</pre>
+</div>
+
+<p>
+Thank my little brother Michael Pacman again for helping me figure the fault of server configuration.
+We should use <b><b>::</b></b> for server address, not <b><b>127.0.0.1</b></b> for server address.
+</p>
+
+<p>
+Hope for a free web.
+</p>
+</div>
+</div>
+<div class="taglist"><a href="https://alienzj.github.io/tags.html">Tags</a>: <a href="https://alienzj.github.io/tag-vultr.html">Vultr</a> <a href="https://alienzj.github.io/tag-vps.html">VPS</a> <a href="https://alienzj.github.io/tag-ss.html">SS</a> <a href="https://alienzj.github.io/tag-free.html">Free</a> </div>]]></description>
+  <category><![CDATA[Vultr]]></category>
+  <category><![CDATA[VPS]]></category>
+  <category><![CDATA[SS]]></category>
+  <category><![CDATA[Free]]></category>
+  <link>https://alienzj.github.io/2022-03-25-vultr-trip.html</link>
+  <guid>https://alienzj.github.io/2022-03-25-vultr-trip.html</guid>
+  <pubDate>Fri, 25 Mar 2022 23:50:00 +0800</pubDate>
+</item>
 <item>
   <title><![CDATA[Rosalind DNA]]></title>
   <description><![CDATA[

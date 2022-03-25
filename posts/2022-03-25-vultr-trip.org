@@ -1,0 +1,105 @@
+:PROPERTIES:
+:ID:       5c3de10a-8432-4d55-a067-37b69eaa9088
+:END:
+#+title: Vultr trip
+#+date: <2022-03-25 23:50>
+#+description:
+#+filetags: Vultr VPS SS Free
+
+Recently I found that [[https://github.com/geph-official/geph4][geph]] is getting less and less useful, such as frequent disconnection, or unable to connect to the main server, or complaining about too many logins. Seriously, the experience was terrible. Once upon a time, I was also a person who surfed the sea of the Internet. Now, starting to miss the days of [[https://github.com/shadowsocks/shadowsocks-rust][shadowsocks.]]
+
+One or two, I decided to start using shadowsocks again.
+
+
+* Buy vps :ATTACH:
+First, I shoud to buy a virtual machine which can run a linux system and host a shadowsocks service. There is no doublt, I choose vultr.
+
+* Check server's port is OK
+To be honest, thank my little brother [[https://github.com/ohmyarch][Michael Pacman]] so much for helping me to figure out the port issue.
+#+BEGIN_SRC bash
+# install nc on server and client site
+sudo pacman -S openbsd-netcat
+
+# server: open port <port> on server
+sudo nc -lv -p <port>
+
+# client: check whether the client network can access it
+nc -nv <server_ip_v4> <port>
+<input something>
+
+# If we can see <input something> from serve, that mean the network of server is accessible.
+# If not, change port or contact the staff of vultr to know your server better.
+#+END_SRC
+
+* Ok, port is not OK
+That was true. I meet it.
+So, two thousand years later.
+
+#+BEGIN_SRC bash
+# Change game rule
+sudo iptables -A INPUT -p tcp --dport <ss_port> -j ACCEPT
+sudo iptables -A INPUT -p udp --dport <ss_port> -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport <ssh_port> -j ACCEPT
+
+# Save it
+sudo iptables-save -f /etc/iptables/iptables.rules
+
+# Run systemd iptables service
+sudo systemctl start iptables.service
+sudo systemctl status iptables.service
+
+# OK
+sudo systemctl enable iptables.service
+#+END_SRC
+For details, you can refer the documentation [[https://wiki.archlinux.org/title/Iptables][here.]]
+Just like vultr's staff saied, **We do not recommend disabling your firewall**.
+
+* Configure shadowsocks
+#+BEGIN_SRC bash
+pacman -S shadowsocks-rust-opt
+pacman -S shadowsocks-v2ray-plugin
+
+# client configuration
+cat /etc/shadowsocks-rust/config.json
+{
+    "server": "<server_ip>",
+    "server_port": <ss_port>,
+    "local_address": "127.0.0.1",
+    "local_port": 1080,
+    "password": "<passwd>",
+    "timeout": 600,
+    "method": "chacha20-ietf-poly1305",
+    "plugin": "v2ray-plugin",
+}
+
+# server configuration
+cat /etc/shadowsocks-rust/config.json
+{
+    "server": "::",
+    "server_port": <ss_port>,
+    "password": "<passwd>",
+    "timeout": 600,
+    "method": "chacha20-ietf-poly1305",
+    "plugin": "v2ray-plugin",
+    "plugin_opts": "server"
+}
+
+# on client and server, keep time
+sudo timedatectl set-ntp true
+sudo hwclock --systohc
+
+# server
+systemctl start shadowsocks-rust-server@config.service
+
+# client
+systemctl start shadowsocks-rust@config.service
+
+# OK
+systemctl enable shadowsocks-rust-server@config.service
+systemctl enable shadowsocks-rust@config.service
+#+END_SRC
+
+Thank my little brother Michael Pacman again for helping me figure the fault of server configuration.
+We should use **::** for server address, not **127.0.0.1** for server address.
+
+Hope for a free web.
