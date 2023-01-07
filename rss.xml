@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-<title><![CDATA[ZJ Org Blog]]></title>
-<description><![CDATA[ZJ Org Blog]]></description>
+<title><![CDATA[ZJ Blog]]></title>
+<description><![CDATA[ZJ Blog]]></description>
 <link>https://alienzj.github.io/</link>
-<lastBuildDate>Sat, 26 Mar 2022 00:44:45 +0800</lastBuildDate>
+<lastBuildDate>Sat, 07 Jan 2023 17:51:40 +0800</lastBuildDate>
+<item>
+  <title><![CDATA[Understanding DESeq2]]></title>
+  <description><![CDATA[
+<div class="taglist"></div>]]></description>
+  <link>https://alienzj.github.io/2022-03-29-understanding-deseq2.html</link>
+  <guid>https://alienzj.github.io/2022-03-29-understanding-deseq2.html</guid>
+  <pubDate>Tue, 29 Mar 2022 21:18:00 +0800</pubDate>
+</item>
 <item>
   <title><![CDATA[Vultr trip]]></title>
   <description><![CDATA[
