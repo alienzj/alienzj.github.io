@@ -10,6 +10,22 @@ theme = "DoIt"
 
 
 [params]
+  # 作者配置
+  [params.author]
+    name = "alienzj"
+    nickname = "alienzj"
+    avatar = "https://blog.alienzj.tech/avatar/myself.webp"
+    link = "https://blog.alienzj.tech/"
+    email = "alienchuj@gmail.com"
+
+  # 社交信息设置
+  [params.social]
+    GitHub = "alienzj"
+    Twitter = "alienzj"
+    Reddit = "alienzj"
+    RSS = true # RSS 格式太简陋，切换到自定义的 ATOM 格式，此参数仅用于控制显示首页的 RSS 按钮
+
+
   # DoIt 主题版本
   version = "0.4.X"
 
@@ -89,13 +105,6 @@ theme = "DoIt"
     # list 页面每页显示文章数量
     paginate = 1000  # 尽量一页列出所有文章
 
-  # 社交信息设置
-  [params.social]
-    GitHub = "alienzj"
-    Twitter = "alienzj"
-    Reddit = "alienzj"
-    RSS = true # RSS 格式太简陋，切换到自定义的 ATOM 格式，此参数仅用于控制显示首页的 RSS 按钮
-
   # DoIt 更改 | 0.2.0 文章页面配置
   [params.page]
     # DoIt 新增 | 0.2.0 是否在主页隐藏一篇文章
@@ -110,8 +119,6 @@ theme = "DoIt"
     ruby = true
     # DoIt 新增 | 0.2.0 是否使用 fraction 扩展语法
     fraction = true
-    # DoIt 新增 | 0.2.0 是否使用 fontawesome 扩展语法
-    fontawesome = true
     # 是否在文章页面显示原始 Markdown 文档链接
     linkToMarkdown = true
     # DoIt 新增 | 0.2.13 是否在文章开头显示系列导航
@@ -425,13 +432,6 @@ theme = "DoIt"
     startLevel = 2
     endLevel = 6
 
-
-# 作者配置
-[author]
-  name = "alienzj"
-  nickname = "alienzj"
-  avatar = "https://blog.alienzj.tech/avatar/myself.webp"
-  link = "https://blog.alienzj.tech/"
 
 
 # 网站地图配置
