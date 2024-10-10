@@ -53,6 +53,7 @@
             typos
             # code formatter
             nodePackages.prettier
+            hugo
           ]
           ++ (with pkgs.python311Packages; [
             pip
