@@ -1,0 +1,10 @@
+baseURL = "https://blog.alienzj.tech/"
+
+defaultContentLanguage = "zh-cn"
+
+languageCode = "en-us"
+
+title = "ZJ Blog"
+
+theme = "DoIt"
+
