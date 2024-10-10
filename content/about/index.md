@@ -8,7 +8,7 @@ draft = false
 
 一个 Husband
 
-一个 NixOSet
+一个 NixOSer
 
 一个 Bioinformatician
 

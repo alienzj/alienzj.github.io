@@ -7,6 +7,7 @@ extend-exclude = ["themes/", "data/"]
 binary = false
 # ignore some special identifiers(sha256, mac address, crypto keys, etc)
 extend-ignore-re = [
+  "NixOSer",
   "6wSenmFo",     # crypto keys
   "UE5",          # Unreal Engine 5
   "CIPH",         # cipher
