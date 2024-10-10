@@ -1,14 +1,10 @@
 +++
-title = '关于'
+title = "关于"
 date = 2024-10-10T17:39:48+08:00
 draft = false
-
-lightgallery: true
-
-comment:
-  utterances:
-    enable: false
 +++
+
+![goal](The_hunt_for_a_healthy_microbiome.webp)
 
 一个 Husband
 
