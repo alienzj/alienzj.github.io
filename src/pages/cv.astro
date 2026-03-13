@@ -19,8 +19,11 @@ import BaseLayout from '../layouts/BlogPost.astro';
   <section class="cv-section">
     <h2>🔗 链接</h2>
     <ul class="cv-links">
-      <li><strong>GitHub:</strong> <a href="https://github.com/alienzj" target="_blank" rel="noopener">@alienzj</a></li>
+      <li><strong>GitHub:</strong> <a href="https://github.com/alienzj" target="_blank" rel="noopener">@alienzj</a> — MAGs lives matter</li>
+      <li><strong>个人主页:</strong> <a href="https://alienzj.tech" target="_blank" rel="noopener">alienzj.tech</a></li>
       <li><strong>OhMeta 组织:</strong> <a href="https://github.com/ohmeta" target="_blank" rel="noopener">github.com/ohmeta</a></li>
+      <li><strong>BioArchLinux:</strong> <a href="https://github.com/BioArchLinux" target="_blank" rel="noopener">github.com/BioArchLinux</a></li>
+      <li><strong>Bioconda:</strong> <a href="https://github.com/bioconda" target="_blank" rel="noopener">github.com/bioconda</a></li>
     </ul>
   </section>
 
@@ -96,11 +99,32 @@ import BaseLayout from '../layouts/BlogPost.astro';
 
   <section class="cv-section">
     <h2>📦 开源项目</h2>
-    <p>
-      在 <a href="https://github.com/ohmeta" target="_blank" rel="noopener">OhMeta</a> 
-      组织下开发和维护多个生物信息学工具与数据分析流程。
-      欢迎访问我的 GitHub 了解更多项目详情。
-    </p>
+    <ul class="cv-projects">
+      <li>
+        <strong><a href="https://github.com/ohmeta/metapi" target="_blank" rel="noopener">metapi</a></strong>
+        <span>A general metagenomics data mining system focus on robust microbiome research (58⭐)</span>
+      </li>
+      <li>
+        <strong><a href="https://github.com/ohmeta/quantpi" target="_blank" rel="noopener">quantpi</a></strong>
+        <span>Microbiome profiling pipeline (15⭐)</span>
+      </li>
+      <li>
+        <strong><a href="https://github.com/ohmeta/rnapi" target="_blank" rel="noopener">rnapi</a></strong>
+        <span>RNA-seq analysis pipeline (2⭐)</span>
+      </li>
+      <li>
+        <strong><a href="https://github.com/metagenome-atlas/atlas" target="_blank" rel="noopener">ATLAS</a></strong>
+        <span>Three commands to start analyzing your metagenome data (403⭐)</span>
+      </li>
+      <li>
+        <strong><a href="https://github.com/bioconda/bioconda-recipes" target="_blank" rel="noopener">Bioconda Recipes</a></strong>
+        <span>Conda recipes for the bioconda channel (Contributor)</span>
+      </li>
+      <li>
+        <strong><a href="https://github.com/snakemake/snakemake-wrappers" target="_blank" rel="noopener">Snakemake Wrappers</a></strong>
+        <span>The Snakemake wrapper repository (Contributor)</span>
+      </li>
+    </ul>
   </section>
 </BaseLayout>
 
@@ -195,5 +219,31 @@ import BaseLayout from '../layouts/BlogPost.astro';
   .cv-interests span {
     color: var(--color-text-light);
     margin-left: 0.5rem;
+  }
+
+  .cv-projects {
+    list-style: none;
+    padding: 0;
+  }
+
+  .cv-projects li {
+    margin-bottom: 0.75rem;
+    padding-left: 0;
+  }
+
+  .cv-projects strong a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .cv-projects strong a:hover {
+    text-decoration: underline;
+  }
+
+  .cv-projects span {
+    color: var(--color-text-light);
+    font-size: 0.95rem;
+    display: block;
+    margin-top: 0.25rem;
   }
 </style>
