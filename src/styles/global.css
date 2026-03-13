@@ -64,6 +64,7 @@ body {
 	background-attachment: fixed;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
+	color: #1e293b; /* Fallback */
 	color: rgb(var(--gray-dark));
 	font-size: 18px;
 	line-height: 1.75;
