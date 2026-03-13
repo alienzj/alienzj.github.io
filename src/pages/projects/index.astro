@@ -3,13 +3,441 @@ import BaseLayout from '../../layouts/BlogPost.astro';
 ---
 
 <BaseLayout
-  title="我的项目"
-  description="长期主义者的折腾记录"
+  title="开源项目"
+  description="Open source contributions for microbiome research and AI for Science"
   pubDate={new Date('2026-03-13')}
 >
-  <h2>开源项目</h2>
-  <ul>
-    <li>项目 A：做了一个极客玩具...</li>
-    <li>项目 B：Homelab 架构实践...</li>
-  </ul>
+  <p class="intro">
+    我致力于通过开源软件让微生物组研究更加<strong>可及、可重复、稳健</strong>。
+    以下是我参与的主要项目，涵盖宏基因组学、转录组学和 AI 驱动的科学工作流。
+  </p>
+
+  <h2>🧬 OhMeta 项目</h2>
+  <p class="section-intro">
+    <a href="https://github.com/ohmeta" target="_blank" rel="noopener" class="org-link">OhMeta</a> 
+    是我共同创立的组织，专注于开发微生物组研究的开源工具。
+  </p>
+
+  <div class="project-grid">
+    <article class="project-card featured">
+      <div class="project-header">
+        <span class="project-icon">🔬</span>
+        <h3>metapi</h3>
+      </div>
+      <div class="project-meta">
+        <a href="https://github.com/ohmeta/metapi" target="_blank" rel="noopener" class="project-link">
+          ohmeta/metapi
+        </a>
+        <span class="stars">58⭐</span>
+      </div>
+      <p class="project-description">
+        一个通用的<strong>宏基因组数据挖掘系统</strong>，为稳健的微生物组研究而设计。
+        整合了从原始数据到功能分析的完整流程，支持多种分析模式和可定制的参数。
+      </p>
+      <div class="project-tags">
+        <span class="tag">Metagenomics</span>
+        <span class="tag">Snakemake</span>
+        <span class="tag">Pipeline</span>
+        <span class="tag">Microbiome</span>
+      </div>
+    </article>
+
+    <article class="project-card">
+      <div class="project-header">
+        <span class="project-icon">🧬</span>
+        <h3>rnapi</h3>
+      </div>
+      <div class="project-meta">
+        <a href="https://github.com/ohmeta/rnapi" target="_blank" rel="noopener" class="project-link">
+          ohmeta/rnapi
+        </a>
+      </div>
+      <p class="project-description">
+        <strong>RNA-seq 分析流程</strong>，为转录组学研究提供从质控到差异表达分析的完整解决方案。
+        基于 Snakemake 构建，确保分析的可重复性和可扩展性。
+      </p>
+      <div class="project-tags">
+        <span class="tag">RNA-seq</span>
+        <span class="tag">Transcriptomics</span>
+        <span class="tag">Snakemake</span>
+        <span class="tag">Differential Expression</span>
+      </div>
+    </article>
+
+    <article class="project-card">
+      <div class="project-header">
+        <span class="project-icon">📊</span>
+        <h3>quantpi</h3>
+      </div>
+      <div class="project-meta">
+        <a href="https://github.com/ohmeta/quantpi" target="_blank" rel="noopener" class="project-link">
+          ohmeta/quantpi
+        </a>
+      </div>
+      <p class="project-description">
+        <strong>微生物组定量分析流程</strong>，提供全面的质量控制和统计分析。
+        整合多种 profiling 工具，生成可重复的研究级结果。
+      </p>
+      <div class="project-tags">
+        <span class="tag">Metagenomics</span>
+        <span class="tag">Profiling</span>
+        <span class="tag">QC</span>
+        <span class="tag">Statistics</span>
+      </div>
+    </article>
+
+    <article class="project-card">
+      <div class="project-header">
+        <span class="project-icon">🦠</span>
+        <h3>qiimepi</h3>
+      </div>
+      <div class="project-meta">
+        <a href="https://github.com/ohmeta/qiimepi" target="_blank" rel="noopener" class="project-link">
+          ohmeta/qiimepi
+        </a>
+      </div>
+      <p class="project-description">
+        <strong>QIIME2 的 Snakemake 实现</strong>，用于 16S/ITS 扩增子分析。
+        结合 QIIME2 的强大功能和 Snakemake 的工作流管理能力。
+      </p>
+      <div class="project-tags">
+        <span class="tag">16S</span>
+        <span class="tag">ITS</span>
+        <span class="tag">QIIME2</span>
+        <span class="tag">Amplicon</span>
+      </div>
+    </article>
+  </div>
+
+  <h2>🤖 AI for Science</h2>
+  <p class="section-intro">
+    我相信<strong>AI 和自主 Agent</strong>将彻底改变科学研究的方式。
+    我正在探索如何用 LLM 驱动的工具让科研工作流更加智能化和自动化。
+  </p>
+
+  <div class="project-grid">
+    <article class="project-card featured ai-agent">
+      <div class="project-header">
+        <span class="project-icon">🦾</span>
+        <h3>metaclaw</h3>
+        <span class="badge">In Development</span>
+      </div>
+      <div class="project-meta">
+        <a href="https://github.com/ohmeta/metaclaw" target="_blank" rel="noopener" class="project-link">
+          ohmeta/metaclaw
+        </a>
+      </div>
+      <p class="project-description">
+        一个<strong>AI Agent</strong>，用于运行宏基因组学流程，实现稳健的微生物组研究。
+        metaclaw 将能够：
+      </p>
+      <ul class="feature-list">
+        <li>📚 <strong>自动文献综述</strong> — 追踪最新的宏基因组学方法和工具</li>
+        <li>⚙️ <strong>智能流程选择</strong> — 根据数据特征自动推荐最佳分析流程</li>
+        <li>🔧 <strong>参数优化</strong> — 基于样本特性自动调整流程参数</li>
+        <li>📊 <strong>结果解释</strong> — 用自然语言生成分析报告和洞见</li>
+        <li>🔄 <strong>可重复执行</strong> — 确保分析过程完全可追溯和可重复</li>
+      </ul>
+      <p class="vision-statement">
+        <strong>愿景：</strong>让每一位研究者都能拥有一个懂宏基因组学的 AI 助手，
+        从实验设计到结果解释，全程提供专业支持。
+      </p>
+      <div class="project-tags">
+        <span class="tag">AI Agent</span>
+        <span class="tag">LLM</span>
+        <span class="tag">Metagenomics</span>
+        <span class="tag">Automation</span>
+        <span class="tag">AI for Science</span>
+      </div>
+    </article>
+  </div>
+
+  <h2>🗺️ 其他贡献</h2>
+  <div class="project-grid">
+    <article class="project-card">
+      <div class="project-header">
+        <span class="project-icon">🌍</span>
+        <h3>metagenome-atlas/atlas</h3>
+      </div>
+      <div class="project-meta">
+        <a href="https://github.com/metagenome-atlas/atlas" target="_blank" rel="noopener" class="project-link">
+          metagenome-atlas/atlas
+        </a>
+        <span class="stars">403⭐</span>
+      </div>
+      <p class="project-description">
+        自动化宏基因组分析流程 — "Three commands to analyze your metagenome"。
+        贡献者之一，参与核心功能开发和维护。
+      </p>
+      <div class="project-tags">
+        <span class="tag">Metagenomics</span>
+        <span class="tag">MAGs</span>
+        <span class="tag">Pipeline</span>
+      </div>
+    </article>
+
+    <article class="project-card">
+      <div class="project-header">
+        <span class="project-icon">📦</span>
+        <h3>BioConda</h3>
+      </div>
+      <div class="project-meta">
+        <a href="https://github.com/bioconda" target="_blank" rel="noopener" class="project-link">
+          bioconda/bioconda-recipes
+        </a>
+        <span class="stars">1.8k⭐</span>
+      </div>
+      <p class="project-description">
+        生物信息学 conda 频道贡献者，参与多个生物信息学工具的打包和维护工作。
+      </p>
+      <div class="project-tags">
+        <span class="tag">Conda</span>
+        <span class="tag">Bioinformatics</span>
+        <span class="tag">Packaging</span>
+      </div>
+    </article>
+
+    <article class="project-card">
+      <div class="project-header">
+        <span class="project-icon">🐍</span>
+        <h3>Snakemake Wrappers</h3>
+      </div>
+      <div class="project-meta">
+        <a href="https://github.com/snakemake/snakemake-wrappers" target="_blank" rel="noopener" class="project-link">
+          snakemake/snakemake-wrappers
+        </a>
+        <span class="stars">240⭐</span>
+      </div>
+      <p class="project-description">
+        为 Snakemake 生态开发可重用的 workflow 组件，简化流程开发和共享。
+      </p>
+      <div class="project-tags">
+        <span class="tag">Snakemake</span>
+        <span class="tag">Workflow</span>
+        <span class="tag">Reusability</span>
+      </div>
+    </article>
+  </div>
+
+  <div class="call-to-action">
+    <p>
+      🤝 欢迎协作！如果你对这些项目感兴趣，或者有想法一起构建让科研更美好的工具，
+      请在 GitHub 上提 issue 或 PR，也可以通过<a href="https://github.com/alienzj" target="_blank" rel="noopener">@alienzj</a>联系我。
+    </p>
+    <p class="motto">
+      <em>"MAGs lives matter" 🦀</em>
+    </p>
+  </div>
 </BaseLayout>
+
+<style>
+  .intro {
+    font-size: 1.1em;
+    line-height: 1.8;
+    color: rgb(var(--gray));
+    max-width: 720px;
+    margin: 0 auto 2rem;
+  }
+
+  .intro strong {
+    color: rgb(var(--gray-dark));
+  }
+
+  h2 {
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 0.5rem;
+    color: rgb(var(--black));
+  }
+
+  .section-intro {
+    color: rgb(var(--gray));
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+  }
+
+  .org-link {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .org-link:hover {
+    text-decoration: underline;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .project-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid rgba(var(--gray-light), 80%);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(var(--gray), 15%);
+    border-color: var(--accent);
+  }
+
+  .project-card.featured {
+    background: linear-gradient(135deg, rgba(35, 55, 255, 0.03) 0%, rgba(147, 112, 219, 0.03) 100%);
+    border-width: 2px;
+  }
+
+  .project-card.ai-agent {
+    background: linear-gradient(135deg, rgba(35, 55, 255, 0.05) 0%, rgba(147, 112, 219, 0.05) 100%);
+  }
+
+  .project-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .project-icon {
+    font-size: 2rem;
+  }
+
+  .project-header h3 {
+    margin: 0;
+    font-size: 1.35rem;
+    color: rgb(var(--gray-dark));
+  }
+
+  .project-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(var(--gray-light), 60%);
+  }
+
+  .project-link {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+  }
+
+  .project-link:hover {
+    color: var(--accent-dark);
+    text-decoration: underline;
+  }
+
+  .stars {
+    color: rgb(var(--gray));
+    font-size: 0.9rem;
+  }
+
+  .badge {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-left: auto;
+  }
+
+  .project-description {
+    color: rgb(var(--gray));
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+  }
+
+  .feature-list li {
+    padding: 0.5rem 0;
+    color: rgb(var(--gray));
+    line-height: 1.6;
+  }
+
+  .vision-statement {
+    background: rgba(var(--gray-light), 40%);
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--accent);
+    margin: 1rem 0;
+    color: rgb(var(--gray-dark));
+    font-style: italic;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .tag {
+    background: rgba(var(--gray-light), 50%);
+    color: rgb(var(--gray));
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .call-to-action {
+    background: linear-gradient(135deg, rgba(35, 55, 255, 0.05) 0%, rgba(147, 112, 219, 0.05) 100%);
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  .call-to-action p {
+    margin: 0.5rem 0;
+    color: rgb(var(--gray-dark));
+    line-height: 1.7;
+  }
+
+  .call-to-action a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .call-to-action a:hover {
+    text-decoration: underline;
+  }
+
+  .motto {
+    margin-top: 1.5rem !important;
+    font-size: 1.1em;
+  }
+
+  @media (max-width: 720px) {
+    .project-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .intro {
+      font-size: 1em;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+    }
+  }
+</style>
