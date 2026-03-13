@@ -4,9 +4,196 @@ import BaseLayout from '../layouts/BlogPost.astro';
 
 <BaseLayout
   title="Curriculum Vitae"
-  description="关于我的工作经历与技能"
+  description="生物信息学工程师 - 专注于微生物组学与 AI for Science"
   pubDate={new Date('2026-03-13')}
 >
-  <h2>工作经历</h2>
-  <p>这里开始用 Markdown 或 HTML 写你的简历...</p>
+  <section class="cv-section">
+    <h2>👤 个人简介</h2>
+    <p>
+      生物信息学工程师，专注于<strong>微生物组学（Microbiome Informatics）</strong>数据分析与工具开发。
+      热衷于将 AI 技术应用于科学研究，探索<strong>AI for Science</strong>的无限可能。
+      开源爱好者，积极参与并维护多个生物信息学相关开源项目。
+    </p>
+  </section>
+
+  <section class="cv-section">
+    <h2>🔗 链接</h2>
+    <ul class="cv-links">
+      <li><strong>GitHub:</strong> <a href="https://github.com/alienzj" target="_blank" rel="noopener">@alienzj</a></li>
+      <li><strong>OhMeta 组织:</strong> <a href="https://github.com/ohmeta" target="_blank" rel="noopener">github.com/ohmeta</a></li>
+    </ul>
+  </section>
+
+  <section class="cv-section">
+    <h2>💼 专业领域</h2>
+    <ul class="cv-skills">
+      <li>
+        <strong>微生物组学分析</strong>
+        <span>16S/ITS 扩增子分析、宏基因组组装、物种注释、功能预测</span>
+      </li>
+      <li>
+        <strong>生物信息流程开发</strong>
+        <span>Nextflow/Snakemake 流程构建、Docker/Singularity 容器化</span>
+      </li>
+      <li>
+        <strong>编程语言</strong>
+        <span>Python、R、Bash、JavaScript/TypeScript</span>
+      </li>
+      <li>
+        <strong>AI for Science</strong>
+        <span>机器学习在组学数据中的应用、AI Agent 开发</span>
+      </li>
+    </ul>
+  </section>
+
+  <section class="cv-section">
+    <h2>🛠️ 技术栈</h2>
+    <div class="cv-tech">
+      <div class="tech-category">
+        <h4>生物信息工具</h4>
+        <p>QIIME2, DADA2, MetaPhlAn, HUMAnN, MEGAHIT, SPAdes, CheckM</p>
+      </div>
+      <div class="tech-category">
+        <h4>数据分析</h4>
+        <p>pandas, scikit-learn, seaborn, ggplot2, Bioconductor</p>
+      </div>
+      <div class="tech-category">
+        <h4>AI/ML</h4>
+        <p>PyTorch, Transformers, LangChain, LLM Agent 框架</p>
+      </div>
+      <div class="tech-category">
+        <h4>DevOps & HomeLab</h4>
+        <p>Docker, Kubernetes, Proxmox, TrueNAS, Ansible, GitOps</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cv-section">
+    <h2>🏠 兴趣与爱好</h2>
+    <ul class="cv-interests">
+      <li>
+        <strong>🚀 AI Agent</strong>
+        <span>探索自主智能体在科研工作流中的应用</span>
+      </li>
+      <li>
+        <strong>🖥️ Self-hosted HomeLab</strong>
+        <span>搭建家庭实验室，运行各类自托管服务</span>
+      </li>
+      <li>
+        <strong>🚴 Biocycle</strong>
+        <span>骑行爱好者，享受户外运动的乐趣</span>
+      </li>
+      <li>
+        <strong>🏀 篮球</strong>
+        <span>保持运动，健康生活</span>
+      </li>
+      <li>
+        <strong>🎮 视频游戏</strong>
+        <span>独立游戏爱好者，享受沉浸式体验</span>
+      </li>
+    </ul>
+  </section>
+
+  <section class="cv-section">
+    <h2>📦 开源项目</h2>
+    <p>
+      在 <a href="https://github.com/ohmeta" target="_blank" rel="noopener">OhMeta</a> 
+      组织下开发和维护多个生物信息学工具与数据分析流程。
+      欢迎访问我的 GitHub 了解更多项目详情。
+    </p>
+  </section>
 </BaseLayout>
+
+<style>
+  .cv-section {
+    margin-bottom: 2rem;
+  }
+  
+  .cv-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: 0.5rem;
+  }
+  
+  .cv-section h4 {
+    font-size: 1rem;
+    margin: 0.75rem 0 0.25rem;
+    color: var(--color-text-light);
+  }
+  
+  .cv-links {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .cv-links li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .cv-links a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+  
+  .cv-links a:hover {
+    text-decoration: underline;
+  }
+  
+  .cv-skills {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .cv-skills li {
+    margin-bottom: 0.75rem;
+    padding-left: 0;
+  }
+  
+  .cv-skills strong {
+    display: block;
+    color: var(--color-primary);
+  }
+  
+  .cv-skills span {
+    color: var(--color-text-light);
+    font-size: 0.95rem;
+  }
+  
+  .cv-tech {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+  
+  .tech-category {
+    background: var(--color-bg-secondary);
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  
+  .tech-category p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+  }
+  
+  .cv-interests {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .cv-interests li {
+    margin-bottom: 0.5rem;
+    padding-left: 0;
+  }
+  
+  .cv-interests strong {
+    color: var(--color-primary);
+  }
+  
+  .cv-interests span {
+    color: var(--color-text-light);
+    margin-left: 0.5rem;
+  }
+</style>
