@@ -8,4 +8,7 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
 	site: 'https://alienzj.tech',
 	integrations: [mdx(), sitemap()],
+	image: {
+		domains: ['alienzj.tech'],
+	},
 });

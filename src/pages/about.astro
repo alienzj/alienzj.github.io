@@ -1,63 +1,150 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 import Layout from '../layouts/BlogPost.astro';
 ---
 
 <Layout
 	title="About Me"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date('August 08 2021')}
-	heroImage={AboutHeroImage}
+	description="A journey through microbiome informatics, open source, and AI for Science"
+	pubDate={new Date('2026-03-13')}
 >
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
-		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
-		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
-	</p>
+	<div class="about-content">
+		<p class="lead">
+			Hi, I'm <strong>alienzj</strong> — a researcher and bioinformatics engineer passionate about
+			<strong>Microbiome Informatics</strong>. I dedicate my work to building robust, reproducible
+			tools that help scientists understand the complex world of microbial communities.
+		</p>
 
-	<p>
-		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non
-		tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non
-		blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
-		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
-		massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-		Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
-		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra
-		massa massa ultricies mi.
-	</p>
+		<h2>🔬 My Research Journey</h2>
+		<p>
+			My work centers on <strong>metagenomics</strong> — the study of genetic material recovered
+			directly from environmental samples. I focus on:
+		</p>
+		<ul>
+			<li><strong>Metagenome-Assembled Genomes (MAGs)</strong> — Recovering and analyzing microbial
+				genomes from complex communities without cultivation</li>
+			<li><strong>Workflow Automation</strong> — Building reproducible pipelines using Snakemake,
+				Nextflow, and containerization technologies</li>
+			<li><strong>Microbiome Data Mining</strong> — Statistical analysis and ecological interpretation
+				of multi-omics data</li>
+		</ul>
 
-	<p>
-		Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl
-		suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet
-		nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae
-		turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
-		dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat
-		semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-		vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum
-		facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam
-		vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla
-		urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
-	</p>
+		<h2>🏢 OhMeta</h2>
+		<p>
+			I co-founded <a href="https://github.com/ohmeta" target="_blank" rel="noopener">OhMeta</a>,
+			an organization dedicated to developing open-source tools for microbiome research. Our mission
+			is to make metagenomics analysis more accessible and robust for researchers worldwide.
+		</p>
+		<p>Key projects include:</p>
+		<ul>
+			<li><strong>metapi</strong> — A general metagenomics data mining system</li>
+			<li><strong>quantpi</strong> — Microbiome profiling pipeline</li>
+			<li><strong>rnapi</strong> — RNA-seq analysis pipeline</li>
+			<li><strong>qiimepi</strong> — Snakemake implementation of QIIME2</li>
+		</ul>
 
-	<p>
-		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper
-		viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc
-		scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur
-		gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-		pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
-		blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id
-		cursus metus aliquam eleifend mi.
-	</p>
+		<h2>🤖 AI for Science</h2>
+		<p>
+			I'm deeply interested in how <strong>AI and LLMs</strong> can transform scientific research.
+			My explorations include:
+		</p>
+		<ul>
+			<li>Building autonomous agents for literature review and data analysis</li>
+			<li>LLM-powered workflow orchestration for reproducible research</li>
+			<li>Intelligent tools that augment human scientific discovery</li>
+		</ul>
 
-	<p>
-		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta
-		nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam
-		tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
-		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
-		proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-	</p>
+		<h2>🌱 Personal Philosophy</h2>
+		<p>
+			As an <strong>INFJ</strong> personality type, I approach research with:
+		</p>
+		<ul class="infj-traits">
+			<li><strong>Idealism</strong> — Believing that open science can make the world better</li>
+			<li><strong>Empathy</strong> — Designing tools with the end user's experience in mind</li>
+			<li><strong>Depth</strong> — Preferring meaningful contributions over superficial metrics</li>
+			<li><strong>Integration</strong> — Seeing connections between disparate fields and ideas</li>
+		</ul>
+
+		<h2>🏠 Life Beyond Code</h2>
+		<p>When I'm not analyzing genomes or writing pipelines, you can find me:</p>
+		<ul>
+			<li>🚴 <strong>Cycling</strong> — Exploring roads and trails, finding balance between screen time and nature</li>
+			<li>🖥️ <strong>HomeLab</strong> — Running self-hosted services on Proxmox and TrueNAS</li>
+			<li>🎮 <strong>Indie Games</strong> — Playing thoughtful, narrative-driven experiences</li>
+			<li>🏀 <strong>Basketball</strong> — Staying active and healthy</li>
+		</ul>
+
+		<blockquote>
+			<p>"MAGs lives matter" 🦀</p>
+			<p class="quote-attribution">— A reminder that even the smallest organisms deserve attention, and that diversity (microbial and otherwise) is what makes our world rich and resilient.</p>
+		</blockquote>
+
+		<h2>📬 Connect</h2>
+		<p>
+			I'm always open to discussing collaborations, new ideas, or just chatting about
+			microbiomes and AI. Feel free to reach out via
+			<a href="https://github.com/alienzj" target="_blank" rel="noopener">GitHub</a> or
+			visit my website at <a href="https://alienzj.tech" target="_blank" rel="noopener">alienzj.tech</a>.
+		</p>
+	</div>
 </Layout>
+
+<style>
+	.about-content {
+		max-width: 720px;
+		margin: 0 auto;
+	}
+
+	.lead {
+		font-size: 1.15em;
+		line-height: 1.8;
+		color: rgb(var(--gray));
+	}
+
+	.about-content h2 {
+		margin-top: 2.5em;
+		margin-bottom: 1em;
+	}
+
+	.about-content ul {
+		margin-bottom: 1.5em;
+	}
+
+	.about-content li {
+		margin-bottom: 0.75em;
+		line-height: 1.7;
+		color: rgb(var(--gray));
+	}
+
+	.infj-traits li {
+		padding: 0.75rem 1rem;
+		background: rgba(var(--gray-light), 30%);
+		border-radius: 6px;
+		margin-bottom: 0.75rem;
+		transition: background 0.2s ease;
+	}
+
+	.infj-traits li:hover {
+		background: rgba(var(--gray-light), 50%);
+	}
+
+	.infj-traits strong {
+		color: var(--accent);
+	}
+
+	.quote-attribution {
+		font-size: 0.9em;
+		font-style: italic;
+		margin-top: 1em;
+		color: rgb(var(--gray));
+	}
+
+	.quote-attribution::before {
+		content: "— ";
+	}
+
+	@media (max-width: 720px) {
+		.lead {
+			font-size: 1.05em;
+		}
+	}
+</style>

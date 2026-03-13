@@ -4,125 +4,153 @@ import BaseLayout from '../layouts/BlogPost.astro';
 
 <BaseLayout
   title="Curriculum Vitae"
-  description="生物信息学工程师 - 专注于微生物组学与 AI for Science"
+  description="Microbiome Informatics & AI for Science Researcher"
   pubDate={new Date('2026-03-13')}
 >
   <section class="cv-section">
-    <h2>👤 个人简介</h2>
+    <h2>👤 Personal Profile</h2>
     <p>
-      生物信息学工程师，专注于<strong>微生物组学（Microbiome Informatics）</strong>数据分析与工具开发。
-      热衷于将 AI 技术应用于科学研究，探索<strong>AI for Science</strong>的无限可能。
-      开源爱好者，积极参与并维护多个生物信息学相关开源项目。
+      <strong>Microbiome Informatics</strong> researcher and bioinformatics engineer dedicated to 
+      developing robust tools for metagenomics data analysis. Passionate about 
+      <strong>AI for Science</strong> — exploring how autonomous agents and machine learning can 
+      revolutionize scientific workflows. Active open-source contributor in the bioinformatics community.
+    </p>
+    <p class="infj-note">
+      <em>INFJ personality type: Advocate, idealist, and lifelong learner committed to making science 
+      more accessible and reproducible through thoughtful tool design.</em>
     </p>
   </section>
 
   <section class="cv-section">
-    <h2>🔗 链接</h2>
+    <h2>🔗 Links</h2>
     <ul class="cv-links">
-      <li><strong>GitHub:</strong> <a href="https://github.com/alienzj" target="_blank" rel="noopener">@alienzj</a> — MAGs lives matter</li>
-      <li><strong>个人主页:</strong> <a href="https://alienzj.tech" target="_blank" rel="noopener">alienzj.tech</a></li>
-      <li><strong>OhMeta 组织:</strong> <a href="https://github.com/ohmeta" target="_blank" rel="noopener">github.com/ohmeta</a></li>
-      <li><strong>BioArchLinux:</strong> <a href="https://github.com/BioArchLinux" target="_blank" rel="noopener">github.com/BioArchLinux</a></li>
-      <li><strong>Bioconda:</strong> <a href="https://github.com/bioconda" target="_blank" rel="noopener">github.com/bioconda</a></li>
+      <li><strong>GitHub:</strong> <a href="https://github.com/alienzj" target="_blank" rel="noopener">@alienzj</a> — MAGs lives matter 🦀</li>
+      <li><strong>Personal Website:</strong> <a href="https://alienzj.tech" target="_blank" rel="noopener">alienzj.tech</a></li>
+      <li><strong>OhMeta (Co-founder):</strong> <a href="https://github.com/ohmeta" target="_blank" rel="noopener">github.com/ohmeta</a></li>
+      <li><strong>Metagenome Atlas:</strong> <a href="https://github.com/metagenome-atlas" target="_blank" rel="noopener">github.com/metagenome-atlas</a></li>
+      <li><strong>BioConda:</strong> <a href="https://github.com/bioconda" target="_blank" rel="noopener">github.com/bioconda</a></li>
+      <li><strong>Snakemake:</strong> <a href="https://github.com/snakemake" target="_blank" rel="noopener">github.com/snakemake</a></li>
     </ul>
   </section>
 
   <section class="cv-section">
-    <h2>💼 专业领域</h2>
+    <h2>🔬 Research Interests</h2>
     <ul class="cv-skills">
       <li>
-        <strong>微生物组学分析</strong>
-        <span>16S/ITS 扩增子分析、宏基因组组装、物种注释、功能预测</span>
+        <strong>Metagenome-Assembled Genomes (MAGs)</strong>
+        <span>Recovery, quality assessment, and comparative genomics of microbial genomes from complex communities</span>
       </li>
       <li>
-        <strong>生物信息流程开发</strong>
-        <span>Nextflow/Snakemake 流程构建、Docker/Singularity 容器化</span>
+        <strong>Microbiome Data Mining</strong>
+        <span>Statistical analysis, functional profiling, and ecological interpretation of multi-omics data</span>
       </li>
       <li>
-        <strong>编程语言</strong>
-        <span>Python、R、Bash、JavaScript/TypeScript</span>
+        <strong>Workflow Automation</strong>
+        <span>Snakemake/Nextflow pipeline development, containerization (Docker/Singularity), and reproducible research</span>
       </li>
       <li>
         <strong>AI for Science</strong>
-        <span>机器学习在组学数据中的应用、AI Agent 开发</span>
+        <span>LLM-powered research agents, automated data analysis, and intelligent scientific workflows</span>
       </li>
     </ul>
   </section>
 
   <section class="cv-section">
-    <h2>🛠️ 技术栈</h2>
+    <h2>🛠️ Technical Stack</h2>
     <div class="cv-tech">
       <div class="tech-category">
-        <h4>生物信息工具</h4>
-        <p>QIIME2, DADA2, MetaPhlAn, HUMAnN, MEGAHIT, SPAdes, CheckM</p>
+        <h4>Metagenomics Tools</h4>
+        <p>ATLAS, MetaPhlAn, HUMAnN, MEGAHIT, metaSPAdes, CheckM, GTDB-Tk, DADA2, QIIME2</p>
       </div>
       <div class="tech-category">
-        <h4>数据分析</h4>
-        <p>pandas, scikit-learn, seaborn, ggplot2, Bioconductor</p>
+        <h4>Data Science</h4>
+        <p>Python (pandas, numpy, scipy), R (tidyverse, phyloseq, microbiome), scikit-learn, seaborn</p>
       </div>
       <div class="tech-category">
-        <h4>AI/ML</h4>
-        <p>PyTorch, Transformers, LangChain, LLM Agent 框架</p>
+        <h4>Workflow & DevOps</h4>
+        <p>Snakemake, Nextflow, Docker, Singularity, Conda/Mamba, Git/GitHub Actions</p>
       </div>
       <div class="tech-category">
-        <h4>DevOps & HomeLab</h4>
-        <p>Docker, Kubernetes, Proxmox, TrueNAS, Ansible, GitOps</p>
+        <h4>AI/ML & Agents</h4>
+        <p>PyTorch, Transformers, LangChain, LLM orchestration, autonomous research agents</p>
       </div>
     </div>
   </section>
 
   <section class="cv-section">
-    <h2>🏠 兴趣与爱好</h2>
-    <ul class="cv-interests">
+    <h2>🏆 Key Contributions</h2>
+    <ul class="cv-achievements">
       <li>
-        <strong>🚀 AI Agent</strong>
-        <span>探索自主智能体在科研工作流中的应用</span>
+        <strong>ATLAS (403⭐)</strong>
+        <span>Automated metagenome analysis pipeline — "Three commands to analyze your metagenome"</span>
       </li>
       <li>
-        <strong>🖥️ Self-hosted HomeLab</strong>
-        <span>搭建家庭实验室，运行各类自托管服务</span>
+        <strong>BioConda Recipes</strong>
+        <span>Contributor to the bioinformatics conda channel (1.8k⭐ repo)</span>
       </li>
       <li>
-        <strong>🚴 Biocycle</strong>
-        <span>骑行爱好者，享受户外运动的乐趣</span>
+        <strong>Snakemake Wrappers</strong>
+        <span>Developing reusable workflow components for the Snakemake ecosystem (240⭐)</span>
       </li>
       <li>
-        <strong>🏀 篮球</strong>
-        <span>保持运动，健康生活</span>
-      </li>
-      <li>
-        <strong>🎮 视频游戏</strong>
-        <span>独立游戏爱好者，享受沉浸式体验</span>
+        <strong>metapi (58⭐)</strong>
+        <span>General metagenomics data mining system for robust microbiome research</span>
       </li>
     </ul>
   </section>
 
   <section class="cv-section">
-    <h2>📦 开源项目</h2>
+    <h2>📦 Open Source Projects</h2>
     <ul class="cv-projects">
       <li>
-        <strong><a href="https://github.com/ohmeta/metapi" target="_blank" rel="noopener">metapi</a></strong>
-        <span>A general metagenomics data mining system focus on robust microbiome research (58⭐)</span>
+        <strong><a href="https://github.com/ohmeta/metapi" target="_blank" rel="noopener">ohmeta/metapi</a></strong>
+        <span>A general metagenomics data mining system for robust microbiome research</span>
       </li>
       <li>
-        <strong><a href="https://github.com/ohmeta/quantpi" target="_blank" rel="noopener">quantpi</a></strong>
-        <span>Microbiome profiling pipeline (15⭐)</span>
+        <strong><a href="https://github.com/ohmeta/quantpi" target="_blank" rel="noopener">ohmeta/quantpi</a></strong>
+        <span>Microbiome profiling pipeline with comprehensive QC and statistical analysis</span>
       </li>
       <li>
-        <strong><a href="https://github.com/ohmeta/rnapi" target="_blank" rel="noopener">rnapi</a></strong>
-        <span>RNA-seq analysis pipeline (2⭐)</span>
+        <strong><a href="https://github.com/ohmeta/rnapi" target="_blank" rel="noopener">ohmeta/rnapi</a></strong>
+        <span>RNA-seq analysis pipeline for transcriptomics studies</span>
       </li>
       <li>
-        <strong><a href="https://github.com/metagenome-atlas/atlas" target="_blank" rel="noopener">ATLAS</a></strong>
-        <span>Three commands to start analyzing your metagenome data (403⭐)</span>
+        <strong><a href="https://github.com/ohmeta/qiimepi" target="_blank" rel="noopener">ohmeta/qiimepi</a></strong>
+        <span>Snakemake implementation of QIIME2 for 16S/ITS amplicon analysis</span>
       </li>
       <li>
-        <strong><a href="https://github.com/bioconda/bioconda-recipes" target="_blank" rel="noopener">Bioconda Recipes</a></strong>
-        <span>Conda recipes for the bioconda channel (Contributor)</span>
+        <strong><a href="https://github.com/metagenome-atlas/atlas" target="_blank" rel="noopener">metagenome-atlas/atlas</a></strong>
+        <span>Streamlined metagenome analysis with MAG recovery and annotation</span>
       </li>
       <li>
-        <strong><a href="https://github.com/snakemake/snakemake-wrappers" target="_blank" rel="noopener">Snakemake Wrappers</a></strong>
-        <span>The Snakemake wrapper repository (Contributor)</span>
+        <strong><a href="https://github.com/BioArchLinux" target="_blank" rel="noopener">BioArchLinux</a></strong>
+        <span>Community-driven bioinformatics software distribution</span>
+      </li>
+    </ul>
+  </section>
+
+  <section class="cv-section">
+    <h2>🌱 Personal Interests</h2>
+    <ul class="cv-interests">
+      <li>
+        <strong>🦀 Crustacean Enthusiast</strong>
+        <span>"MAGs lives matter" — fascinated by microbial diversity and evolutionary biology</span>
+      </li>
+      <li>
+        <strong>🤖 AI Agents</strong>
+        <span>Building autonomous agents to automate literature review and data analysis workflows</span>
+      </li>
+      <li>
+        <strong>🖥️ Self-hosted HomeLab</strong>
+        <span>Running Proxmox, TrueNAS, and containerized services for personal infrastructure</span>
+      </li>
+      <li>
+        <strong>🚴 Cycling</strong>
+        <span>Outdoor cycling and biocycle — finding balance between screen time and nature</span>
+      </li>
+      <li>
+        <strong>🎮 Indie Games</strong>
+        <span>Thoughtful, narrative-driven games that explore human experience</span>
       </li>
     </ul>
   </section>
@@ -130,120 +158,183 @@ import BaseLayout from '../layouts/BlogPost.astro';
 
 <style>
   .cv-section {
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
+    scroll-margin-top: 2rem;
   }
-  
+
   .cv-section h2 {
     font-size: 1.5rem;
-    margin-bottom: 1rem;
-    border-bottom: 2px solid var(--color-primary);
+    margin-bottom: 1.25rem;
+    border-bottom: 3px solid var(--accent);
     padding-bottom: 0.5rem;
+    color: rgb(var(--black));
   }
-  
+
   .cv-section h4 {
     font-size: 1rem;
     margin: 0.75rem 0 0.25rem;
-    color: var(--color-text-light);
+    color: rgb(var(--gray));
+    font-weight: 600;
   }
-  
+
+  .infj-note {
+    background: linear-gradient(135deg, rgba(35, 55, 255, 0.05) 0%, rgba(147, 112, 219, 0.05) 100%);
+    border-left: 4px solid var(--accent);
+    padding: 1rem 1.25rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1rem 0;
+    font-style: italic;
+    color: rgb(var(--gray-dark));
+  }
+
   .cv-links {
     list-style: none;
     padding: 0;
-  }
-  
-  .cv-links li {
-    margin-bottom: 0.5rem;
-  }
-  
-  .cv-links a {
-    color: var(--color-primary);
-    text-decoration: none;
-  }
-  
-  .cv-links a:hover {
-    text-decoration: underline;
-  }
-  
-  .cv-skills {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .cv-skills li {
-    margin-bottom: 0.75rem;
-    padding-left: 0;
-  }
-  
-  .cv-skills strong {
-    display: block;
-    color: var(--color-primary);
-  }
-  
-  .cv-skills span {
-    color: var(--color-text-light);
-    font-size: 0.95rem;
-  }
-  
-  .cv-tech {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-  }
-  
-  .tech-category {
-    background: var(--color-bg-secondary);
-    padding: 1rem;
-    border-radius: 8px;
-  }
-  
-  .tech-category p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: var(--color-text-light);
-  }
-  
-  .cv-interests {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .cv-interests li {
-    margin-bottom: 0.5rem;
-    padding-left: 0;
-  }
-  
-  .cv-interests strong {
-    color: var(--color-primary);
-  }
-  
-  .cv-interests span {
-    color: var(--color-text-light);
-    margin-left: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 0.75rem;
   }
 
+  .cv-links li {
+    margin-bottom: 0;
+    background: rgba(var(--gray-light), 30%);
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .cv-links li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(var(--gray), 15%);
+  }
+
+  .cv-links a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  .cv-links a:hover {
+    color: var(--accent-dark);
+    text-decoration: underline;
+  }
+
+  .cv-skills,
+  .cv-achievements,
+  .cv-interests,
   .cv-projects {
     list-style: none;
     padding: 0;
   }
 
+  .cv-skills li,
+  .cv-achievements li,
+  .cv-interests li,
   .cv-projects li {
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     padding-left: 0;
+    padding: 1rem 1.25rem;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid rgba(var(--gray-light), 80%);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .cv-skills li:hover,
+  .cv-achievements li:hover,
+  .cv-interests li:hover,
+  .cv-projects li:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 16px rgba(35, 55, 255, 0.1);
+  }
+
+  .cv-skills strong,
+  .cv-achievements strong,
+  .cv-interests strong,
+  .cv-projects strong {
+    display: block;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+
+  .cv-skills span,
+  .cv-achievements span,
+  .cv-interests span,
+  .cv-projects span {
+    color: rgb(var(--gray));
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .cv-tech {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .tech-category {
+    background: linear-gradient(135deg, rgba(var(--gray-light), 40%) 0%, rgba(255, 255, 255, 80%) 100%);
+    padding: 1.25rem;
+    border-radius: 10px;
+    border: 1px solid rgba(var(--gray-light), 60%);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .tech-category:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(var(--gray), 12%);
+  }
+
+  .tech-category h4 {
+    margin: 0 0 0.75rem 0;
+    color: var(--accent);
+    font-size: 1.05rem;
+  }
+
+  .tech-category p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgb(var(--gray));
+    line-height: 1.7;
   }
 
   .cv-projects strong a {
-    color: var(--color-primary);
+    color: var(--accent);
     text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
   }
 
   .cv-projects strong a:hover {
+    color: var(--accent-dark);
     text-decoration: underline;
   }
 
   .cv-projects span {
-    color: var(--color-text-light);
-    font-size: 0.95rem;
+    color: rgb(var(--gray));
+    font-size: 0.92rem;
     display: block;
-    margin-top: 0.25rem;
+    margin-top: 0.35rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 720px) {
+    .cv-section {
+      margin-bottom: 2rem;
+    }
+
+    .cv-section h2 {
+      font-size: 1.35rem;
+    }
+
+    .cv-links {
+      grid-template-columns: 1fr;
+    }
+
+    .cv-tech {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

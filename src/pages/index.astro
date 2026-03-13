@@ -13,37 +13,140 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
+			<h1>🦀 MAGs Lives Matter</h1>
+			<p class="intro">
+				Welcome! I'm a <strong>Microbiome Informatics</strong> researcher and bioinformatics engineer,
+				dedicated to developing robust tools for metagenomics data analysis. I believe in making
+				science more <strong>reproducible, accessible, and intelligent</strong> through open-source software
+				and AI-powered workflows.
 			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
+
+			<div class="highlight-grid">
+				<div class="highlight-card">
+					<h3>🔬 Research</h3>
+					<p>
+						Focused on metagenome-assembled genomes (MAGs), microbiome data mining,
+						and workflow automation using Snakemake and Nextflow.
+					</p>
+				</div>
+				<div class="highlight-card">
+					<h3>🤖 AI for Science</h3>
+					<p>
+						Exploring how LLM-powered agents can revolutionize scientific workflows
+						and automate literature review and data analysis.
+					</p>
+				</div>
+				<div class="highlight-card">
+					<h3>📦 Open Source</h3>
+					<p>
+						Active contributor to <a href="https://github.com/ohmeta">OhMeta</a>,
+						<a href="https://github.com/metagenome-atlas/atlas">ATLAS</a>,
+						<a href="https://github.com/bioconda">BioConda</a>, and
+						<a href="https://github.com/snakemake">Snakemake</a>.
+					</p>
+				</div>
+				<div class="highlight-card">
+					<h3>🌱 Personal</h3>
+					<p>
+						INFJ • Cycling enthusiast • Self-hosted HomeLab builder • Indie game lover
+						• Finding balance between code and nature.
+					</p>
+				</div>
+			</div>
+
+			<h2 style="margin-top: 2em;">🧭 Navigate</h2>
+			<ul class="nav-links">
+				<li><a href="/cv">📄 Curriculum Vitae</a> — My research interests, skills, and projects</li>
+				<li><a href="/blog">📝 Blog</a> — Thoughts on bioinformatics, AI, and scientific computing</li>
+				<li><a href="/about">👤 About</a> — More about my journey and philosophy</li>
+				<li><a href="https://github.com/alienzj" target="_blank" rel="noopener">🐙 GitHub</a> — My open-source contributions</li>
 			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
+
+			<blockquote>
+				<p>"The good researcher is not the one who has the best tools, but the one who builds tools that make others better."</p>
+			</blockquote>
+
+			<p style="margin-top: 2em; color: rgb(var(--gray)); font-size: 0.95rem;">
+				📍 Building the future of microbiome research, one commit at a time.
 			</p>
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.intro {
+		font-size: 1.1em;
+		line-height: 1.8;
+		color: rgb(var(--gray));
+	}
+
+	.highlight-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 1.25rem;
+		margin: 2rem 0;
+	}
+
+	.highlight-card {
+		background: white;
+		padding: 1.5rem;
+		border-radius: 10px;
+		border: 1px solid rgba(var(--gray-light), 70%);
+		box-shadow: var(--box-shadow);
+		transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+	}
+
+	.highlight-card:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--box-shadow-hover);
+		border-color: var(--accent);
+	}
+
+	.highlight-card h3 {
+		margin-bottom: 0.75rem;
+		font-size: 1.2rem;
+		color: var(--accent);
+	}
+
+	.highlight-card p {
+		margin: 0;
+		font-size: 0.95rem;
+		color: rgb(var(--gray));
+		line-height: 1.7;
+	}
+
+	.nav-links {
+		list-style: none;
+		padding: 0;
+	}
+
+	.nav-links li {
+		padding: 0.75rem 1rem;
+		margin-bottom: 0.5rem;
+		background: rgba(var(--gray-light), 30%);
+		border-radius: 6px;
+		transition: background 0.2s ease, transform 0.2s ease;
+	}
+
+	.nav-links li:hover {
+		background: rgba(var(--gray-light), 50%);
+		transform: translateX(4px);
+	}
+
+	.nav-links a {
+		color: var(--accent);
+		font-weight: 500;
+		text-decoration: none;
+	}
+
+	.nav-links a:hover {
+		color: var(--accent-dark);
+	}
+
+	@media (max-width: 720px) {
+		.highlight-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
