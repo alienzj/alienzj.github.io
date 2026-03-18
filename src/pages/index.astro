@@ -13,62 +13,38 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	<body>
 		<Header />
 		<main>
-			<h1>🦀 MAGs Lives Matter</h1>
+			<h1>alienzj</h1>
 			<p class="intro">
-				Welcome! I'm a <strong>Microbiome Informatics</strong> researcher and bioinformatics engineer,
-				dedicated to developing robust tools for metagenomics data analysis. I believe in making
-				science more <strong>reproducible, accessible, and intelligent</strong> through open-source software
-				and AI-powered workflows.
+				Microbiome Informatics researcher and bioinformatics engineer.
+				Building tools for metagenomics, MAGs, and AI-powered scientific workflows.
 			</p>
 
-			<div class="highlight-grid">
-				<div class="highlight-card">
+			<section class="sections">
+				<div class="section-card">
 					<h3>🔬 Research</h3>
-					<p>
-						Focused on metagenome-assembled genomes (MAGs), microbiome data mining,
-						and workflow automation using Snakemake and Nextflow.
-					</p>
+					<p>Metagenome-assembled genomes (MAGs), microbiome data mining, workflow automation with Snakemake and Nextflow.</p>
 				</div>
-				<div class="highlight-card">
+				<div class="section-card">
 					<h3>🤖 AI for Science</h3>
-					<p>
-						Exploring how LLM-powered agents can revolutionize scientific workflows
-						and automate literature review and data analysis.
-					</p>
+					<p>LLM-powered agents for scientific workflows, automated literature review, and intelligent data analysis.</p>
 				</div>
-				<div class="highlight-card">
+				<div class="section-card">
 					<h3>📦 Open Source</h3>
-					<p>
-						Active contributor to <a href="https://github.com/ohmeta">OhMeta</a>,
-						<a href="https://github.com/metagenome-atlas/atlas">ATLAS</a>,
-						<a href="https://github.com/bioconda">BioConda</a>, and
-						<a href="https://github.com/snakemake">Snakemake</a>.
-					</p>
+					<p>Contributor to <a href="https://github.com/ohmeta">OhMeta</a>, <a href="https://github.com/metagenome-atlas/atlas">ATLAS</a>, <a href="https://github.com/bioconda">BioConda</a>, and <a href="https://github.com/snakemake">Snakemake</a>.</p>
 				</div>
-				<div class="highlight-card">
+				<div class="section-card">
 					<h3>🌱 Personal</h3>
-					<p>
-						INFJ • Cycling enthusiast • Self-hosted HomeLab builder • Indie game lover
-						• Finding balance between code and nature.
-					</p>
+					<p>INFJ • Cycling • HomeLab • Indie games • Balancing code and nature.</p>
 				</div>
-			</div>
+			</section>
 
-			<h2 style="margin-top: 2em;">🧭 Navigate</h2>
-			<ul class="nav-links">
-				<li><a href="/cv">📄 Curriculum Vitae</a> — My research interests, skills, and projects</li>
+			<h2>Navigate</h2>
+			<ul class="nav-list">
+				<li><a href="/cv">📄 Curriculum Vitae</a> — Research interests, skills, and projects</li>
 				<li><a href="/blog">📝 Blog</a> — Thoughts on bioinformatics, AI, and scientific computing</li>
-				<li><a href="/about">👤 About</a> — More about my journey and philosophy</li>
-				<li><a href="https://github.com/alienzj" target="_blank" rel="noopener">🐙 GitHub</a> — My open-source contributions</li>
+				<li><a href="/about">👤 About</a> — My journey and philosophy</li>
+				<li><a href="https://github.com/alienzj" target="_blank" rel="noopener">🐙 GitHub</a> — Open-source contributions</li>
 			</ul>
-
-			<blockquote>
-				<p>"The good researcher is not the one who has the best tools, but the one who builds tools that make others better."</p>
-			</blockquote>
-
-			<p style="margin-top: 2em; color: rgb(var(--gray)); font-size: 0.95rem;">
-				📍 Building the future of microbiome research, one commit at a time.
-			</p>
 		</main>
 		<Footer />
 	</body>
@@ -76,76 +52,67 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 <style>
 	.intro {
-		font-size: 1.1em;
+		font-size: 1.125rem;
 		line-height: 1.8;
-		color: rgb(var(--gray));
+		color: #57606a;
+		margin-bottom: 2.5rem;
 	}
 
-	.highlight-grid {
+	.sections {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-		gap: 1.25rem;
-		margin: 2rem 0;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+		margin-bottom: 2.5rem;
 	}
 
-	.highlight-card {
-		background: white;
-		padding: 1.5rem;
-		border-radius: 10px;
-		border: 1px solid rgba(var(--gray-light), 70%);
-		box-shadow: var(--box-shadow);
-		transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+	.section-card {
+		padding: 1.25rem;
+		background: #f6f8fa;
+		border-radius: 8px;
+		border: 1px solid #eaeef2;
 	}
 
-	.highlight-card:hover {
-		transform: translateY(-4px);
-		box-shadow: var(--box-shadow-hover);
-		border-color: var(--accent);
+	.section-card:hover {
+		border-color: #0366d6;
 	}
 
-	.highlight-card h3 {
-		margin-bottom: 0.75rem;
-		font-size: 1.2rem;
-		color: var(--accent);
+	.section-card h3 {
+		margin: 0 0 0.5rem 0;
+		font-size: 1rem;
 	}
 
-	.highlight-card p {
+	.section-card p {
 		margin: 0;
-		font-size: 0.95rem;
-		color: rgb(var(--gray));
-		line-height: 1.7;
+		font-size: 0.925rem;
+		color: #57606a;
+		line-height: 1.6;
 	}
 
-	.nav-links {
+	.section-card a {
+		color: #0366d6;
+	}
+
+	.nav-list {
 		list-style: none;
 		padding: 0;
 	}
 
-	.nav-links li {
-		padding: 0.75rem 1rem;
-		margin-bottom: 0.5rem;
-		background: rgba(var(--gray-light), 30%);
-		border-radius: 6px;
-		transition: background 0.2s ease, transform 0.2s ease;
+	.nav-list li {
+		padding: 0.75rem 0;
+		border-bottom: 1px solid #eaeef2;
 	}
 
-	.nav-links li:hover {
-		background: rgba(var(--gray-light), 50%);
-		transform: translateX(4px);
+	.nav-list li:last-child {
+		border-bottom: none;
 	}
 
-	.nav-links a {
-		color: var(--accent);
+	.nav-list a {
+		color: #0366d6;
 		font-weight: 500;
-		text-decoration: none;
 	}
 
-	.nav-links a:hover {
-		color: var(--accent-dark);
-	}
-
-	@media (max-width: 720px) {
-		.highlight-grid {
+	@media (max-width: 600px) {
+		.sections {
 			grid-template-columns: 1fr;
 		}
 	}
