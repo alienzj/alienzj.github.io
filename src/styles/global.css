@@ -6,6 +6,7 @@
   --accent: #222222;
   --accent-hover: #000000;
   --border-color: #eeeeee;
+  --code-bg: #f6f8fa;
   
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -27,6 +28,7 @@
     --accent: #ffffff;
     --accent-hover: #cccccc;
     --border-color: #333333;
+    --code-bg: #1a1a1a;
   }
 }
 
@@ -99,15 +101,11 @@ code {
 }
 
 pre {
-  background: #f6f8fa;
+  background: var(--code-bg);
   padding: var(--space-4);
   overflow-x: auto;
   border-radius: 6px;
   margin-bottom: var(--space-6);
-}
-
-@media (prefers-color-scheme: dark) {
-  pre { background: #1a1a1a; }
 }
 
 blockquote {

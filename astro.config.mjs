@@ -6,9 +6,18 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://alienzj.tech',
-	integrations: [mdx(), sitemap()],
-	image: {
-		domains: ['alienzj.tech'],
-	},
+        site: 'https://alienzj.tech',
+        integrations: [mdx(), sitemap()],
+        markdown: {
+                shikiConfig: {
+                        themes: {
+                                light: 'github-light',
+                                dark: 'github-dark',
+                        },
+                },
+        },
+        image: {
+                domains: ['alienzj.tech'],
+        },
 });
+
