@@ -1,5 +1,6 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 import { SITE_TITLE } from '../consts';
 ---
 
@@ -120,10 +121,19 @@ import { SITE_TITLE } from '../consts';
       .back-link:hover {
         color: var(--text-primary);
       }
+
+      .theme-toggle-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+      }
     </style>
   </head>
   <body>
     <a href="/about" class="back-link no-print">&larr; Back to About</a>
+    <div class="theme-toggle-container no-print">
+      <ThemeToggle />
+    </div>
     
     <div class="cv-paper">
       <header class="header">
