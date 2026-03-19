@@ -19,19 +19,6 @@
   --space-16: 4rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-primary: #121212;
-    --text-primary: #e0e0e0;
-    --text-secondary: #b0b0b0;
-    --text-muted: #888888;
-    --accent: #ffffff;
-    --accent-hover: #cccccc;
-    --border-color: #333333;
-    --code-bg: #1a1a1a;
-  }
-}
-
 .dark {
   --bg-primary: #121212;
   --text-primary: #e0e0e0;

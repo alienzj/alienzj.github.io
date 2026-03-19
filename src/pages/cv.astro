@@ -26,10 +26,8 @@ import { SITE_TITLE } from '../consts';
         min-height: 1100px;
       }
 
-      @media (prefers-color-scheme: dark) {
-        .cv-paper {
-          box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-        }
+      :global(.dark) .cv-paper {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
       }
 
       @media print {
