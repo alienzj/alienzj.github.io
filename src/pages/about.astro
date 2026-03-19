@@ -3,148 +3,96 @@ import Layout from '../layouts/BlogPost.astro';
 ---
 
 <Layout
-	title="About Me"
-	description="A journey through microbiome informatics, open source, and AI for Science"
+	title="About & CV"
+	description="Microbiome Informatics Researcher & Bioinformatics Engineer"
 	pubDate={new Date('2026-03-13')}
 >
-	<div class="about-content">
-		<p class="lead">
-			Hi, I'm <strong>alienzj</strong> — a researcher and bioinformatics engineer passionate about
-			<strong>Microbiome Informatics</strong>. I dedicate my work to building robust, reproducible
-			tools that help scientists understand the complex world of microbial communities.
+	<div class="about-container">
+		<p class="intro">
+			Hi, I'm <strong>alienzj</strong>. I am a researcher and bioinformatics engineer 
+      dedicated to building tools for microbiome informatics and AI-powered scientific workflows.
 		</p>
 
-		<h2>🔬 My Research Journey</h2>
-		<p>
-			My work centers on <strong>metagenomics</strong> — the study of genetic material recovered
-			directly from environmental samples. I focus on:
-		</p>
-		<ul>
-			<li><strong>Metagenome-Assembled Genomes (MAGs)</strong> — Recovering and analyzing microbial
-				genomes from complex communities without cultivation</li>
-			<li><strong>Workflow Automation</strong> — Building reproducible pipelines using Snakemake,
-				Nextflow, and containerization technologies</li>
-			<li><strong>Microbiome Data Mining</strong> — Statistical analysis and ecological interpretation
-				of multi-omics data</li>
-		</ul>
+		<section>
+			<h2>Research & Work</h2>
+			<p>
+				My work centers on <strong>metagenomics</strong> and the development of 
+        robust, reproducible pipelines. I focus on Metagenome-Assembled Genomes (MAGs) 
+        and high-throughput data analysis.
+			</p>
+      <p>
+        I am a co-founder of <strong>OhMeta</strong>, where I develop tools like 
+        <code>metapi</code>, <code>quantpi</code>, <code>rnapi</code>, <code>qiimepi</code>, 
+        <code>skillpi</code>, and <code>clawpi</code>.
+      </p>
+		</section>
 
-		<h2>🏢 OhMeta</h2>
-		<p>
-			I co-founded <a href="https://github.com/ohmeta" target="_blank" rel="noopener">OhMeta</a>,
-			an organization dedicated to developing open-source tools for microbiome research. Our mission
-			is to make metagenomics analysis more accessible and robust for researchers worldwide.
-		</p>
-		<p>Key projects include:</p>
-		<ul>
-			<li><strong>metapi</strong> — A general metagenomics data mining system</li>
-			<li><strong>quantpi</strong> — Microbiome profiling pipeline</li>
-			<li><strong>rnapi</strong> — RNA-seq analysis pipeline</li>
-			<li><strong>qiimepi</strong> — Snakemake implementation of QIIME2</li>
-		</ul>
+		<section>
+			<h2>AI for Science</h2>
+			<p>
+				I am exploring how Large Language Models (LLMs) and autonomous agents 
+        can transform scientific discovery, specifically through workflow 
+        orchestration and automated data interpretation.
+			</p>
+		</section>
 
-		<h2>🤖 AI for Science</h2>
-		<p>
-			I'm deeply interested in how <strong>AI and LLMs</strong> can transform scientific research.
-			My explorations include:
-		</p>
-		<ul>
-			<li>Building autonomous agents for literature review and data analysis</li>
-			<li>LLM-powered workflow orchestration for reproducible research</li>
-			<li>Intelligent tools that augment human scientific discovery</li>
-		</ul>
+    <section>
+      <h2>Curriculum Vitae</h2>
+      <p>
+        For a more formal overview of my experience, you can view my 
+        <a href="/cv" class="cv-link">Curriculum Vitae (PDF-style HTML)</a>.
+      </p>
+    </section>
 
-		<h2>🌱 Personal Philosophy</h2>
-		<p>
-			As an <strong>INFJ</strong> personality type, I approach research with:
-		</p>
-		<ul class="infj-traits">
-			<li><strong>Idealism</strong> — Believing that open science can make the world better</li>
-			<li><strong>Empathy</strong> — Designing tools with the end user's experience in mind</li>
-			<li><strong>Depth</strong> — Preferring meaningful contributions over superficial metrics</li>
-			<li><strong>Integration</strong> — Seeing connections between disparate fields and ideas</li>
-		</ul>
+		<section>
+			<h2>Personal</h2>
+			<p>
+				Outside of code, I enjoy cycling, HomeLab experimentation, indie games, 
+        and basketball. I am an INFJ — committed to meaningful contributions 
+        and open science.
+			</p>
+		</section>
 
-		<h2>🏠 Life Beyond Code</h2>
-		<p>When I'm not analyzing genomes or writing pipelines, you can find me:</p>
-		<ul>
-			<li>🚴 <strong>Cycling</strong> — Exploring roads and trails, finding balance between screen time and nature</li>
-			<li>🖥️ <strong>HomeLab</strong> — Running self-hosted services on Proxmox and TrueNAS</li>
-			<li>🎮 <strong>Indie Games</strong> — Playing thoughtful, narrative-driven experiences</li>
-			<li>🏀 <strong>Basketball</strong> — Staying active and healthy</li>
-		</ul>
-
-		<blockquote>
-			<p>"MAGs lives matter" 🦀</p>
-			<p class="quote-attribution">— A reminder that even the smallest organisms deserve attention, and that diversity (microbial and otherwise) is what makes our world rich and resilient.</p>
-		</blockquote>
-
-		<h2>📬 Connect</h2>
-		<p>
-			I'm always open to discussing collaborations, new ideas, or just chatting about
-			microbiomes and AI. Feel free to reach out via
-			<a href="https://github.com/alienzj" target="_blank" rel="noopener">GitHub</a> or
-			visit my website at <a href="https://alienzj.tech" target="_blank" rel="noopener">alienzj.tech</a>.
-		</p>
+    <blockquote>
+      "MAGs lives matter" 🦀
+    </blockquote>
 	</div>
 </Layout>
 
 <style>
-	.about-content {
+	.about-container {
 		max-width: 720px;
 		margin: 0 auto;
 	}
 
-	.lead {
-		font-size: 1.15em;
-		line-height: 1.8;
-		color: rgb(var(--gray));
+	.intro {
+		font-size: 1.4rem;
+		line-height: 1.6;
+		margin-bottom: var(--space-10);
 	}
 
-	.about-content h2 {
-		margin-top: 2.5em;
-		margin-bottom: 1em;
+	section {
+		margin-bottom: var(--space-8);
 	}
 
-	.about-content ul {
-		margin-bottom: 1.5em;
+	h2 {
+		font-size: 1.2rem;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--text-muted);
+		border-bottom: 1px solid var(--border-color);
+		padding-bottom: var(--space-2);
+		margin-bottom: var(--space-4);
 	}
 
-	.about-content li {
-		margin-bottom: 0.75em;
-		line-height: 1.7;
-		color: rgb(var(--gray));
-	}
+  .cv-link {
+    font-weight: 600;
+    text-decoration: underline;
+  }
 
-	.infj-traits li {
-		padding: 0.75rem 1rem;
-		background: rgba(var(--gray-light), 30%);
-		border-radius: 6px;
-		margin-bottom: 0.75rem;
-		transition: background 0.2s ease;
-	}
-
-	.infj-traits li:hover {
-		background: rgba(var(--gray-light), 50%);
-	}
-
-	.infj-traits strong {
-		color: var(--accent);
-	}
-
-	.quote-attribution {
-		font-size: 0.9em;
-		font-style: italic;
-		margin-top: 1em;
-		color: rgb(var(--gray));
-	}
-
-	.quote-attribution::before {
-		content: "— ";
-	}
-
-	@media (max-width: 720px) {
-		.lead {
-			font-size: 1.05em;
-		}
-	}
+  blockquote {
+    margin-top: var(--space-12);
+    text-align: center;
+    font-size: 1.5rem;
+  }
 </style>

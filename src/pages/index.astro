@@ -7,113 +7,110 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>alienzj</h1>
-			<p class="intro">
-				Microbiome Informatics researcher and bioinformatics engineer.
-				Building tools for metagenomics, MAGs, and AI-powered scientific workflows.
-			</p>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="bio">
+        <h1>alienzj</h1>
+        <p>
+          Microbiome Informatics Researcher & Bioinformatics Engineer.
+          Focusing on metagenomics, MAGs, and AI-powered scientific workflows.
+          Passionate about open-source science and community-driven tool development.
+        </p>
+        <p>
+          I am a co-founder of <a href="https://github.com/ohmeta">OhMeta</a> and a 
+          contributor to <a href="https://github.com/snakemake">Snakemake</a>, 
+          <a href="https://github.com/bioconda">BioConda</a>, and 
+          <a href="https://github.com/metagenome-atlas">Metagenome Atlas</a>.
+        </p>
+      </section>
 
-			<section class="sections">
-				<div class="section-card">
-					<h3>🔬 Research</h3>
-					<p>Metagenome-assembled genomes (MAGs), microbiome data mining, workflow automation with Snakemake and Nextflow.</p>
-				</div>
-				<div class="section-card">
-					<h3>🤖 AI for Science</h3>
-					<p>LLM-powered agents for scientific workflows, automated literature review, and intelligent data analysis.</p>
-				</div>
-				<div class="section-card">
-					<h3>📦 Open Source</h3>
-					<p>Contributor to <a href="https://github.com/ohmeta">OhMeta</a>, <a href="https://github.com/metagenome-atlas/atlas">ATLAS</a>, <a href="https://github.com/bioconda">BioConda</a>, and <a href="https://github.com/snakemake">Snakemake</a>.</p>
-				</div>
-				<div class="section-card">
-					<h3>🌱 Personal</h3>
-					<p>INFJ • Cycling • HomeLab • Indie games • Balancing code and nature.</p>
-				</div>
-			</section>
+      <section class="projects">
+        <h2>Selected Projects</h2>
+        <ul>
+          <li>
+            <strong><a href="https://github.com/ohmeta/metapi">metapi</a></strong>: 
+            A general metagenomics data mining system.
+          </li>
+          <li>
+            <strong><a href="https://github.com/ohmeta/quantpi">quantpi</a></strong>: 
+            Microbiome profiling and statistical analysis.
+          </li>
+          <li>
+            <strong><a href="https://github.com/ohmeta/clawpi">clawpi</a></strong>: 
+            AI-powered workflow orchestration.
+          </li>
+        </ul>
+        <p><a href="/projects">View all projects &rarr;</a></p>
+      </section>
 
-			<h2>Navigate</h2>
-			<ul class="nav-list">
-				<li><a href="/cv">📄 Curriculum Vitae</a> — Research interests, skills, and projects</li>
-				<li><a href="/blog">📝 Blog</a> — Thoughts on bioinformatics, AI, and scientific computing</li>
-				<li><a href="/about">👤 About</a> — My journey and philosophy</li>
-				<li><a href="https://github.com/alienzj" target="_blank" rel="noopener">🐙 GitHub</a> — Open-source contributions</li>
-			</ul>
-		</main>
-		<Footer />
-	</body>
+      <section class="blog-preview">
+        <h2>Recent Blog Posts</h2>
+        <ul>
+          <li>
+            <a href="/blog/velvet-genome-assembler">Velvet 基因组组装器详解：从论文到 C 代码实现</a>
+            <span>(Mar 13, 2026)</span>
+          </li>
+        </ul>
+        <p><a href="/blog">Read the blog &rarr;</a></p>
+      </section>
+
+      <section class="links">
+        <h2>Links</h2>
+        <ul>
+          <li><a href="https://github.com/alienzj">GitHub (@alienzj)</a></li>
+          <li><a href="https://alienzj.tech">Personal Website (alienzj.tech)</a></li>
+          <li><a href="/about">About & Curriculum Vitae</a></li>
+        </ul>
+      </section>
+    </main>
+    <Footer />
+  </body>
 </html>
 
 <style>
-	.intro {
-		font-size: 1.125rem;
-		line-height: 1.8;
-		color: #57606a;
-		margin-bottom: 2.5rem;
-	}
+  .bio h1 {
+    font-size: 3rem;
+    margin-bottom: var(--space-6);
+  }
 
-	.sections {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 1rem;
-		margin-bottom: 2.5rem;
-	}
+  .bio p {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    max-width: 700px;
+  }
 
-	.section-card {
-		padding: 1.25rem;
-		background: #f6f8fa;
-		border-radius: 8px;
-		border: 1px solid #eaeef2;
-	}
+  section {
+    margin-bottom: var(--space-12);
+  }
 
-	.section-card:hover {
-		border-color: #0366d6;
-	}
+  h2 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-6);
+  }
 
-	.section-card h3 {
-		margin: 0 0 0.5rem 0;
-		font-size: 1rem;
-	}
+  ul {
+    list-style: none;
+    padding: 0;
+  }
 
-	.section-card p {
-		margin: 0;
-		font-size: 0.925rem;
-		color: #57606a;
-		line-height: 1.6;
-	}
+  li {
+    margin-bottom: var(--space-4);
+    line-height: 1.5;
+  }
 
-	.section-card a {
-		color: #0366d6;
-	}
-
-	.nav-list {
-		list-style: none;
-		padding: 0;
-	}
-
-	.nav-list li {
-		padding: 0.75rem 0;
-		border-bottom: 1px solid #eaeef2;
-	}
-
-	.nav-list li:last-child {
-		border-bottom: none;
-	}
-
-	.nav-list a {
-		color: #0366d6;
-		font-weight: 500;
-	}
-
-	@media (max-width: 600px) {
-		.sections {
-			grid-template-columns: 1fr;
-		}
-	}
+  span {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-left: var(--space-2);
+  }
 </style>

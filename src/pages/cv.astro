@@ -1,340 +1,193 @@
 ---
-import BaseLayout from '../layouts/BlogPost.astro';
+import BaseHead from '../components/BaseHead.astro';
+import { SITE_TITLE } from '../consts';
 ---
 
-<BaseLayout
-  title="Curriculum Vitae"
-  description="Microbiome Informatics & AI for Science Researcher"
-  pubDate={new Date('2026-03-13')}
->
-  <section class="cv-section">
-    <h2>👤 Personal Profile</h2>
-    <p>
-      <strong>Microbiome Informatics</strong> researcher and bioinformatics engineer dedicated to 
-      developing robust tools for metagenomics data analysis. Passionate about 
-      <strong>AI for Science</strong> — exploring how autonomous agents and machine learning can 
-      revolutionize scientific workflows. Active open-source contributor in the bioinformatics community.
-    </p>
-    <p class="infj-note">
-      <em>INFJ personality type: Advocate, idealist, and lifelong learner committed to making science 
-      more accessible and reproducible through thoughtful tool design.</em>
-    </p>
-  </section>
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`CV | ${SITE_TITLE}`} description="Curriculum Vitae" />
+    <style>
+      body {
+        background: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        font-family: Georgia, serif;
+      }
 
-  <section class="cv-section">
-    <h2>🔗 Links</h2>
-    <ul class="cv-links">
-      <li><strong>GitHub:</strong> <a href="https://github.com/alienzj" target="_blank" rel="noopener">@alienzj</a> — MAGs lives matter 🦀</li>
-      <li><strong>Personal Website:</strong> <a href="https://alienzj.tech" target="_blank" rel="noopener">alienzj.tech</a></li>
-      <li><strong>OhMeta (Co-founder):</strong> <a href="https://github.com/ohmeta" target="_blank" rel="noopener">github.com/ohmeta</a></li>
-      <li><strong>Metagenome Atlas:</strong> <a href="https://github.com/metagenome-atlas" target="_blank" rel="noopener">github.com/metagenome-atlas</a></li>
-      <li><strong>BioConda:</strong> <a href="https://github.com/bioconda" target="_blank" rel="noopener">github.com/bioconda</a></li>
-      <li><strong>Snakemake:</strong> <a href="https://github.com/snakemake" target="_blank" rel="noopener">github.com/snakemake</a></li>
-    </ul>
-  </section>
+      .cv-paper {
+        background: white;
+        max-width: 800px;
+        margin: var(--space-12) auto;
+        padding: var(--space-12);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        min-height: 1100px; /* A4-ish height */
+      }
 
-  <section class="cv-section">
-    <h2>🔬 Research Interests</h2>
-    <ul class="cv-skills">
-      <li>
-        <strong>Metagenome-Assembled Genomes (MAGs)</strong>
-        <span>Recovery, quality assessment, and comparative genomics of microbial genomes from complex communities</span>
-      </li>
-      <li>
-        <strong>Microbiome Data Mining</strong>
-        <span>Statistical analysis, functional profiling, and ecological interpretation of multi-omics data</span>
-      </li>
-      <li>
-        <strong>Workflow Automation</strong>
-        <span>Snakemake/Nextflow pipeline development, containerization (Docker/Singularity), and reproducible research</span>
-      </li>
-      <li>
-        <strong>AI for Science</strong>
-        <span>LLM-powered research agents, automated data analysis, and intelligent scientific workflows</span>
-      </li>
-    </ul>
-  </section>
+      @media print {
+        body { background: white; }
+        .cv-paper { box-shadow: none; margin: 0; width: 100%; max-width: 100%; }
+        .no-print { display: none; }
+      }
 
-  <section class="cv-section">
-    <h2>🛠️ Technical Stack</h2>
-    <div class="cv-tech">
-      <div class="tech-category">
-        <h4>Metagenomics Tools</h4>
-        <p>ATLAS, MetaPhlAn, HUMAnN, MEGAHIT, metaSPAdes, CheckM, GTDB-Tk, DADA2, QIIME2</p>
-      </div>
-      <div class="tech-category">
-        <h4>Data Science</h4>
-        <p>Python (pandas, numpy, scipy), R (tidyverse, phyloseq, microbiome), scikit-learn, seaborn</p>
-      </div>
-      <div class="tech-category">
-        <h4>Workflow & DevOps</h4>
-        <p>Snakemake, Nextflow, Docker, Singularity, Conda/Mamba, Git/GitHub Actions</p>
-      </div>
-      <div class="tech-category">
-        <h4>AI/ML & Agents</h4>
-        <p>PyTorch, Transformers, LangChain, LLM orchestration, autonomous research agents</p>
-      </div>
+      .header {
+        text-align: center;
+        margin-bottom: var(--space-10);
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      .contact-info {
+        margin-top: var(--space-2);
+        font-family: -apple-system, sans-serif;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+      }
+
+      section {
+        margin-bottom: var(--space-8);
+      }
+
+      h2 {
+        font-family: -apple-system, sans-serif;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border-bottom: 2px solid #000;
+        padding-bottom: 2px;
+        margin-bottom: var(--space-4);
+      }
+
+      .cv-item {
+        margin-bottom: var(--space-4);
+      }
+
+      .cv-item-header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+      }
+
+      .cv-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .cv-list li {
+        margin-bottom: var(--space-2);
+        line-height: 1.5;
+      }
+
+      .tech-stack {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-4);
+      }
+
+      .tech-category h3 {
+        font-family: -apple-system, sans-serif;
+        font-size: 0.9rem;
+        margin: 0 0 var(--space-1) 0;
+      }
+
+      .tech-category p {
+        font-size: 0.9rem;
+        margin: 0;
+      }
+
+      .back-link {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        font-family: -apple-system, sans-serif;
+        font-size: 0.9rem;
+        text-decoration: none;
+        color: var(--text-muted);
+      }
+
+      .back-link:hover {
+        color: var(--text-primary);
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/about" class="back-link no-print">&larr; Back to About</a>
+    
+    <div class="cv-paper">
+      <header class="header">
+        <h1>alienzj</h1>
+        <div class="contact-info">
+          Bioinformatics Engineer | Researcher | alienzj.tech
+        </div>
+      </header>
+
+      <section>
+        <h2>Personal Summary</h2>
+        <p>
+          Microbiome Informatics researcher and bioinformatics engineer dedicated to developing 
+          robust tools for metagenomics data analysis. Focused on high-throughput pipeline 
+          development, workflow automation, and AI-powered scientific discovery.
+        </p>
+      </section>
+
+      <section>
+        <h2>Technical Stack</h2>
+        <div class="tech-stack">
+          <div class="tech-category">
+            <h3>Metagenomics</h3>
+            <p>ATLAS, MetaPhlAn, HUMAnN, MEGAHIT, CheckM, GTDB-Tk, QIIME2</p>
+          </div>
+          <div class="tech-category">
+            <h3>Workflow & Ops</h3>
+            <p>Snakemake, Nextflow, Docker, Singularity, Conda, GitHub Actions</p>
+          </div>
+          <div class="tech-category">
+            <h3>Data Science</h3>
+            <p>Python (pandas, numpy, scikit-learn), R (tidyverse, phyloseq)</p>
+          </div>
+          <div class="tech-category">
+            <h3>AI & Agents</h3>
+            <p>LLM orchestration, LangChain, Autonomous Agents for Science</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Open Source Projects</h2>
+        <ul class="cv-list">
+          <li><strong>metapi</strong>: General metagenomics data mining system for robust research.</li>
+          <li><strong>quantpi</strong>: Microbiome profiling pipeline with comprehensive QC.</li>
+          <li><strong>rnapi</strong>: RNA-seq analysis pipeline for transcriptomics.</li>
+          <li><strong>qiimepi</strong>: Snakemake implementation of QIIME2 for amplicon analysis.</li>
+          <li><strong>skillpi</strong>: Knowledge base and skill management for scientific workflows.</li>
+          <li><strong>clawpi</strong>: AI-powered workflow orchestration and discovery.</li>
+          <li><strong>ATLAS (Contributor)</strong>: Automated metagenome analysis pipeline.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Research Interests</h2>
+        <ul class="cv-list">
+          <li>Recovery and analysis of Metagenome-Assembled Genomes (MAGs).</li>
+          <li>Microbiome data mining and functional profiling.</li>
+          <li>Reproducible research through workflow automation.</li>
+          <li>Artificial Intelligence for scientific discovery (AI4Science).</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Links</h2>
+        <ul class="cv-list">
+          <li>GitHub: github.com/alienzj</li>
+          <li>Organization: github.com/ohmeta</li>
+          <li>Website: alienzj.tech</li>
+        </ul>
+      </section>
     </div>
-  </section>
-
-  <section class="cv-section">
-    <h2>🏆 Key Contributions</h2>
-    <ul class="cv-achievements">
-      <li>
-        <strong>ATLAS (403⭐)</strong>
-        <span>Automated metagenome analysis pipeline — "Three commands to analyze your metagenome"</span>
-      </li>
-      <li>
-        <strong>BioConda Recipes</strong>
-        <span>Contributor to the bioinformatics conda channel (1.8k⭐ repo)</span>
-      </li>
-      <li>
-        <strong>Snakemake Wrappers</strong>
-        <span>Developing reusable workflow components for the Snakemake ecosystem (240⭐)</span>
-      </li>
-      <li>
-        <strong>metapi (58⭐)</strong>
-        <span>General metagenomics data mining system for robust microbiome research</span>
-      </li>
-    </ul>
-  </section>
-
-  <section class="cv-section">
-    <h2>📦 Open Source Projects</h2>
-    <ul class="cv-projects">
-      <li>
-        <strong><a href="https://github.com/ohmeta/metapi" target="_blank" rel="noopener">ohmeta/metapi</a></strong>
-        <span>A general metagenomics data mining system for robust microbiome research</span>
-      </li>
-      <li>
-        <strong><a href="https://github.com/ohmeta/quantpi" target="_blank" rel="noopener">ohmeta/quantpi</a></strong>
-        <span>Microbiome profiling pipeline with comprehensive QC and statistical analysis</span>
-      </li>
-      <li>
-        <strong><a href="https://github.com/ohmeta/rnapi" target="_blank" rel="noopener">ohmeta/rnapi</a></strong>
-        <span>RNA-seq analysis pipeline for transcriptomics studies</span>
-      </li>
-      <li>
-        <strong><a href="https://github.com/ohmeta/qiimepi" target="_blank" rel="noopener">ohmeta/qiimepi</a></strong>
-        <span>Snakemake implementation of QIIME2 for 16S/ITS amplicon analysis</span>
-      </li>
-      <li>
-        <strong><a href="https://github.com/metagenome-atlas/atlas" target="_blank" rel="noopener">metagenome-atlas/atlas</a></strong>
-        <span>Streamlined metagenome analysis with MAG recovery and annotation</span>
-      </li>
-      <li>
-        <strong><a href="https://github.com/BioArchLinux" target="_blank" rel="noopener">BioArchLinux</a></strong>
-        <span>Community-driven bioinformatics software distribution</span>
-      </li>
-    </ul>
-  </section>
-
-  <section class="cv-section">
-    <h2>🌱 Personal Interests</h2>
-    <ul class="cv-interests">
-      <li>
-        <strong>🦀 Crustacean Enthusiast</strong>
-        <span>"MAGs lives matter" — fascinated by microbial diversity and evolutionary biology</span>
-      </li>
-      <li>
-        <strong>🤖 AI Agents</strong>
-        <span>Building autonomous agents to automate literature review and data analysis workflows</span>
-      </li>
-      <li>
-        <strong>🖥️ Self-hosted HomeLab</strong>
-        <span>Running Proxmox, TrueNAS, and containerized services for personal infrastructure</span>
-      </li>
-      <li>
-        <strong>🚴 Cycling</strong>
-        <span>Outdoor cycling and biocycle — finding balance between screen time and nature</span>
-      </li>
-      <li>
-        <strong>🎮 Indie Games</strong>
-        <span>Thoughtful, narrative-driven games that explore human experience</span>
-      </li>
-    </ul>
-  </section>
-</BaseLayout>
-
-<style>
-  .cv-section {
-    margin-bottom: 2.5rem;
-    scroll-margin-top: 2rem;
-  }
-
-  .cv-section h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1.25rem;
-    border-bottom: 3px solid var(--accent);
-    padding-bottom: 0.5rem;
-    color: rgb(var(--black));
-  }
-
-  .cv-section h4 {
-    font-size: 1rem;
-    margin: 0.75rem 0 0.25rem;
-    color: rgb(var(--gray));
-    font-weight: 600;
-  }
-
-  .infj-note {
-    background: linear-gradient(135deg, rgba(35, 55, 255, 0.05) 0%, rgba(147, 112, 219, 0.05) 100%);
-    border-left: 4px solid var(--accent);
-    padding: 1rem 1.25rem;
-    border-radius: 0 8px 8px 0;
-    margin: 1rem 0;
-    font-style: italic;
-    color: rgb(var(--gray-dark));
-  }
-
-  .cv-links {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 0.75rem;
-  }
-
-  .cv-links li {
-    margin-bottom: 0;
-    background: rgba(var(--gray-light), 30%);
-    padding: 0.75rem 1rem;
-    border-radius: 6px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .cv-links li:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(var(--gray), 15%);
-  }
-
-  .cv-links a {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s ease;
-  }
-
-  .cv-links a:hover {
-    color: var(--accent-dark);
-    text-decoration: underline;
-  }
-
-  .cv-skills,
-  .cv-achievements,
-  .cv-interests,
-  .cv-projects {
-    list-style: none;
-    padding: 0;
-  }
-
-  .cv-skills li,
-  .cv-achievements li,
-  .cv-interests li,
-  .cv-projects li {
-    margin-bottom: 1rem;
-    padding-left: 0;
-    padding: 1rem 1.25rem;
-    background: white;
-    border-radius: 8px;
-    border: 1px solid rgba(var(--gray-light), 80%);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .cv-skills li:hover,
-  .cv-achievements li:hover,
-  .cv-interests li:hover,
-  .cv-projects li:hover {
-    border-color: var(--accent);
-    box-shadow: 0 4px 16px rgba(35, 55, 255, 0.1);
-  }
-
-  .cv-skills strong,
-  .cv-achievements strong,
-  .cv-interests strong,
-  .cv-projects strong {
-    display: block;
-    color: var(--accent);
-    font-weight: 600;
-    margin-bottom: 0.35rem;
-  }
-
-  .cv-skills span,
-  .cv-achievements span,
-  .cv-interests span,
-  .cv-projects span {
-    color: rgb(var(--gray));
-    font-size: 0.95rem;
-    line-height: 1.6;
-  }
-
-  .cv-tech {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.25rem;
-  }
-
-  .tech-category {
-    background: linear-gradient(135deg, rgba(var(--gray-light), 40%) 0%, rgba(255, 255, 255, 80%) 100%);
-    padding: 1.25rem;
-    border-radius: 10px;
-    border: 1px solid rgba(var(--gray-light), 60%);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .tech-category:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(var(--gray), 12%);
-  }
-
-  .tech-category h4 {
-    margin: 0 0 0.75rem 0;
-    color: var(--accent);
-    font-size: 1.05rem;
-  }
-
-  .tech-category p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: rgb(var(--gray));
-    line-height: 1.7;
-  }
-
-  .cv-projects strong a {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.2s ease;
-  }
-
-  .cv-projects strong a:hover {
-    color: var(--accent-dark);
-    text-decoration: underline;
-  }
-
-  .cv-projects span {
-    color: rgb(var(--gray));
-    font-size: 0.92rem;
-    display: block;
-    margin-top: 0.35rem;
-    line-height: 1.6;
-  }
-
-  @media (max-width: 720px) {
-    .cv-section {
-      margin-bottom: 2rem;
-    }
-
-    .cv-section h2 {
-      font-size: 1.35rem;
-    }
-
-    .cv-links {
-      grid-template-columns: 1fr;
-    }
-
-    .cv-tech {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>
+  </body>
+</html>
