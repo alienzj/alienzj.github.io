@@ -19,14 +19,15 @@ const { title = 'On this page' } = Astro.props;
     text: string;
     depth: number;
     element: Element;
+    top: number;
   }
 
   let tocItems: TOCItem[] = [];
   let activeId: string | null = null;
+  let ticking: boolean = false;
 
   function getArticle() {
-    // Try multiple selectors for flexibility
-    return document.querySelector('article.blog-content') || 
+    return document.querySelector('article.blog-content') ||
            document.querySelector('article.blog-main') ||
            document.querySelector('article .prose')?.closest('article') ||
            document.querySelector('article');
@@ -40,7 +41,7 @@ const { title = 'On this page' } = Astro.props;
     if (!article) return;
 
     const headings = article.querySelectorAll('h2, h3, h4');
-    
+
     if (headings.length === 0) {
       const tocEl = document.querySelector('.toc');
       if (tocEl) tocEl.style.display = 'none';
@@ -48,7 +49,6 @@ const { title = 'On this page' } = Astro.props;
     }
 
     tocItems = Array.from(headings).map(heading => {
-      // Generate ID if not present
       if (!heading.id) {
         heading.id = heading.textContent
           .toLowerCase()
@@ -60,9 +60,13 @@ const { title = 'On this page' } = Astro.props;
         id: heading.id,
         text: heading.textContent || '',
         depth: parseInt(heading.tagName.charAt(1)),
-        element: heading
+        element: heading,
+        top: 0
       };
     });
+
+    // Update positions
+    updatePositions();
 
     tocList.innerHTML = '';
     tocItems.forEach(item => {
@@ -77,8 +81,14 @@ const { title = 'On this page' } = Astro.props;
         e.preventDefault();
         const target = document.getElementById(item.id);
         if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // Update URL without scrolling
+          const headerOffset = 100;
+          const elementPosition = target.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
           history.pushState(null, '', `#${item.id}`);
         }
       });
@@ -87,90 +97,75 @@ const { title = 'On this page' } = Astro.props;
       tocList.appendChild(li);
     });
 
-    // Initialize scroll spy
     initScrollSpy();
   }
 
+  function updatePositions() {
+    const headerOffset = 100;
+    tocItems.forEach(item => {
+      const rect = item.element.getBoundingClientRect();
+      item.top = rect.top + window.pageYOffset - headerOffset;
+    });
+  }
+
   function initScrollSpy() {
-    // Calculate offset for scroll position
-    const getOffsetTop = (element: Element): number => {
-      const article = getArticle();
-      if (!article) return 0;
-      
-      const articleRect = article.getBoundingClientRect();
-      const elementRect = element.getBoundingClientRect();
-      return elementRect.top - articleRect.top + (window.scrollY || document.documentElement.scrollTop);
-    };
-
     const handleScroll = () => {
-      const article = getArticle();
-      if (!article) return;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updatePositions();
+          
+          const scrollPos = window.pageYOffset || document.documentElement.scrollTop;
+          const viewportMiddle = scrollPos + window.innerHeight * 0.35;
+          
+          let currentId: string | null = null;
 
-      // Use window scroll position instead of article scroll
-      const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-      const viewportHeight = window.innerHeight;
+          for (let i = 0; i < tocItems.length; i++) {
+            const item = tocItems[i];
+            const nextItem = tocItems[i + 1];
+            
+            if (item.top <= scrollPos + 120) {
+              if (nextItem && nextItem.top > scrollPos + 120) {
+                currentId = item.id;
+                break;
+              }
+              currentId = item.id;
+            }
+          }
 
-      // Find the active heading
-      let currentId: string | null = null;
-      
-      for (let i = tocItems.length - 1; i >= 0; i--) {
-        const item = tocItems[i];
-        const offsetTop = getOffsetTop(item.element);
-        
-        // Consider heading active if it's within the top 30% of viewport
-        if (offsetTop <= scrollPosition + viewportHeight * 0.15) {
-          currentId = item.id;
-          break;
-        }
-      }
-
-      // Update active state
-      if (currentId !== activeId) {
-        activeId = currentId;
-        updateActiveLink();
+          if (currentId !== activeId) {
+            activeId = currentId;
+            updateActiveLink();
+          }
+          
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    // Listen to window scroll instead of article scroll
     window.addEventListener('scroll', handleScroll, { passive: true });
-
-    // Initial check
-    setTimeout(handleScroll, 100);
+    window.addEventListener('resize', updatePositions, { passive: true });
+    
+    setTimeout(handleScroll, 50);
   }
 
   function updateActiveLink() {
     const tocList = document.getElementById('toc-list');
     if (!tocList) return;
 
-    // Remove active class from all links
     tocList.querySelectorAll('.toc-item a').forEach(link => {
       link.classList.remove('active');
     });
 
-    // Add active class to current link
     if (activeId) {
       const activeLink = tocList.querySelector(`a[href="#${activeId}"]`);
       if (activeLink) {
         activeLink.classList.add('active');
-        
-        // Scroll active item into view if needed
-        const tocContainer = document.querySelector('.toc');
-        if (tocContainer) {
-          const linkRect = activeLink.getBoundingClientRect();
-          const containerRect = tocContainer.getBoundingClientRect();
-          
-          if (linkRect.top < containerRect.top || linkRect.bottom > containerRect.bottom) {
-            activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }
-        }
       }
     }
   }
 
-  // Run on page load
   generateTOC();
-
-  // Re-run after Astro page transitions
   document.addEventListener('astro:page-load', generateTOC);
 </script>
 
@@ -180,10 +175,11 @@ const { title = 'On this page' } = Astro.props;
     top: var(--space-6);
     background: var(--bg-primary);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: var(--space-4);
-    max-height: calc(100vh - var(--space-12));
+    border-radius: 6px;
+    padding: var(--space-3) var(--space-3);
+    max-height: calc(100vh - var(--space-10));
     overflow-y: auto;
+    overflow-x: hidden;
     transition: border-color 0.2s;
   }
 
@@ -194,11 +190,11 @@ const { title = 'On this page' } = Astro.props;
   .toc-title {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-weight: 600;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--text-secondary);
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-2);
     padding-bottom: var(--space-2);
     border-bottom: 1px solid var(--border-color);
   }
@@ -215,15 +211,18 @@ const { title = 'On this page' } = Astro.props;
 
   .toc-item a {
     display: block;
-    padding: var(--space-1) var(--space-2);
+    padding: 2px var(--space-2);
     margin: 0 calc(-1 * var(--space-2));
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--text-secondary);
     text-decoration: none;
-    line-height: 1.5;
-    border-radius: 4px;
-    transition: all 0.15s ease;
+    line-height: 1.4;
+    border-radius: 3px;
+    transition: all 0.12s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .toc-item a:hover {
@@ -232,22 +231,22 @@ const { title = 'On this page' } = Astro.props;
   }
 
   .toc-item a.active {
-    color: var(--text-primary);
+    color: var(--accent);
     font-weight: 500;
     background: var(--border-color);
   }
 
   .toc-depth-3 {
-    padding-left: var(--space-4);
+    padding-left: var(--space-3);
   }
 
   .toc-depth-4 {
-    padding-left: var(--space-6);
+    padding-left: var(--space-5);
   }
 
   /* Custom scrollbar */
   .toc::-webkit-scrollbar {
-    width: 4px;
+    width: 3px;
   }
 
   .toc::-webkit-scrollbar-track {
