@@ -77,26 +77,31 @@ const { title = 'On this page' } = Astro.props;
       const a = document.createElement('a');
       a.href = `#${item.id}`;
       a.textContent = item.text;
-      a.dataset.tocLink = item.id;  // Store ID in dataset
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        const linkId = e.currentTarget.dataset.tocLink;
-        const target = document.getElementById(linkId);
-        if (target) {
-          const headerOffset = 80;
-          const elementPosition = target.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
-          history.pushState(null, '', `#${linkId}`);
-        }
-      });
+      a.setAttribute('data-toc-link', item.id);
 
       li.appendChild(a);
       tocList.appendChild(li);
+    });
+
+    // Use event delegation for click handling
+    tocList.addEventListener('click', (e) => {
+      const link = e.target.closest('a[data-toc-link]');
+      if (!link) return;
+
+      e.preventDefault();
+      const linkId = link.getAttribute('data-toc-link');
+      const target = document.getElementById(linkId);
+      if (target) {
+        const headerOffset = 80;
+        const elementPosition = target.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+        history.pushState(null, '', `#${linkId}`);
+      }
     });
 
     initScrollSpy();
@@ -187,7 +192,7 @@ const { title = 'On this page' } = Astro.props;
 
     // Add active class to current link
     if (activeId) {
-      const activeLink = tocList.querySelector(`a[data-toc-link="${activeId}"]`);
+      const activeLink = tocList.querySelector('a[data-toc-link="' + activeId + '"]');
       if (activeLink) {
         activeLink.classList.add('active');
         
