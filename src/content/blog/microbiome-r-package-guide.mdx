@@ -1,0 +1,765 @@
+---
+title: '微生物组 R 包全景指南：从 phyloseq 到 SIAMCAT'
+description: '系统梳理微生物组分析的 R 语言生态系统，涵盖数据结构、多样性分析、差异检验、机器学习和网络分析的核心工具包'
+pubDate: 'Mar 20 2026'
+heroImage: '../../assets/blog-placeholder-3.jpg'
+tags: ['Microbiome', 'R', 'Bioinformatics', 'Data Analysis', 'phyloseq']
+---
+
+## 引言
+
+微生物组数据分析面临着独特的挑战：**组成性数据**（相对丰度）、**高度稀疏**（大量零值）、**高维度**（数千个分类单元）、**系统发育结构**以及**多层级分类体系**。
+
+经过多年发展，R 语言已经形成了一个完整的微生物组分析生态系统。本指南将带你系统了解这个生态系统的核心组件。
+
+> **版本信息**：本文基于 2026 年 3 月的包版本，适用于 Bioconductor 3.22+ 和 CRAN 最新包。
+
+---
+
+## 一、生态系统概览
+
+### 1.1 核心挑战与解决方案
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Microbiome R Ecosystem                        │
+├─────────────────────────────────────────────────────────────────┤
+│  Bioconductor Core                                              │
+│  ├─ phyloseq (数据结构)                                        │
+│  ├─ DESeq2 (差异丰度)                                          │
+│  ├─ edgeR (差异丰度)                                           │
+│  ├─ Maaslin2 (多变量关联)                                      │
+│  ├─ SIAMCAT (机器学习)                                         │
+│  └─ ALDEx2 (组成性分析)                                        │
+├─────────────────────────────────────────────────────────────────┤
+│  CRAN Packages                                                  │
+│  ├─ vegan (群落生态学)                                         │
+│  ├─ microbiome (tidy 工作流)                                   │
+│  └─ MicrobiotaProcess (tidy 框架)                              │
+├─────────────────────────────────────────────────────────────────┤
+│  Specialized Tools                                              │
+│  ├─ picante (系统发育生态)                                     │
+│  ├─ iNEXT (多样性估计)                                         │
+│  ├─ SpiecEasi (网络推断)                                       │
+│  └─ compositions (组成性数据)                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 1.2 快速选择指南
+
+| 分析目标 | 推荐包 |
+|---------|--------|
+| 数据导入与存储 | phyloseq, MicrobiotaProcess |
+| Alpha 多样性 | vegan, iNEXT, microbiome |
+| Beta 多样性 | vegan, phyloseq |
+| 差异丰度 | Maaslin2, DESeq2, ALDEx2, ANCOM-BC, edgeR |
+| 多变量分析 | Maaslin2 |
+| 分类/机器学习 | SIAMCAT |
+| 网络分析 | SpiecEasi, microbiome |
+| 组成性分析 | ALDEx2, zCompositions, compositions |
+| 系统发育分析 | picante, phyloseq |
+
+---
+
+## 二、核心数据结构
+
+### 2.1 phyloseq：标准数据容器
+
+**解决的问题**：微生物组数据来自多个来源（OTU 表、分类学、元数据、系统发育树），需要保持同步。phyloseq 提供了一个统一的 S4 类来确保数据完整性。
+
+**设计哲学**：
+- **S4 对象系统**：强制执行严格的类定义
+- **组件集成**：链接 OTU 表、分类学、元数据、系统发育树
+- **Bioconductor 兼容性**：与 SummarizedExperiment 生态系统协作
+- **方法分派**：通用函数可在各组件上工作
+
+```r
+library(phyloseq)
+
+# phyloseq 对象包含 4-5 个组件：
+# 1. otu_table: 计数矩阵（特征 × 样本）
+# 2. tax_table: 分类学分类矩阵
+# 3. sample_data: 样本元数据数据框
+# 4. phylo_tree: 系统发育树（可选）
+# 5. refseq: 序列数据（可选）
+
+ps <- phyloseq(otu_table_obj, tax_table_obj, sample_data_obj, phylo_tree_obj)
+```
+
+**核心函数**：
+
+```r
+# 访问组件
+otu_table(ps)        # 获取 OTU 表
+tax_table(ps)        # 获取分类学
+sample_data(ps)      # 获取元数据
+phylo_tree(ps)       # 获取系统发育树
+refseq(ps)           # 获取序列
+
+# 修改组件
+otu_table(ps) <- new_otu
+sample_data(ps) <- new_meta
+
+# 子集化
+ps_filtered <- subset_samples(ps, Disease == "Case")
+ps_taxa <- subset_taxa(ps, Kingdom == "Bacteria")
+
+# 合并
+ps_merged <- merge_phyloseq(ps1, ps2)
+```
+
+### 2.2 MPSE (MicrobiotaProcess)：Tidy 框架
+
+**解决的问题**：传统微生物组工作流是碎片化的。MPSE 提供 tidyverse 兼容的接口，与现代 R 工作流集成。
+
+```r
+library(MicrobiotaProcess)
+
+# 创建 MPSE 对象
+mpse_obj <- MPSE(
+    count_data = count_matrix,
+    tax_data = tax_matrix,
+    sample_data = metadata
+)
+
+# 提取距离矩阵
+dist_matrix <- mpse_obj %>% mp_extract_dist(distmethod = "bray")
+
+# 转换数据
+mpse_transformed <- mpse_obj %>% mp_transform(method = "clr")
+```
+
+---
+
+## 三、数据导入与处理
+
+### 3.1 导入数据
+
+**phyloseq 导入函数**：
+
+```r
+# 从 BIOM 格式（QIIME、mothur 常用）
+ps <- import_biom("otu_table.biom")
+
+# 从 QIIME 输出
+ps <- import_qiime(
+    otu_table = "otu_table.txt",
+    taxonomy = "taxonomy.txt",
+    sample_data = "sample_data.txt",
+    suppress_warnings = TRUE
+)
+
+# 从 mothur
+ps <- import_mothur(
+    shared_file = "shared_file.txt",
+    taxonomy_file = "taxonomy.txt"
+)
+
+# 从一般矩阵
+ps <- phyloseq(
+    otu_table(otu_matrix, taxa_are_rows = TRUE),
+    tax_table(tax_matrix),
+    sample_data(meta_data)
+)
+```
+
+### 3.2 数据转换
+
+```r
+library(phyloseq)
+
+# 1. 过滤低丰度分类单元
+ps_filtered <- filter_taxa(
+    ps,
+    function(x) sum(x > 0) > 10,  # 保留在>10 个样本中存在的分类单元
+    TRUE
+)
+
+# 2. 在更高分类层级聚合
+ps_glom <- tax_glom(ps_filtered, taxrank = "Phylum")
+
+# 3. 转换计数
+ps_log <- transform_sample_counts(ps, function(x) log10(x + 1))
+ps_sqrt <- transform_sample_counts(ps, sqrt)
+ps_prop <- transform_sample_counts(ps, function(x) x / sum(x))
+
+# 4. 稀疏化（重采样）
+ps_rarefied <- rarefy_even_depth(ps, sample.size = 10000)
+
+# 5. CLR 转换（组成性）
+ps_clr <- transform_sample_counts(ps, function(x) {
+    clr(x + 1e-6)  # CLR 前添加伪计数
+})
+```
+
+---
+
+## 四、多样性分析
+
+### 4.1 Alpha 多样性
+
+**vegan 实现**：
+
+```r
+library(vegan)
+
+# 提取群落矩阵
+comm_matrix <- otu_table(ps)
+if (taxa_are_rows(ps)) {
+    comm_matrix <- t(comm_matrix)  # 样本 × 特征
+}
+
+# 1. 物种丰富度 (S)
+richness <- specnumber(comm_matrix)
+
+# 2. Shannon 多样性
+shannon <- diversity(comm_matrix, index = "shannon")
+
+# 3. Simpson 多样性
+simpson <- diversity(comm_matrix, index = "simpson")
+
+# 4. 逆 Simpson
+inv_simpson <- diversity(comm_matrix, index = "invsimpson")
+
+# 5. Berger-Parker 指数
+berger_parker <- diversity(comm_matrix, index = "bergerparker")
+
+# 6. Pielou 均匀度
+pielou <- diversity(comm_matrix, index = "pielou")
+
+# 一次性计算多个指标
+richness_metrics <- estimate_richness(
+    comm_matrix,
+    measures = c("Shannon", "Simpson", "Chao1", "ACE", "Jack1")
+)
+```
+
+**phyloseq 集成**：
+
+```r
+# 直接从 phyloseq 对象计算
+alpha_div <- estimate_richness(ps, measures = c("Shannon", "Simpson", "Chao1"))
+
+# 添加到样本数据
+sample_data(ps)$Shannon <- alpha_div$Shannon
+sample_data(ps)$Simpson <- alpha_div$Simpson
+
+# 统计比较
+library(ggplot2)
+ggplot(sample_data(ps), aes(x = Disease, y = Shannon)) +
+    geom_boxplot() +
+    geom_jitter(width = 0.2) +
+    stat_compare_means()  # 来自 ggpubr
+```
+
+### 4.2 Beta 多样性
+
+**距离矩阵计算**：
+
+```r
+# Bray-Curtis（基于丰度）
+dist_bray <- vegdist(comm_matrix, method = "bray")
+
+# Jaccard（存在/缺失）
+dist_jaccard <- vegdist(comm_matrix, method = "jaccard")
+
+# UniFrac（系统发育）
+dist_unifrac_weighted <- UniFrac(ps, weighted = TRUE)
+dist_unifrac_unweighted <- UniFrac(ps, weighted = FALSE)
+
+# Canberra 距离
+dist_canberra <- vegdist(comm_matrix, method = "canberra")
+
+# Hellinger 距离
+comm_hell <- decostand(comm_matrix, method = "hellinger")
+dist_hell <- vegdist(comm_hell, method = "euclidean")
+```
+
+### 4.3 Beta 多样性的统计检验
+
+**PERMANOVA (adonis2)**：
+
+```r
+library(vegan)
+
+# 基础 PERMANOVA
+adonis_result <- adonis2(
+    comm_matrix ~ Disease + Age + BMI,
+    data = metadata,
+    method = "bray",
+    permutations = 999,
+    by = "margin"  # 边际效应
+)
+
+# 使用系统发育距离
+adonis_unifrac <- adonis2(
+    dist_unifrac ~ Disease,
+    data = metadata,
+    permutations = 999
+)
+```
+
+**PERMDISP（Beta 多样性离散度检验）**：
+
+```r
+# 检验多元离散度的同质性
+beta_disp <- betadisper(dist_bray, metadata$Disease)
+
+# 检验显著性
+permutest(beta_disp)
+
+# 重要提示：PERMANOVA 可能因离散度差异而显著
+# 务必检查 PERMDISP 以正确解释 PERMANOVA
+```
+
+---
+
+## 五、排序与可视化
+
+### 5.1 排序方法
+
+**NMDS（非度量多维尺度分析）**：
+
+```r
+library(vegan)
+
+# 基础 NMDS
+nmds <- metaMDS(
+    comm_matrix,
+    distance = "bray",
+    k = 2,              # 维度数
+    trymax = 20,        # 最大尝试次数
+    autotransform = FALSE,
+    wascores = TRUE
+)
+
+# 提取坐标
+nmds_coords <- scores(nmds)
+
+# Stress 值（越低越好，<0.2 可接受）
+nmds$stress
+```
+
+**PCoA（主坐标分析）**：
+
+```r
+# 从 phyloseq
+ord <- ordinate(ps, method = "PCoA", distance = "bray")
+
+# 从 vegan
+eigenvals <- cmdscale(dist_bray, k = 10, eig = TRUE)
+pcoa_coords <- eigenvals$points
+```
+
+### 5.2 与 ggplot2 集成
+
+**排序图**：
+
+```r
+# 使用 phyloseq
+plot_ordination(ps, ord, color = "Disease", shape = "Gender") +
+    geom_point(size = 3, alpha = 0.7) +
+    stat_ellipse(aes(group = Disease), type = "t", linetype = 2) +
+    theme_minimal()
+
+# 使用 vegan + ggplot2
+nmds_df <- as.data.frame(nmds$points)
+nmds_df$Disease <- metadata$Disease
+
+ggplot(nmds_df, aes(x = MDS1, y = MDS2, color = Disease)) +
+    geom_point(size = 3, alpha = 0.7) +
+    theme_minimal()
+
+# 添加环境变量向量
+env_fit <- envfit(nmds ~ pH + Temperature, data = metadata, permutations = 999)
+plot(env_fit, p.max = 0.05, col = "red")
+```
+
+**热图**：
+
+```r
+library(pheatmap)
+
+# 选取前 50 个分类单元
+top_taxa <- names(sort(rowSums(otu_table(ps)), decreasing = TRUE))[1:50]
+heatmap_data <- t(log10(otu_table(ps)[top_taxa, ] + 1))
+
+pheatmap(
+    heatmap_data,
+    cluster_rows = TRUE,
+    cluster_cols = TRUE,
+    annotation_col = metadata,
+    scale = "row"
+)
+```
+
+---
+
+## 六、差异丰度检验
+
+### 6.1 DESeq2
+
+**设计哲学**：
+- **负二项 GLM**：适当建模计数数据
+- **收缩估计**：稳定离散度和倍数变化估计
+- **多重检验校正**：内置 FDR 控制
+- **灵活设计**：支持复杂实验设计
+
+```r
+library(DESeq2)
+
+# 1. 创建 DESeqDataSet
+dds <- DESeqDataSetFromMatrix(
+    countData = otu_table(ps),      # 整数计数矩阵
+    colData = sample_data(ps),      # 元数据
+    design = ~ Disease              # 公式
+)
+
+# 2. 预过滤（推荐）
+keep <- rowSums(counts(dds) >= 10) >= 3
+dds <- dds[keep, ]
+
+# 3. 运行 DESeq 流程
+dds <- DESeq(dds, fitType = "parametric")
+
+# 4. 提取结果
+res <- results(
+    dds,
+    contrast = c("Disease", "Case", "Control"),
+    pAdjustMethod = "BH",
+    alpha = 0.05
+)
+
+# 5. 收缩 log2 倍数变化
+res_shrunk <- lfcShrink(
+    dds,
+    coef = "Disease_Case_vs_Control",
+    type = "apeglm"
+)
+
+# 6. 结果表
+results_table <- as.data.frame(res_shrunk)
+sig_features <- results_table[results_table$padj < 0.05 & abs(results_table$log2FoldChange) > 1, ]
+```
+
+### 6.2 ALDEx2
+
+**解决的问题**：使用中心对数比转换和蒙特卡洛采样的组成性数据分析。专为微生物组数据设计。
+
+```r
+library(ALDEx2)
+
+# 1. 基础差异丰度
+x <- aldex(
+    reads = otu_table(ps),        # 整数计数矩阵（特征 × 样本）
+    conditions = metadata$Disease, # 组别标签向量
+    mc.samples = 128,             # 蒙特卡洛迭代次数
+    denom = "all",                # "all" 或特定分类单元名称
+    test = "t",                   # "t", "wilcox", "glm", "kr"
+    eff = TRUE,                   # 计算效应量
+    alt.hypothesis = "two.sided"  # "two.sided", "greater", "less"
+)
+
+# 2. 获取结果
+aldex_results <- aldex.ttest(x)
+
+# 结果列：
+# - effect: 效应量（CLR 空间中的均值差异）
+# - we.ep: Welch t 检验 p 值
+# - wi.eBH: Wilcoxon BH 校正 p 值
+# - median, mean: 各组丰度
+
+sig_features <- aldex_results[
+    aldex_results$we.eBH < 0.05 & abs(aldex_results$effect) > 0.5, 
+]
+```
+
+### 6.3 ANCOM-BC
+
+**解决的问题**：具有偏差校正的差异丰度检验。在控制采样分数差异的同时控制错误发现率。
+
+```r
+library(ANCOMBC)
+
+# 1. 使用 phyloseq 对象
+out <- ancombc(
+    phyloseq = ps,
+    formula = "Disease",              # 主效应
+    zero_cut = 0.9,                   # 最大零值比例
+    lib_cut = 0,                      # 最小文库大小
+    corr_method = "holm",             # P 值校正
+    pv_adj_method = "fdr",            # P 值调整方法
+    verbose = TRUE
+)
+
+# 2. 结果
+res <- out$res
+# 列：diff_abn, W, p_val, q_val, log2FC, avg
+
+sig_taxa <- res[res$q_val < 0.05 & res$diff_abn == TRUE, ]
+```
+
+### 6.4 方法比较
+
+| 方法 | 最佳用途 | 优点 | 缺点 |
+|------|---------|------|------|
+| **DESeq2** | 计数数据，稳健 | 成熟，处理复杂设计 | 可能保守 |
+| **edgeR** | 小样本量 | 灵活，良好功效 | 类似 DESeq2 |
+| **ALDEx2** | 组成性数据 | CLR 基础，对零值稳健 | 计算密集 |
+| **ANCOM-BC** | FDR 控制 | 偏差校正，良好特异性 | 可能保守 |
+| **Maaslin2** | 多变量 | 处理协变量，随机效应 | 需要大样本 |
+
+---
+
+## 七、多变量关联：MaAsLin2
+
+**解决的问题**：在控制混杂因素的同时识别与元数据相关的微生物特征。临床微生物组研究的首选工具。
+
+**设计哲学**：
+- **广义线性模型**：LM、MLM、GLM、GAM、SVM、RF
+- **多种归一化**：TSS、CLR 等
+- **随机效应**：处理重复测量
+- **多重检验**：内置 FDR 控制
+
+```r
+library(Maaslin2)
+
+# 1. 运行 MaAsLin2
+results <- Maaslin2(
+    input_data = otu_table(ps),       # 丰度矩阵
+    input_metadata = sample_data(ps), # 元数据
+    output = "maaslin2_output",       # 输出目录
+    formula = "Disease + Age + BMI",  # 固定效应
+    random_effect = "PatientID",      # 随机效应（可选）
+    normalization = "TSS",            # "TSS", "TSSp", "CLR"
+    transform = "LOG",                # "NONE", "LOG", "AITCHISON"
+    analysis_method = "LM",           # "LM", "MLM", "LR", "SVM", "RF"
+    q_value_correction = "BH",        # P 值校正
+    verbose = TRUE
+)
+
+# 2. 结果表列：
+# - feature: 特征名称
+# - variable: 协变量
+# - coef: 系数（效应量）
+# - std_error: 标准误
+# - t_stat: T 统计量
+# - p_val: 原始 p 值
+# - q_val: 校正后 p 值
+
+# 3. 过滤显著关联
+sig_results <- results$results[results$results$q_val < 0.05, ]
+```
+
+---
+
+## 八、机器学习：SIAMCAT
+
+**解决的问题**：基于微生物组的预测和特征选择。正确处理高维稀疏数据和验证流程。
+
+```r
+library(SIAMCAT)
+
+# 1. 创建 SIAMCAT 对象
+siamcat_obj <- create_siamcat(
+    abund_data = otu_table(ps),         # 特征 × 样本
+    metadata = sample_data(ps),         # 样本元数据
+    label = "Disease"                   # 预测目标列名
+)
+
+# 2. 特征过滤
+siamcat_obj <- filter_features(
+    siamcat_obj,
+    min_prevalence = 0.1,              # 最小流行率
+    min_abundance = 1e-6               # 最小丰度
+)
+
+# 3. 训练模型
+siamcat_obj <- train_siamcat(
+    siamcat_obj,
+    method = "glmnet",                  # "glm", "glmnet", "svm", "rf"
+    label = "Disease",
+    cv_folds = 10,                      # 交叉验证折数
+    alpha = 1,                          # LASSO (1) 或 Ridge (0)
+    cores = 4
+)
+
+# 4. 计算指标
+siamcat_obj <- calc_metrics(
+    siamcat_obj,
+    metric = "auc",
+    test_id = "Disease_Classifier"
+)
+
+# 5. 特征选择
+siamcat_obj <- select_features(
+    siamcat_obj,
+    method = "LR",
+    n_features = 20,
+    test_id = "Disease_Classifier"
+)
+
+# 6. 可视化
+plotROC(siamcat_obj, test_id = "Disease_Classifier")
+plotFeatureImportance(siamcat_obj, test_id = "Disease_Classifier")
+```
+
+---
+
+## 九、网络分析：SpiecEasi
+
+**解决的问题**：从组成数据推断微生物关联网络。区分直接关联和间接关联。
+
+```r
+library(SpiecEasi)
+
+# 1. 准备数据（推荐 CLR 转换）
+comm_matrix <- otu_table(ps)
+comm_clr <- t(apply(comm_matrix, 1, function(x) {
+    log(x / exp(mean(log(x + 1e-10)))) + 1e-10
+}))
+
+# 2. 拟合网络
+spiec_easi_obj <- spiec.easi(
+    comm_clr,
+    method = "mb",                  # "mb", "glasso", "nealasso"
+    lambda.max.ratio = 0.01,
+    nlambda = 20,
+    pulsar.p = 0.05,                # P 值阈值
+    usePulsar = TRUE,
+    parallel = TRUE
+)
+
+# 3. 提取网络
+network <- getRefit(spiec_easi_obj)
+
+# 4. 可视化
+plot(spiec_easi_obj)
+```
+
+---
+
+## 十、组成性数据分析
+
+### 10.1 zCompositions：零值替换
+
+```r
+library(zCompositions)
+
+# 1. 多重插补
+data_zc <- cmultRepl(
+    data = otu_table(ps),
+    method = "CZM",                 # "CZM", "IM", "LRM", "QRN", "SM"
+    label = "zeros",
+    seed = 1234
+)
+
+# 2. 在插补数据上执行 CLR
+clr_data <- clr(data_zc$data)
+```
+
+### 10.2 compositions：通用组成性数据工具
+
+```r
+library(compositions)
+
+# CLR 转换
+clr_data <- clr(comm_matrix + 1e-6)
+
+# Aitchison 距离
+ait_dist <- aitchison(comm_matrix)
+
+# 协变分析
+covar_data <- coVar(clr_data)
+```
+
+---
+
+## 十一、完整分析工作流
+
+```r
+# 加载库
+library(phyloseq)
+library(vegan)
+library(Maaslin2)
+library(ggplot2)
+
+# 1. 导入数据
+ps <- import_biom("data.biom")
+
+# 2. 过滤和转换
+ps <- filter_taxa(ps, rowSums(otu_table(ps)) > 10, TRUE)
+ps_log <- transform_sample_counts(ps, function(x) log10(x + 1))
+
+# 3. 多样性分析
+alpha_div <- estimate_richness(ps)
+dist_bray <- distance(ps, "bray")
+
+# 4. 统计检验
+adonis2(dist_bray ~ Disease, data = sample_data(ps))
+
+# 5. 差异丰度
+results <- Maaslin2(
+    input_data = otu_table(ps),
+    input_metadata = sample_data(ps),
+    formula = "Disease",
+    output = "output"
+)
+
+# 6. 可视化
+plot_bar(ps, fill = "Phylum")
+plot_ordination(ps, ordinate(ps, "PCoA", "bray"), color = "Disease")
+```
+
+---
+
+## 十二、未来方向
+
+### 12.1 当前趋势
+
+1. **Tidyverse 集成**：向管道友好型 API 迁移
+2. **单细胞微生物组**：与 SingleCellExperiment 集成
+3. **多组学整合**：mixOmics 集成，多表分析
+4. **深度学习**：微生物组专用神经网络
+5. **云原生分析**：与 Bioconductor 云集成，并行计算改进
+
+### 12.2 值得关注的新兴包
+
+| 包名 | 状态 | 重点领域 |
+|------|------|---------|
+| **microbiomeSeq** | 活跃 | Tidy 工作流 |
+| **microme** | 开发中 | 现代微生物组分析 |
+| **gmic** | 新兴 | 基于图的微生物组分析 |
+| **PhyloFactor** | 活跃 | 系统发育划分 |
+| **corncob** | 活跃 | Beta-二项回归 |
+
+---
+
+## 附录：快速安装
+
+```r
+# Bioconductor 包
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install(c(
+    "phyloseq", "DESeq2", "edgeR", "Maaslin2",
+    "SIAMCAT", "ALDEx2", "ANCOMBC", "MicrobiotaProcess",
+    "SpiecEasi", "zCompositions"
+))
+
+# CRAN 包
+install.packages(c(
+    "vegan", "ggplot2", "dplyr", "tidyr", "pheatmap"
+))
+```
+
+---
+
+<div class="post-footer">
+
+**关于本文**：本指南基于 2026 年 3 月的 R 包版本编写。微生物组分析领域发展迅速，建议定期查看各包的 vignette 和文档获取最新信息。
+
+**关于作者**：计算生物学研究者，专注于微生物组学和生物信息学分析。欢迎在 GitHub 上讨论交流！
+
+</div>
