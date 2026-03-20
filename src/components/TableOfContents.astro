@@ -24,14 +24,23 @@ const { title = 'On this page' } = Astro.props;
   let tocItems: TOCItem[] = [];
   let activeId: string | null = null;
 
+  function getArticle() {
+    // Try multiple selectors for flexibility
+    return document.querySelector('article.blog-content') || 
+           document.querySelector('article.blog-main') ||
+           document.querySelector('article .prose')?.closest('article') ||
+           document.querySelector('article');
+  }
+
   function generateTOC() {
     const tocList = document.getElementById('toc-list');
     if (!tocList) return;
 
-    const article = document.querySelector('article.blog-main');
+    const article = getArticle();
     if (!article) return;
 
     const headings = article.querySelectorAll('h2, h3, h4');
+    
     if (headings.length === 0) {
       const tocEl = document.querySelector('.toc');
       if (tocEl) tocEl.style.display = 'none';
@@ -85,20 +94,21 @@ const { title = 'On this page' } = Astro.props;
   function initScrollSpy() {
     // Calculate offset for scroll position
     const getOffsetTop = (element: Element): number => {
-      const article = document.querySelector('article.blog-main');
+      const article = getArticle();
       if (!article) return 0;
       
       const articleRect = article.getBoundingClientRect();
       const elementRect = element.getBoundingClientRect();
-      return elementRect.top - articleRect.top + article.scrollTop;
+      return elementRect.top - articleRect.top + (window.scrollY || document.documentElement.scrollTop);
     };
 
     const handleScroll = () => {
-      const article = document.querySelector('article.blog-main');
+      const article = getArticle();
       if (!article) return;
 
-      const scrollPosition = article.scrollTop;
-      const viewportHeight = article.clientHeight;
+      // Use window scroll position instead of article scroll
+      const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+      const viewportHeight = window.innerHeight;
 
       // Find the active heading
       let currentId: string | null = null;
@@ -121,10 +131,8 @@ const { title = 'On this page' } = Astro.props;
       }
     };
 
-    const article = document.querySelector('article.blog-main');
-    if (article) {
-      article.addEventListener('scroll', handleScroll, { passive: true });
-    }
+    // Listen to window scroll instead of article scroll
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     // Initial check
     setTimeout(handleScroll, 100);
