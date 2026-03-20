@@ -77,9 +77,11 @@ const { title = 'On this page' } = Astro.props;
       const a = document.createElement('a');
       a.href = `#${item.id}`;
       a.textContent = item.text;
+      a.dataset.tocLink = item.id;  // Store ID in dataset
       a.addEventListener('click', (e) => {
         e.preventDefault();
-        const target = document.getElementById(item.id);
+        const linkId = e.currentTarget.dataset.tocLink;
+        const target = document.getElementById(linkId);
         if (target) {
           const headerOffset = 80;
           const elementPosition = target.getBoundingClientRect().top;
@@ -89,7 +91,7 @@ const { title = 'On this page' } = Astro.props;
             top: offsetPosition,
             behavior: 'smooth'
           });
-          history.pushState(null, '', `#${item.id}`);
+          history.pushState(null, '', `#${linkId}`);
         }
       });
 
@@ -185,7 +187,7 @@ const { title = 'On this page' } = Astro.props;
 
     // Add active class to current link
     if (activeId) {
-      const activeLink = tocList.querySelector(`a[href="#${activeId}"]`);
+      const activeLink = tocList.querySelector(`a[data-toc-link="${activeId}"]`);
       if (activeLink) {
         activeLink.classList.add('active');
         
