@@ -20,6 +20,7 @@ const { title = 'On this page' } = Astro.props;
     depth: number;
     element: Element;
     top: number;
+    bottom: number;
   }
 
   let tocItems: TOCItem[] = [];
@@ -61,18 +62,17 @@ const { title = 'On this page' } = Astro.props;
         text: heading.textContent || '',
         depth: parseInt(heading.tagName.charAt(1)),
         element: heading,
-        top: 0
+        top: 0,
+        bottom: 0
       };
     });
 
-    // Update positions
     updatePositions();
 
     tocList.innerHTML = '';
     tocItems.forEach(item => {
       const li = document.createElement('li');
       li.className = `toc-item toc-depth-${item.depth}`;
-      li.dataset.tocId = item.id;
 
       const a = document.createElement('a');
       a.href = `#${item.id}`;
@@ -81,7 +81,7 @@ const { title = 'On this page' } = Astro.props;
         e.preventDefault();
         const target = document.getElementById(item.id);
         if (target) {
-          const headerOffset = 100;
+          const headerOffset = 80;
           const elementPosition = target.getBoundingClientRect().top;
           const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -101,10 +101,20 @@ const { title = 'On this page' } = Astro.props;
   }
 
   function updatePositions() {
-    const headerOffset = 100;
-    tocItems.forEach(item => {
+    const headerOffset = 80;
+    tocItems.forEach((item, index) => {
       const rect = item.element.getBoundingClientRect();
       item.top = rect.top + window.pageYOffset - headerOffset;
+      
+      // Calculate bottom as the position of the next heading or end of page
+      const nextItem = tocItems[index + 1];
+      if (nextItem) {
+        const nextRect = nextItem.element.getBoundingClientRect();
+        item.bottom = nextRect.top + window.pageYOffset - headerOffset - 1;
+      } else {
+        // Last item: use document end
+        item.bottom = document.documentElement.scrollHeight;
+      }
     });
   }
 
@@ -113,22 +123,30 @@ const { title = 'On this page' } = Astro.props;
       if (!ticking) {
         window.requestAnimationFrame(() => {
           updatePositions();
-          
+
           const scrollPos = window.pageYOffset || document.documentElement.scrollTop;
-          const viewportMiddle = scrollPos + window.innerHeight * 0.35;
-          
+          // Use a point slightly below the top of viewport for better UX
+          const scanPoint = scrollPos + 120;
+
           let currentId: string | null = null;
 
+          // Find which section the scan point is in
           for (let i = 0; i < tocItems.length; i++) {
             const item = tocItems[i];
-            const nextItem = tocItems[i + 1];
             
-            if (item.top <= scrollPos + 120) {
-              if (nextItem && nextItem.top > scrollPos + 120) {
-                currentId = item.id;
+            if (scanPoint >= item.top && scanPoint < item.bottom) {
+              currentId = item.id;
+              break;
+            }
+          }
+
+          // If no section found, use the last one we passed
+          if (!currentId) {
+            for (let i = tocItems.length - 1; i >= 0; i--) {
+              if (scanPoint >= tocItems[i].top) {
+                currentId = tocItems[i].id;
                 break;
               }
-              currentId = item.id;
             }
           }
 
@@ -136,7 +154,7 @@ const { title = 'On this page' } = Astro.props;
             activeId = currentId;
             updateActiveLink();
           }
-          
+
           ticking = false;
         });
         ticking = true;
@@ -144,23 +162,45 @@ const { title = 'On this page' } = Astro.props;
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', updatePositions, { passive: true });
-    
-    setTimeout(handleScroll, 50);
+    window.addEventListener('resize', () => {
+      updatePositions();
+      handleScroll();
+    }, { passive: true });
+
+    // Initial check
+    setTimeout(() => {
+      updatePositions();
+      handleScroll();
+    }, 100);
   }
 
   function updateActiveLink() {
     const tocList = document.getElementById('toc-list');
     if (!tocList) return;
 
+    // Remove active class from all links
     tocList.querySelectorAll('.toc-item a').forEach(link => {
       link.classList.remove('active');
     });
 
+    // Add active class to current link
     if (activeId) {
       const activeLink = tocList.querySelector(`a[href="#${activeId}"]`);
       if (activeLink) {
         activeLink.classList.add('active');
+        
+        // Auto-scroll TOC to keep active item visible
+        const tocContainer = document.querySelector('.toc');
+        if (tocContainer) {
+          const linkRect = activeLink.getBoundingClientRect();
+          const containerRect = tocContainer.getBoundingClientRect();
+          
+          if (linkRect.top < containerRect.top + 40) {
+            activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          } else if (linkRect.bottom > containerRect.bottom - 40) {
+            activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }
       }
     }
   }
