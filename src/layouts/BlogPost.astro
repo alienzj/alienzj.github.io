@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
@@ -14,72 +15,65 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead title={title} description={description} image={heroImage} />
     <style>
-      /* Main layout - wider content area */
       .blog-wrapper {
         display: grid;
-        grid-template-columns: 200px minmax(0, 1fr) 280px;
-        gap: var(--space-10);
-        max-width: 1400px;
+        grid-template-columns: 1fr min(220px, 20%);
+        gap: var(--space-8);
+        max-width: 1100px;
         margin: 0 auto;
         padding: 0 var(--space-6);
       }
 
-      /* Left sidebar - navigation */
-      .blog-sidebar-left {
-        position: sticky;
-        top: var(--space-6);
-        height: fit-content;
-        grid-column: 1;
-      }
-
-      /* Main content area */
       .blog-content {
-        grid-column: 2;
         min-width: 0;
+        max-width: 720px;
       }
 
-      /* Right sidebar - TOC */
-      .blog-sidebar-right {
-        position: sticky;
-        top: var(--space-6);
-        height: fit-content;
-        grid-column: 3;
+      .blog-sidebar {
+        position: relative;
       }
 
-      /* Article header styles */
+      /* Article header */
       .article-header {
         margin-bottom: var(--space-8);
-        padding-bottom: var(--space-6);
-        border-bottom: 1px solid var(--border-color);
       }
 
       .article-meta {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        font-size: 0.85rem;
-        color: var(--text-muted);
-        margin-bottom: var(--space-3);
         display: flex;
         align-items: center;
         gap: var(--space-2);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: var(--space-4);
+      }
+
+      .article-meta span {
+        display: flex;
+        align-items: center;
+        gap: var(--space-1);
       }
 
       .article-title {
-        font-size: 2rem;
-        margin-top: 0;
-        margin-bottom: var(--space-3);
-        line-height: 1.25;
-        font-weight: 700;
-        letter-spacing: -0.02em;
+        font-size: 2.25rem;
+        font-weight: 800;
+        line-height: 1.2;
+        letter-spacing: -0.03em;
+        margin: 0 0 var(--space-4);
+        background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
       }
 
       .article-description {
-        font-size: 1.05rem;
-        font-style: italic;
-        color: var(--text-secondary);
-        margin-bottom: var(--space-4);
+        font-size: 1.15rem;
         line-height: 1.6;
+        color: var(--text-secondary);
+        margin: 0 0 var(--space-5);
+        font-style: italic;
       }
 
       .article-tags {
@@ -91,279 +85,315 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
       .tag {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         font-size: 0.75rem;
+        font-weight: 500;
+        padding: 0.3rem 0.75rem;
+        border-radius: 20px;
         background: var(--border-color);
-        padding: 0.2rem 0.5rem;
-        border-radius: 999px;
         color: var(--text-secondary);
         text-decoration: none;
         transition: all 0.2s;
+        border: 1px solid transparent;
       }
 
       .tag:hover {
         background: var(--accent);
-        color: var(--bg-primary);
+        color: white;
+        transform: translateY(-1px);
       }
 
       /* Hero image */
       .hero-image {
-        margin: 0 calc(-1 * var(--space-6)) var(--space-8);
+        margin: var(--space-6) 0 var(--space-8);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
       }
 
       .hero-image img {
-        width: calc(100% + var(--space-12));
-        max-height: 400px;
+        width: 100%;
+        max-height: 420px;
         object-fit: cover;
-        border-radius: 12px;
+        display: block;
       }
 
       /* Content typography */
       .prose {
-        font-size: 1.05rem;
-        line-height: 1.75;
+        font-size: 1.0625rem;
+        line-height: 1.8;
         color: var(--text-primary);
       }
 
       .prose :global(h2) {
-        margin-top: var(--space-10);
-        margin-bottom: var(--space-3);
+        margin-top: var(--space-12);
+        margin-bottom: var(--space-4);
         font-size: 1.5rem;
-        font-weight: 600;
-        letter-spacing: -0.01em;
+        font-weight: 700;
+        letter-spacing: -0.02em;
         color: var(--text-primary);
+        scroll-margin-top: 120px;
+        position: relative;
+        padding-bottom: var(--space-2);
+      }
+
+      .prose :global(h2)::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 2px;
+        background: var(--accent);
+        border-radius: 1px;
       }
 
       .prose :global(h3) {
-        margin-top: var(--space-8);
-        margin-bottom: var(--space-2);
+        margin-top: var(--space-10);
+        margin-bottom: var(--space-3);
         font-size: 1.25rem;
         font-weight: 600;
         color: var(--text-primary);
+        scroll-margin-top: 100px;
       }
 
       .prose :global(h4) {
-        margin-top: var(--space-6);
+        margin-top: var(--space-8);
         margin-bottom: var(--space-2);
         font-size: 1.1rem;
         font-weight: 600;
         color: var(--text-primary);
+        scroll-margin-top: 80px;
       }
 
       .prose :global(p) {
-        margin-bottom: var(--space-4);
+        margin-bottom: var(--space-5);
       }
 
       .prose :global(a) {
-        color: var(--text-primary);
-        text-decoration: underline;
-        text-decoration-color: var(--text-muted);
-        text-underline-offset: 3px;
+        color: var(--accent);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
         transition: all 0.2s;
       }
 
       .prose :global(a:hover) {
-        color: var(--accent);
-        text-decoration-color: var(--accent);
+        border-bottom-color: var(--accent);
       }
 
       .prose :global(pre) {
-        margin: var(--space-5) 0;
-        padding: var(--space-4);
-        border-radius: 8px;
+        margin: var(--space-6) 0;
+        padding: var(--space-5);
+        background: var(--code-bg);
+        border-radius: 10px;
         border: 1px solid var(--border-color);
+        overflow-x: auto;
+        position: relative;
+      }
+
+      .prose :global(pre)::before {
+        content: '';
+        position: absolute;
+        top: 12px;
+        left: 16px;
+        width: 8px;
+        height: 8px;
+        background: #ef4444;
+        border-radius: 50%;
+        box-shadow: 14px 0 0 #f59e0b, 28px 0 0 #22c55e;
+        opacity: 0.8;
+      }
+
+      .prose :global(pre) {
+        padding-top: var(--space-8);
       }
 
       .prose :global(code) {
-        font-family: "JetBrains Mono", "Fira Code", monospace;
-        font-size: 0.9em;
-        background: var(--border-color);
-        padding: 0.15em 0.4em;
+        font-family: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875em;
+        background: var(--code-bg);
+        padding: 0.2em 0.4em;
         border-radius: 4px;
+        border: 1px solid var(--border-color);
       }
 
       .prose :global(pre code) {
         background: transparent;
         padding: 0;
+        border: none;
+        font-size: 0.875rem;
+        line-height: 1.6;
       }
 
       .prose :global(ul),
       .prose :global(ol) {
-        margin-bottom: var(--space-4);
+        margin-bottom: var(--space-5);
         padding-left: var(--space-6);
       }
 
       .prose :global(li) {
         margin-bottom: var(--space-2);
+        position: relative;
       }
 
-      .prose :global(li > ul),
-      .prose :global(li > ol) {
-        margin-top: var(--space-2);
-        margin-bottom: 0;
+      .prose :global(ul li::marker) {
+        color: var(--accent);
       }
 
-      .prose :global(table) {
-        font-size: 0.95rem;
-        margin-bottom: var(--space-5);
-        width: 100%;
-        border-collapse: collapse;
-      }
-
-      .prose :global(th) {
-        text-align: left;
-        padding: var(--space-3) var(--space-4);
-        border-bottom: 2px solid var(--border-color);
+      .prose :global(ol li::marker) {
+        color: var(--accent);
         font-weight: 600;
-        color: var(--text-primary);
-      }
-
-      .prose :global(td) {
-        padding: var(--space-3) var(--space-4);
-        border-bottom: 1px solid var(--border-color);
-        color: var(--text-secondary);
-      }
-
-      .prose :global(tr:last-child td) {
-        border-bottom: none;
       }
 
       .prose :global(blockquote) {
-        margin: var(--space-6) 0;
-        padding: var(--space-3) var(--space-4);
-        border-left: 4px solid var(--accent);
-        background: var(--border-color);
-        border-radius: 0 6px 6px 0;
-        font-style: italic;
+        margin: var(--space-8) 0;
+        padding: var(--space-5) var(--space-6);
+        border-left: 3px solid var(--accent);
+        background: var(--bg-secondary);
+        border-radius: 0 8px 8px 0;
         color: var(--text-secondary);
+        font-style: italic;
+        position: relative;
       }
 
-      .prose :global(blockquote > p:last-child) {
+      .prose :global(blockquote)::before {
+        content: '"';
+        position: absolute;
+        top: -10px;
+        left: 20px;
+        font-size: 4rem;
+        color: var(--accent);
+        opacity: 0.2;
+        font-family: Georgia, serif;
+        line-height: 1;
+      }
+
+      .prose :global(blockquote > *:last-child) {
         margin-bottom: 0;
-      }
-
-      .prose :global(hr) {
-        border: none;
-        border-top: 1px solid var(--border-color);
-        margin: var(--space-10) 0;
       }
 
       .prose :global(img) {
         max-width: 100%;
         height: auto;
         border-radius: 8px;
-        margin: var(--space-6) 0;
+        margin: var(--space-8) 0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
       }
 
-      .prose :global(.admonition) {
-        padding: var(--space-4);
+      .prose :global(hr) {
+        border: none;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+        margin: var(--space-12) 0;
+      }
+
+      .prose :global(table) {
+        width: 100%;
+        margin: var(--space-6) 0;
+        border-collapse: collapse;
+        font-size: 0.95rem;
         border-radius: 8px;
-        margin: var(--space-6) 0;
-        border-left: 4px solid;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
       }
 
-      .prose :global(.admonition-note) {
-        background: rgba(59, 130, 246, 0.1);
-        border-color: #3b82f6;
+      .prose :global(th) {
+        background: var(--bg-secondary);
+        padding: var(--space-3) var(--space-4);
+        text-align: left;
+        font-weight: 600;
+        border-bottom: 2px solid var(--border-color);
       }
 
-      .prose :global(.admonition-warning) {
-        background: rgba(245, 158, 11, 0.1);
-        border-color: #f59e0b;
+      .prose :global(td) {
+        padding: var(--space-3) var(--space-4);
+        border-bottom: 1px solid var(--border-color);
       }
 
-      .prose :global(.admonition-danger) {
-        background: rgba(239, 68, 68, 0.1);
-        border-color: #ef4444;
+      .prose :global(tr:last-child td) {
+        border-bottom: none;
       }
 
       /* Post footer */
       .post-footer {
-        margin-top: var(--space-12);
-        padding-top: var(--space-6);
+        margin-top: var(--space-16);
+        padding-top: var(--space-8);
         border-top: 1px solid var(--border-color);
-        font-size: 0.9rem;
       }
 
       .post-footer a {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 0.9rem;
+        font-weight: 500;
         color: var(--text-secondary);
         text-decoration: none;
-        transition: color 0.2s;
+        transition: all 0.2s;
       }
 
       .post-footer a:hover {
         color: var(--accent);
+        transform: translateX(-4px);
       }
 
-      /* Responsive design */
-      @media (max-width: 1200px) {
-        .blog-wrapper {
-          grid-template-columns: 1fr 280px;
-        }
-
-        .blog-sidebar-left {
-          display: none;
-        }
-
-        .blog-content {
-          grid-column: 1;
-        }
-
-        .blog-sidebar-right {
-          grid-column: 2;
-        }
+      .post-footer a svg {
+        transition: transform 0.2s;
       }
 
-      @media (max-width: 900px) {
+      .post-footer a:hover svg {
+        transform: translateX(-4px);
+      }
+
+      /* Responsive */
+      @media (max-width: 1024px) {
         .blog-wrapper {
           grid-template-columns: 1fr;
-          max-width: 800px;
+          max-width: 720px;
         }
 
-        .blog-sidebar-right {
+        .blog-sidebar {
           display: none;
-        }
-
-        .hero-image {
-          margin: 0 0 var(--space-6);
-        }
-
-        .hero-image img {
-          width: 100%;
         }
       }
 
       @media (max-width: 640px) {
+        .blog-wrapper {
+          padding: 0 var(--space-4);
+        }
+
         .article-title {
-          font-size: 1.6rem;
+          font-size: 1.75rem;
+        }
+
+        .article-description {
+          font-size: 1.05rem;
         }
 
         .prose {
           font-size: 1rem;
+          line-height: 1.75;
         }
 
-        .blog-wrapper {
-          padding: 0 var(--space-4);
+        .prose :global(h2) {
+          font-size: 1.35rem;
+        }
+
+        .prose :global(h3) {
+          font-size: 1.15rem;
         }
       }
 
-      /* Dark mode specific adjustments */
+      /* Dark mode */
+      :global(.dark) .hero-image {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+
       :global(.dark) .prose :global(pre) {
-        border-color: #333;
+        border-color: #2a2a2a;
       }
 
-      :global(.dark) .prose :global(table) {
-        border-color: #333;
-      }
-
-      :global(.dark) .prose :global(th) {
-        border-bottom-color: #444;
-      }
-
-      :global(.dark) .prose :global(td) {
-        border-bottom-color: #333;
-      }
-
-      :global(.dark) .prose :global(blockquote) {
-        background: rgba(255, 255, 255, 0.05);
+      :global(.dark) .prose :global(img) {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       }
     </style>
   </head>
@@ -371,23 +401,17 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
   <body>
     <Header />
     <main class="blog-wrapper">
-      <!-- Left sidebar - can be used for navigation -->
-      <aside class="blog-sidebar-left">
-        <!-- Reserved for future navigation -->
-      </aside>
-
-      <!-- Main content -->
       <article class="blog-content">
         <header class="article-header">
           <div class="article-meta">
-            <FormattedDate date={pubDate} />
+            <span><FormattedDate date={pubDate} /></span>
             {updatedDate && (
-              <span> · Updated <FormattedDate date={updatedDate} /></span>
+              <span>· Updated <FormattedDate date={updatedDate} /></span>
             )}
           </div>
           <h1 class="article-title">{title}</h1>
-          <p class="article-description">{description}</p>
-          {tags && (
+          {description && <p class="article-description">{description}</p>}
+          {tags && tags.length > 0 && (
             <div class="article-tags">
               {tags.map(tag => <span class="tag">{tag}</span>)}
             </div>
@@ -396,7 +420,11 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
 
         {heroImage && (
           <div class="hero-image">
-            <img src={heroImage} alt="" />
+            {typeof heroImage === 'string' ? (
+              <img src={heroImage} alt="" loading="lazy" />
+            ) : (
+              <Image src={heroImage} alt="" loading="lazy" />
+            )}
           </div>
         )}
 
@@ -405,12 +433,17 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
         </div>
 
         <footer class="post-footer">
-          <a href="/blog">&larr; Back to blog</a>
+          <a href="/blog">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Back to blog
+          </a>
         </footer>
       </article>
 
-      <!-- Right sidebar - Table of Contents -->
-      <aside class="blog-sidebar-right">
+      <aside class="blog-sidebar">
         <TableOfContents />
       </aside>
     </main>
