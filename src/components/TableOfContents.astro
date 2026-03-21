@@ -350,18 +350,7 @@ const { title = 'Contents' } = Astro.props;
     color: var(--toc-text-muted);
   }
 
-  /* Progress indicator */
-  .toc::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: var(--scroll-progress, 0%);
-    height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-hover));
-    transition: width 0.1s linear;
-    z-index: 100;
-  }
+
 
   /* Custom scrollbar */
   .toc::-webkit-scrollbar {

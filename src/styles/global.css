@@ -60,7 +60,13 @@ main {
   padding: var(--space-12) var(--space-6);
 }
 
-header, footer {
+header {
+  max-width: none;
+  margin: 0;
+  padding: var(--space-8) var(--space-6) 0;
+}
+
+footer {
   max-width: 800px;
   margin: 0 auto;
   padding: var(--space-6);
