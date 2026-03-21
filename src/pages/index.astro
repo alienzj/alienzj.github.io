@@ -9,108 +9,215 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 <html lang="en">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <style>
+      .hero {
+        padding: var(--space-12) 0 var(--space-16);
+      }
+
+      .hero h1 {
+        font-size: clamp(3rem, 8vw, 4.5rem);
+        font-weight: 800;
+        letter-spacing: -0.05em;
+        line-height: 1;
+        margin-bottom: var(--space-6);
+      }
+
+      .hero p {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        max-width: 650px;
+        line-height: 1.6;
+      }
+
+      .section-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-muted);
+        margin-bottom: var(--space-8);
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
+      }
+
+      .section-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      section {
+        margin-bottom: var(--space-20);
+      }
+
+      .project-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: var(--space-6);
+      }
+
+      .project-card {
+        padding: var(--space-6);
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--border);
+        background: var(--bg-secondary);
+        transition: all 0.2s ease;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+
+      .project-card:hover {
+        border-color: var(--accent);
+        background: var(--bg-tertiary);
+        transform: translateY(-2px);
+      }
+
+      .project-card h3 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin: 0 0 var(--space-2) 0;
+        color: var(--text-primary);
+      }
+
+      .project-card p {
+        font-size: 0.9375rem;
+        color: var(--text-secondary);
+        margin: 0;
+        line-height: 1.5;
+      }
+
+      .blog-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .blog-item {
+        margin-bottom: var(--space-4);
+      }
+
+      .blog-link {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        text-decoration: none;
+        padding: var(--space-3) var(--space-4);
+        margin: 0 calc(var(--space-4) * -1);
+        border-radius: var(--radius-md);
+        transition: background 0.2s;
+      }
+
+      .blog-link:hover {
+        background: var(--bg-tertiary);
+      }
+
+      .blog-link .title {
+        font-weight: 500;
+        color: var(--text-primary);
+      }
+
+      .blog-link .date {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .view-all {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+        margin-top: var(--space-6);
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        text-decoration: none;
+      }
+
+      .view-all:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 640px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+        .blog-link {
+          flex-direction: column;
+          gap: var(--space-1);
+        }
+      }
+    </style>
   </head>
   <body>
     <Header />
-    <main>
-      <section class="bio">
-        <h1>alienzj</h1>
+    <main class="fade-in">
+      <section class="hero">
+        <h1 class="text-gradient">alienzj</h1>
         <p>
           Microbiome Informatics Researcher & Bioinformatics Engineer.
           Focusing on metagenomics, MAGs, and AI-powered scientific workflows.
-          Passionate about open-source science and community-driven tool development.
         </p>
         <p>
-          I am a co-founder of <a href="https://github.com/ohmeta">OhMeta</a> and a 
-          contributor to <a href="https://github.com/snakemake">Snakemake</a>, 
+          Co-founder of <a href="https://github.com/ohmeta">OhMeta</a> and contributor to 
+          <a href="https://github.com/snakemake">Snakemake</a>, 
           <a href="https://github.com/bioconda">BioConda</a>, and 
           <a href="https://github.com/metagenome-atlas">Metagenome Atlas</a>.
         </p>
       </section>
 
-      <section class="projects">
-        <h2>Selected Projects</h2>
-        <ul>
-          <li>
-            <strong><a href="https://github.com/ohmeta/metapi">metapi</a></strong>: 
-            A general metagenomics data mining system.
-          </li>
-          <li>
-            <strong><a href="https://github.com/ohmeta/quantpi">quantpi</a></strong>: 
-            Microbiome profiling and statistical analysis.
-          </li>
-          <li>
-            <strong><a href="https://github.com/ohmeta/clawpi">clawpi</a></strong>: 
-            AI-powered workflow orchestration.
-          </li>
-        </ul>
-        <p><a href="/projects">View all projects &rarr;</a></p>
+      <section>
+        <h2 class="section-title">Selected Projects</h2>
+        <div class="project-grid">
+          <a href="https://github.com/ohmeta/metapi" class="project-card">
+            <h3>metapi</h3>
+            <p>A general metagenomics data mining system designed for high-performance computing.</p>
+          </a>
+          <a href="https://github.com/ohmeta/quantpi" class="project-card">
+            <h3>quantpi</h3>
+            <p>Microbiome profiling and statistical analysis toolkit for large-scale studies.</p>
+          </a>
+          <a href="https://github.com/ohmeta/clawpi" class="project-card">
+            <h3>clawpi</h3>
+            <p>AI-powered workflow orchestration and intelligent agent for scientific analysis.</p>
+          </a>
+        </div>
+        <a href="/projects" class="view-all">View all projects &rarr;</a>
       </section>
 
-      <section class="blog-preview">
-        <h2>Recent Blog Posts</h2>
-        <ul>
-          <li>
-            <a href="/blog/velvet-genome-assembler">Velvet 基因组组装器详解：从论文到 C 代码实现</a>
-            <span>(Mar 13, 2026)</span>
+      <section>
+        <h2 class="section-title">Recent Writing</h2>
+        <ul class="blog-list">
+          <li class="blog-item">
+            <a href="/blog/velvet-genome-assembler" class="blog-link">
+              <span class="title">Velvet 基因组组装器详解：从论文到 C 代码实现</span>
+              <span class="date">Mar 13, 2026</span>
+            </a>
           </li>
         </ul>
-        <p><a href="/blog">Read the blog &rarr;</a></p>
+        <a href="/blog" class="view-all">Read the blog &rarr;</a>
       </section>
 
-      <section class="links">
-        <h2>Links</h2>
-        <ul>
-          <li><a href="https://github.com/alienzj">GitHub (@alienzj)</a></li>
-          <li><a href="https://alienzj.tech">Personal Website (alienzj.tech)</a></li>
-          <li><a href="/about">About & Curriculum Vitae</a></li>
+      <section>
+        <h2 class="section-title">Connect</h2>
+        <ul class="blog-list">
+          <li class="blog-item">
+            <a href="https://github.com/alienzj" class="blog-link">
+              <span class="title">GitHub (@alienzj)</span>
+              <span class="date">Code & Contributions</span>
+            </a>
+          </li>
+          <li class="blog-item">
+            <a href="/about" class="blog-link">
+              <span class="title">About & CV</span>
+              <span class="date">Bio & Experience</span>
+            </a>
+          </li>
         </ul>
       </section>
     </main>
     <Footer />
   </body>
 </html>
-
-<style>
-  .bio h1 {
-    font-size: 3rem;
-    margin-bottom: var(--space-6);
-  }
-
-  .bio p {
-    font-size: 1.2rem;
-    color: var(--text-primary);
-    max-width: 700px;
-  }
-
-  section {
-    margin-bottom: var(--space-12);
-  }
-
-  h2 {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: 1.2rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: var(--space-2);
-    margin-bottom: var(--space-6);
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  li {
-    margin-bottom: var(--space-4);
-    line-height: 1.5;
-  }
-
-  span {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    margin-left: var(--space-2);
-  }
-</style>

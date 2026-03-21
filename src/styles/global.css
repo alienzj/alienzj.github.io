@@ -1,14 +1,30 @@
 :root {
-  --bg-primary: #fff;
-  --bg-secondary: #f5f5f5;
-  --text-primary: #1a1a1a;
-  --text-secondary: #525252;
-  --text-muted: #737373;
-  --accent: #2563eb;
-  --accent-hover: #1d4ed8;
-  --border-color: #e5e5e5;
-  --code-bg: #f6f8fa;
+  /* Colors - Zinc/Gray palette */
+  --bg-primary: #ffffff;
+  --bg-secondary: #fafafa;
+  --bg-tertiary: #f4f4f5;
+  --text-primary: #09090b;
+  --text-secondary: #52525b;
+  --text-muted: #71717a;
+  --accent: #18181b;
+  --accent-foreground: #ffffff;
+  --accent-soft: #f4f4f5;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #18181b;
 
+  /* Semantic Colors */
+  --link: #09090b;
+  --link-hover: #18181b;
+  --code-bg: #f4f4f5;
+  --code-text: #18181b;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: Georgia, "Times New Roman", Times, serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Spacing */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -19,18 +35,40 @@
   --space-10: 2.5rem;
   --space-12: 3rem;
   --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* Radius */
+  --radius-sm: 0.125rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
+
+  /* Layout */
+  --max-width-content: 720px;
+  --max-width-site: 1100px;
+  --header-height: 4rem;
 }
 
 .dark {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #171717;
+  --bg-primary: #09090b;
+  --bg-secondary: #0a0a0a;
+  --bg-tertiary: #18181b;
   --text-primary: #fafafa;
-  --text-secondary: #a3a3a3;
-  --text-muted: #737373;
-  --accent: #3b82f6;
-  --accent-hover: #60a5fa;
-  --border-color: #262626;
-  --code-bg: #1c1c1c;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --accent: #fafafa;
+  --accent-foreground: #09090b;
+  --accent-soft: #18181b;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #fafafa;
+
+  --link: #fafafa;
+  --link-hover: #ffffff;
+  --code-bg: #18181b;
+  --code-text: #f4f4f5;
 }
 
 *, *::before, *::after {
@@ -39,62 +77,76 @@
 
 html {
   scroll-behavior: smooth;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: Georgia, "Times New Roman", Times, serif;
+  font-family: var(--font-sans);
   margin: 0;
   padding: 0;
   background: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
-  font-size: 18px;
+  font-size: 16px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 main:not(.blog-layout) {
-  max-width: 800px;
+  max-width: var(--max-width-content);
   margin: 0 auto;
   padding: var(--space-12) var(--space-6);
 }
 
 header {
-  max-width: 1040px;
+  max-width: var(--max-width-site);
   margin: 0 auto;
-  padding: var(--space-8) var(--space-6) 0;
+  height: var(--header-height);
+  padding: 0 var(--space-6);
 }
 
 footer {
-  max-width: 800px;
+  max-width: var(--max-width-site);
   margin: 0 auto;
-  padding: var(--space-6);
+  padding: var(--space-12) var(--space-6);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.875rem;
 }
 
+/* Typography Elements */
 h1, h2, h3, h4, h5, h6 {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-weight: 700;
+  font-family: var(--font-sans);
+  font-weight: 600;
   margin-top: var(--space-10);
   margin-bottom: var(--space-4);
-  line-height: 1.2;
+  line-height: 1.25;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
-h1 { font-size: 2.2rem; margin-top: 0; }
-h2 { font-size: 1.6rem; }
-h3 { font-size: 1.3rem; }
+h1 { font-size: 2.25rem; font-weight: 800; }
+h2 { font-size: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+h3 { font-size: 1.25rem; }
 
 p { margin-bottom: var(--space-4); }
 
 a {
-  color: var(--text-primary);
+  color: var(--link);
   text-decoration: underline;
   text-decoration-color: var(--text-muted);
-  text-underline-offset: 3px;
-  transition: color 0.2s;
+  text-underline-offset: 4px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 a:hover {
   color: var(--accent);
+  text-decoration-color: var(--accent);
 }
 
+/* Content Elements */
 ul, ol {
   margin-bottom: var(--space-6);
   padding-left: var(--space-6);
@@ -103,31 +155,45 @@ ul, ol {
 li { margin-bottom: var(--space-2); }
 
 code {
-  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-family: var(--font-mono);
   background: var(--code-bg);
-  padding: 0.15em 0.35em;
-  border-radius: 3px;
-  font-size: 0.9em;
+  color: var(--code-text);
+  padding: 0.2em 0.4em;
+  border-radius: var(--radius-md);
+  font-size: 0.875em;
+  font-weight: 400;
 }
 
 pre {
   background: var(--code-bg);
   padding: var(--space-4);
   overflow-x: auto;
-  border-radius: 6px;
+  border-radius: var(--radius-lg);
   margin-bottom: var(--space-6);
+  border: 1px solid var(--border);
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  color: inherit;
+  font-size: 0.875rem;
 }
 
 blockquote {
-  margin: var(--space-6) 0;
-  padding-left: var(--space-4);
-  border-left: 3px solid var(--border-color);
+  margin: var(--space-8) 0;
+  padding: var(--space-4) var(--space-6);
+  border-left: 2px solid var(--accent);
   color: var(--text-secondary);
+  font-style: italic;
+  background: var(--bg-secondary);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
 hr {
   border: 0;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--border);
   margin: var(--space-12) 0;
 }
 
@@ -135,4 +201,34 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
+  border-radius: var(--radius-lg);
+}
+
+/* Utils */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.text-gradient {
+  background: linear-gradient(to right, var(--text-primary), var(--text-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
 }

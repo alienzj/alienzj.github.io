@@ -17,228 +17,173 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
   <head>
     <BaseHead title={title} description={description} image={heroImage} />
     <style>
+      .reading-progress {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: transparent;
+        z-index: 100;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background: var(--accent);
+        width: 0%;
+        transition: width 0.1s;
+      }
+
       .blog-layout {
-        display: flex;
-        gap: var(--space-8);
-        max-width: 1040px;
+        display: grid;
+        grid-template-columns: 1fr minmax(0, var(--max-width-content)) 250px;
+        gap: var(--space-12);
+        max-width: var(--max-width-site);
         margin: 0 auto;
-        padding: var(--space-8) var(--space-6) var(--space-16);
+        padding: var(--space-12) var(--space-6) var(--space-24);
       }
 
       .blog-main {
-        flex: 1;
+        grid-column: 2;
         min-width: 0;
-        max-width: 680px;
       }
 
       .blog-sidebar {
-        width: 200px;
-        flex-shrink: 0;
+        grid-column: 3;
         position: sticky;
-        top: var(--space-6);
+        top: calc(var(--header-height) + var(--space-8));
+        height: fit-content;
+        max-height: calc(100vh - var(--header-height) - var(--space-12));
+        overflow-y: auto;
       }
 
       /* Header */
       .article-header {
-        margin-bottom: var(--space-8);
+        margin-bottom: var(--space-12);
+        text-align: center;
       }
 
-      .article-date {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        font-size: 0.85rem;
+      .article-meta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-3);
+        font-size: 0.875rem;
         color: var(--text-muted);
-        margin-bottom: var(--space-3);
+        margin-bottom: var(--space-4);
       }
 
       .article-title {
-        font-size: 2rem;
+        font-size: 3rem;
         font-weight: 800;
-        line-height: 1.2;
-        letter-spacing: -0.025em;
-        margin: 0 0 var(--space-4);
+        line-height: 1.1;
+        letter-spacing: -0.04em;
+        margin: 0 0 var(--space-6);
         color: var(--text-primary);
       }
 
       .article-desc {
-        font-size: 1.1rem;
+        font-size: 1.25rem;
         line-height: 1.6;
         color: var(--text-secondary);
-        margin: 0 0 var(--space-4);
+        max-width: 600px;
+        margin: 0 auto var(--space-6);
       }
 
       .article-tags {
         display: flex;
         gap: var(--space-2);
+        justify-content: center;
         flex-wrap: wrap;
       }
 
       .tag {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         font-size: 0.75rem;
         font-weight: 500;
-        padding: 0.25rem 0.6rem;
-        border-radius: 4px;
-        background: var(--border-color);
+        padding: 0.2rem 0.6rem;
+        border-radius: var(--radius-full);
+        background: var(--bg-tertiary);
         color: var(--text-secondary);
         text-decoration: none;
         transition: all 0.2s;
+        border: 1px solid var(--border);
       }
 
       .tag:hover {
         background: var(--accent);
-        color: white;
+        color: var(--accent-foreground);
+        border-color: var(--accent);
       }
 
       /* Hero */
       .hero {
-        margin: 0 0 var(--space-8);
-        border-radius: 8px;
+        margin: 0 0 var(--space-12);
+        border-radius: var(--radius-xl);
         overflow: hidden;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
       }
 
       .hero img {
         width: 100%;
-        max-height: 400px;
+        aspect-ratio: 16 / 9;
         object-fit: cover;
         display: block;
       }
 
-      /* Prose */
+      /* Prose improvements */
       .prose {
-        font-size: 1rem;
+        font-size: 1.125rem;
         line-height: 1.8;
         color: var(--text-primary);
       }
 
       .prose :global(h2) {
-        font-size: 1.4rem;
-        font-weight: 700;
-        margin: var(--space-10) 0 var(--space-4);
-        color: var(--text-primary);
-        scroll-margin-top: 100px;
+        font-size: 1.875rem;
+        margin: var(--space-16) 0 var(--space-6);
+        letter-spacing: -0.03em;
       }
 
       .prose :global(h3) {
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin: var(--space-8) 0 var(--space-3);
-        color: var(--text-primary);
-        scroll-margin-top: 80px;
-      }
-
-      .prose :global(h4) {
-        font-size: 1.05rem;
-        font-weight: 600;
-        margin: var(--space-6) 0 var(--space-2);
-        color: var(--text-primary);
-        scroll-margin-top: 80px;
+        font-size: 1.5rem;
+        margin: var(--space-12) 0 var(--space-4);
+        letter-spacing: -0.02em;
       }
 
       .prose :global(p) {
-        margin-bottom: var(--space-4);
+        margin-bottom: var(--space-6);
       }
 
-      .prose :global(a) {
-        color: var(--accent);
-        text-decoration: none;
-      }
-
-      .prose :global(a:hover) {
-        text-decoration: underline;
-      }
-
-      .prose :global(code) {
-        font-family: "JetBrains Mono", "Fira Code", monospace;
-        font-size: 0.875em;
-        background: var(--code-bg);
-        padding: 0.15em 0.35em;
-        border-radius: 4px;
-      }
-
-      .prose :global(pre) {
-        margin: var(--space-5) 0;
-        padding: var(--space-4);
-        background: var(--code-bg);
-        border-radius: 6px;
-        border: 1px solid var(--border-color);
-        overflow-x: auto;
-      }
-
-      .prose :global(pre code) {
-        background: none;
-        padding: 0;
-        font-size: 0.875rem;
-        line-height: 1.6;
-      }
-
-      .prose :global(ul),
-      .prose :global(ol) {
-        margin-bottom: var(--space-4);
-        padding-left: var(--space-6);
+      .prose :global(ul), .prose :global(ol) {
+        margin-bottom: var(--space-6);
       }
 
       .prose :global(li) {
-        margin-bottom: var(--space-2);
+        margin-bottom: var(--space-3);
       }
 
-      .prose :global(blockquote) {
-        margin: var(--space-6) 0;
-        padding: var(--space-4) var(--space-5);
-        border-left: 3px solid var(--accent);
-        background: var(--bg-secondary);
-        border-radius: 0 4px 4px 0;
-        color: var(--text-secondary);
-      }
-
-      .prose :global(blockquote p:last-child) {
-        margin-bottom: 0;
+      .prose :global(pre) {
+        margin: var(--space-8) 0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
       }
 
       .prose :global(img) {
-        max-width: 100%;
-        height: auto;
-        border-radius: 6px;
-        margin: var(--space-6) 0;
-      }
-
-      .prose :global(hr) {
-        border: none;
-        border-top: 1px solid var(--border-color);
         margin: var(--space-10) 0;
-      }
-
-      .prose :global(table) {
-        width: 100%;
-        margin: var(--space-4) 0;
-        border-collapse: collapse;
-        font-size: 0.9rem;
-      }
-
-      .prose :global(th) {
-        text-align: left;
-        padding: var(--space-2) var(--space-3);
-        border-bottom: 2px solid var(--border-color);
-        font-weight: 600;
-      }
-
-      .prose :global(td) {
-        padding: var(--space-2) var(--space-3);
-        border-bottom: 1px solid var(--border-color);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
       }
 
       /* Footer */
       .post-footer {
-        margin-top: var(--space-12);
-        padding-top: var(--space-6);
-        border-top: 1px solid var(--border-color);
+        margin-top: var(--space-20);
+        padding-top: var(--space-8);
+        border-top: 1px solid var(--border);
       }
 
       .back-link {
         display: inline-flex;
         align-items: center;
-        gap: var(--space-1);
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        font-size: 0.9rem;
+        gap: var(--space-2);
+        font-size: 0.875rem;
+        font-weight: 500;
         color: var(--text-secondary);
         text-decoration: none;
         transition: color 0.2s;
@@ -249,28 +194,22 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
       }
 
       /* Responsive */
-      @media (max-width: 960px) {
+      @media (max-width: 1100px) {
         .blog-layout {
-          flex-direction: column;
-          padding: var(--space-6) var(--space-4);
+          grid-template-columns: 1fr minmax(0, var(--max-width-content));
+          gap: var(--space-8);
         }
-
-        .blog-main {
-          max-width: none;
-        }
-
         .blog-sidebar {
           display: none;
         }
       }
 
-      @media (max-width: 640px) {
+      @media (max-width: 768px) {
         .article-title {
-          font-size: 1.6rem;
+          font-size: 2.25rem;
         }
-
         .prose {
-          font-size: 0.95rem;
+          font-size: 1rem;
         }
       }
     </style>
@@ -278,12 +217,21 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
 
   <body>
     <Header />
+    <div class="reading-progress">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
     <div class="blog-layout">
       <article class="blog-main">
-        <header class="article-header">
-          <div class="article-date">
+        <header class="article-header fade-in">
+          <div class="article-meta">
             <FormattedDate date={pubDate} />
-            {updatedDate && <span> (Updated <FormattedDate date={updatedDate} />)</span>}
+            {updatedDate && (
+              <>
+                <span class="dot">·</span>
+                <span>Updated <FormattedDate date={updatedDate} /></span>
+              </>
+            )}
           </div>
           <h1 class="article-title">{title}</h1>
           {description && <p class="article-desc">{description}</p>}
@@ -295,7 +243,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
         </header>
 
         {heroImage && (
-          <div class="hero">
+          <div class="hero fade-in" style="animation-delay: 0.1s">
             {typeof heroImage === 'string' ? (
               <img src={heroImage} alt="" loading="lazy" />
             ) : (
@@ -304,13 +252,13 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
           </div>
         )}
 
-        <div class="prose">
+        <div class="prose fade-in" style="animation-delay: 0.2s">
           <slot />
         </div>
 
         <footer class="post-footer">
           <a href="/blog" class="back-link">
-            <span>&larr;</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
             <span>Back to blog</span>
           </a>
         </footer>
@@ -321,5 +269,79 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
       </aside>
     </div>
     <Footer />
+
+    <script is:inline>
+      // Reading Progress Bar
+      document.addEventListener('scroll', () => {
+        const progressBar = document.getElementById('progress-bar');
+        if (!progressBar) return;
+        
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        progressBar.style.width = scrolled + "%";
+      }, { passive: true });
+
+      // Copy Code Button
+      function addCopyButtons() {
+        const blocks = document.querySelectorAll('pre');
+        blocks.forEach((block) => {
+          if (block.classList.contains('has-copy-button')) return;
+          
+          const button = document.createElement('button');
+          button.className = 'copy-code';
+          button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
+          button.setAttribute('aria-label', 'Copy code');
+          
+          block.appendChild(button);
+          block.classList.add('has-copy-button');
+          block.style.position = 'relative';
+
+          button.addEventListener('click', async () => {
+            const code = block.querySelector('code');
+            const text = code.innerText;
+            
+            await navigator.clipboard.writeText(text);
+            
+            button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+            
+            setTimeout(() => {
+              button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
+            }, 2000);
+          });
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', addCopyButtons);
+      document.addEventListener('astro:page-load', addCopyButtons);
+    </script>
+
+    <style is:global>
+      .copy-code {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        padding: 0.4rem;
+        border-radius: var(--radius-md);
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        cursor: pointer;
+        opacity: 0;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      pre:hover .copy-code {
+        opacity: 1;
+      }
+
+      .copy-code:hover {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+      }
+    </style>
   </body>
 </html>

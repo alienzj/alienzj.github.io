@@ -1,7 +1,7 @@
 ---
 ---
 
-<button id="theme-toggle" aria-label="Toggle theme" type="button">
+<button id="theme-toggle" aria-label="Toggle theme" type="button" class="theme-toggle">
   <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="5"></circle>
     <line x1="12" y1="1" x2="12" y1="3"></line>
@@ -19,23 +19,29 @@
 </button>
 
 <style>
-  #theme-toggle {
+  .theme-toggle {
     border: 0;
-    background: none;
+    background: transparent;
     cursor: pointer;
     padding: 0;
-    color: var(--text-primary);
+    color: var(--text-secondary);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-    transition: background-color 0.2s;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  #theme-toggle:hover {
-    background-color: var(--border-color);
+  .theme-toggle:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    transform: scale(1.05);
+  }
+
+  .theme-toggle:active {
+    transform: scale(0.95);
   }
 
   .sun { display: none; }
@@ -45,42 +51,24 @@
   :global(.dark) .moon { display: none; }
 </style>
 
-<script>
-  function applyTheme() {
-    const theme = (() => {
-      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-        return localStorage.getItem('theme');
-      }
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        return 'dark';
-      }
-      return 'light';
-    })();
+<script is:inline>
+  const handleToggleClick = () => {
+    const element = document.documentElement;
+    element.classList.toggle("dark");
 
-    if (theme === 'light') {
-      document.documentElement.classList.remove('dark');
-    } else {
+    const isDark = element.classList.contains("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  };
+
+  document.getElementById("theme-toggle")?.addEventListener("click", handleToggleClick);
+</script>
+
+<script>
+  // This script runs on every page navigation (Astro transitions)
+  document.addEventListener('astro:after-swap', () => {
+    const theme = localStorage.getItem('theme');
+    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.classList.add('dark');
     }
-    window.localStorage.setItem('theme', theme || 'light');
-  }
-
-  function attachEvent() {
-    document.getElementById("theme-toggle")?.addEventListener("click", () => {
-      const element = document.documentElement;
-      element.classList.toggle("dark");
-      const isDark = element.classList.contains("dark");
-      localStorage.setItem("theme", isDark ? "dark" : "light");
-    });
-  }
-
-  // Initialize on swap (Astro transitions)
-  document.addEventListener('astro:after-swap', () => {
-    applyTheme();
-    attachEvent();
   });
-  
-  // Initialize on load
-  applyTheme();
-  attachEvent();
 </script>
