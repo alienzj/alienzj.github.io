@@ -44,6 +44,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: Georgia, "Times New Roman", Times, serif;
   margin: 0;
@@ -54,7 +58,8 @@ body {
   font-size: 18px;
 }
 
-main {
+/* Only apply max-width to non-blog pages */
+main:not(.blog-wrapper) {
   max-width: 800px;
   margin: 0 auto;
   padding: var(--space-12) var(--space-6);

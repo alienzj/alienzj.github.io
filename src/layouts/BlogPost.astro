@@ -17,18 +17,6 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
   <head>
     <BaseHead title={title} description={description} image={heroImage} />
     <style>
-      body:has(.blog-wrapper) main {
-        max-width: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      body:has(.blog-wrapper) header {
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: var(--space-8) var(--space-6) 0;
-      }
-
       .blog-wrapper {
         display: grid;
         grid-template-columns: 1fr 200px;
@@ -37,7 +25,6 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
         margin: 0 auto;
         padding: var(--space-8) var(--space-6) var(--space-16);
         align-items: start;
-        width: 100%;
       }
 
       .blog-content {
@@ -148,6 +135,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
         scroll-margin-top: 120px;
         position: relative;
         padding-bottom: var(--space-2);
+        border-bottom: none;
       }
 
       .prose :global(h2)::after {
@@ -270,7 +258,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
       }
 
       .prose :global(blockquote)::before {
-        content: '"';
+        content: '\201C';
         position: absolute;
         top: -10px;
         left: 20px;
@@ -410,12 +398,6 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
 
       :global(.dark) .prose :global(img) {
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      }
-
-      body:has(.blog-wrapper) footer {
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: var(--space-8) var(--space-6);
       }
     </style>
   </head>
