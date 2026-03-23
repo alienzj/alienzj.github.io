@@ -1,0 +1,9 @@
+title: BioConda
+description: Contributor to the bioinformatics conda channel, participating in packaging and maintenance.
+url: https://github.com/bioconda/bioconda-recipes
+tags:
+  - Conda
+  - Bioinformatics
+category: Other Contributions
+featured: false
+order: 8

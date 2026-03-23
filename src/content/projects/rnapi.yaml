@@ -1,0 +1,9 @@
+title: rnapi
+description: RNA-seq analysis pipeline for transcriptomics studies.
+url: https://github.com/ohmeta/rnapi
+tags:
+  - RNA-seq
+  - Transcriptomics
+category: OhMeta Projects
+featured: false
+order: 3

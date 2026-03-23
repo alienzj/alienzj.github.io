@@ -1,0 +1,9 @@
+title: quantpi
+description: Microbiome profiling pipeline with comprehensive QC and statistical analysis.
+url: https://github.com/ohmeta/quantpi
+tags:
+  - Metagenomics
+  - Profiling
+category: OhMeta Projects
+featured: true
+order: 2

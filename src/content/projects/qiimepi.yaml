@@ -1,0 +1,9 @@
+title: qiimepi
+description: Snakemake implementation of QIIME2 for amplicon analysis.
+url: https://github.com/ohmeta/qiimepi
+tags:
+  - 16S/ITS
+  - QIIME2
+category: OhMeta Projects
+featured: false
+order: 4

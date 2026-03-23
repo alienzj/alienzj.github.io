@@ -1,0 +1,102 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	url: string;
+	tags?: string[];
+  featured?: boolean;
+}
+
+const { title, description, url, tags = [], featured = false } = Astro.props;
+---
+
+<a href={url} class:list={["project-card", { featured }]}>
+  <div class="project-header">
+    <h3>{title}</h3>
+    {featured && <span class="featured-badge">Featured</span>}
+  </div>
+  <p>{description}</p>
+  {tags.length > 0 && (
+    <div class="project-tags">
+      {tags.map(tag => <span class="tag">{tag}</span>)}
+    </div>
+  )}
+</a>
+
+<style>
+  .project-card {
+    padding: var(--space-8);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--bg-primary);
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .project-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.1);
+  }
+
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-3);
+  }
+
+  .project-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+  }
+
+  .featured-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    background: var(--accent);
+    color: var(--accent-foreground);
+    padding: 0.15rem 0.4rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .project-card p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    margin: 0 0 var(--space-6) 0;
+    line-height: 1.6;
+    flex-grow: 1;
+  }
+
+  .project-tags {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    padding: 0.1rem 0.4rem;
+    border-radius: var(--radius-sm);
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    text-transform: uppercase;
+  }
+
+  .project-card:hover .tag {
+    border-color: var(--border-strong);
+    color: var(--text-secondary);
+  }
+</style>

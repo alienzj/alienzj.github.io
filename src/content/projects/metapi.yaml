@@ -1,0 +1,9 @@
+title: metapi
+description: A general metagenomics data mining system for robust microbiome research.
+url: https://github.com/ohmeta/metapi
+tags:
+  - Metagenomics
+  - Snakemake
+category: OhMeta Projects
+featured: true
+order: 1

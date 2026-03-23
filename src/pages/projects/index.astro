@@ -1,8 +1,15 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+
+const projects = (await getCollection('projects'))
+  .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
+
+const categories = [...new Set(projects.map(p => p.data.category))];
 ---
 
 <!doctype html>
@@ -11,141 +18,81 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
     <BaseHead title={`Projects | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
     <style>
       .page-header {
-        margin-bottom: var(--space-12);
+        margin-bottom: var(--space-16);
       }
 
       .page-header h1 {
-        font-size: 2.5rem;
+        font-size: 3.5rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
         margin-bottom: var(--space-4);
       }
 
       .page-header p {
-        font-size: 1.2rem;
+        font-size: 1.25rem;
         color: var(--text-secondary);
-      }
-
-      section {
-        margin-bottom: var(--space-12);
-      }
-
-      h2 {
-        font-size: 1.4rem;
-        border-bottom: 2px solid var(--border-color);
-        padding-bottom: var(--space-2);
-        margin-bottom: var(--space-6);
-      }
-
-      .project-list {
-        list-style: none;
-        padding: 0;
-      }
-
-      .project-item {
-        margin-bottom: var(--space-8);
-      }
-
-      .project-title {
-        font-size: 1.3rem;
-        margin: 0 0 var(--space-2) 0;
-      }
-
-      .project-description {
-        margin: 0 0 var(--space-4) 0;
-        color: var(--text-secondary);
+        max-width: 600px;
         line-height: 1.6;
       }
 
-      .project-tags {
-        display: flex;
-        gap: var(--space-2);
-        flex-wrap: wrap;
+      section {
+        margin-bottom: var(--space-20);
       }
 
-      .tag {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        font-size: 0.8rem;
-        background: var(--border-color);
-        padding: 0.1rem 0.4rem;
-        border-radius: 4px;
-        color: var(--text-secondary);
+      .category-title {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--text-muted);
+        margin-bottom: var(--space-10);
+        display: flex;
+        align-items: center;
+        gap: var(--space-6);
+      }
+
+      .category-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      .project-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: var(--space-6);
       }
     </style>
   </head>
   <body>
     <Header />
-    <main>
+    <main class="fade-in">
       <div class="page-header">
         <h1>Projects</h1>
-        <p>Open source contributions for microbiome research and AI for Science</p>
+        <p>Open source contributions for microbiome research, bioinformatics pipelines, and AI for Science.</p>
       </div>
 
-      <section>
-        <h2>OhMeta Projects</h2>
-        <ul class="project-list">
-          <li class="project-item">
-            <h3 class="project-title"><a href="https://github.com/ohmeta/metapi">metapi</a></h3>
-            <p class="project-description">A general metagenomics data mining system for robust microbiome research.</p>
-            <div class="project-tags">
-              <span class="tag">Metagenomics</span>
-              <span class="tag">Snakemake</span>
-            </div>
-          </li>
-          <li class="project-item">
-            <h3 class="project-title"><a href="https://github.com/ohmeta/quantpi">quantpi</a></h3>
-            <p class="project-description">Microbiome profiling pipeline with comprehensive QC and statistical analysis.</p>
-            <div class="project-tags">
-              <span class="tag">Metagenomics</span>
-              <span class="tag">Profiling</span>
-            </div>
-          </li>
-          <li class="project-item">
-            <h3 class="project-title"><a href="https://github.com/ohmeta/rnapi">rnapi</a></h3>
-            <p class="project-description">RNA-seq analysis pipeline for transcriptomics studies.</p>
-            <div class="project-tags">
-              <span class="tag">RNA-seq</span>
-              <span class="tag">Transcriptomics</span>
-            </div>
-          </li>
-          <li class="project-item">
-            <h3 class="project-title"><a href="https://github.com/ohmeta/qiimepi">qiimepi</a></h3>
-            <p class="project-description">Snakemake implementation of QIIME2 for amplicon analysis.</p>
-            <div class="project-tags">
-              <span class="tag">16S/ITS</span>
-              <span class="tag">QIIME2</span>
-            </div>
-          </li>
-          <li class="project-item">
-            <h3 class="project-title"><a href="https://github.com/ohmeta/skillpi">skillpi</a></h3>
-            <p class="project-description">Knowledge base and skill management for scientific workflows.</p>
-            <div class="project-tags">
-              <span class="tag">Knowledge Base</span>
-              <span class="tag">Workflow</span>
-            </div>
-          </li>
-          <li class="project-item">
-            <h3 class="project-title"><a href="https://github.com/ohmeta/clawpi">clawpi</a></h3>
-            <p class="project-description">AI-powered workflow orchestration and automated scientific discovery.</p>
-            <div class="project-tags">
-              <span class="tag">AI Agent</span>
-              <span class="tag">Automation</span>
-            </div>
-          </li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Other Contributions</h2>
-        <ul class="project-list">
-          <li class="project-item">
-            <h3 class="project-title"><a href="https://github.com/metagenome-atlas/atlas">metagenome-atlas/atlas</a></h3>
-            <p class="project-description">Automated metagenome analysis pipeline — "Three commands to analyze your metagenome".</p>
-          </li>
-          <li class="project-item">
-            <h3 class="project-title"><a href="https://github.com/bioconda/bioconda-recipes">BioConda</a></h3>
-            <p class="project-description">Contributor to the bioinformatics conda channel, participating in packaging and maintenance.</p>
-          </li>
-        </ul>
-      </section>
+      {categories.map(category => (
+        <section>
+          <h2 class="category-title">{category}</h2>
+          <div class="project-grid">
+            {projects
+              .filter(p => p.data.category === category)
+              .map(project => (
+                <ProjectCard 
+                  title={project.data.title}
+                  description={project.data.description}
+                  url={project.data.url}
+                  tags={project.data.tags}
+                  featured={project.data.featured}
+                />
+              ))
+            }
+          </div>
+        </section>
+      ))}
     </main>
     <Footer />
   </body>

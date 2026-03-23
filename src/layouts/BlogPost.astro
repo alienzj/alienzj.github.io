@@ -7,11 +7,12 @@ import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
 type Props = CollectionEntry<'blog'>['data'] & {
-  headings: { depth: number; slug: string; text: string }[];
+  headings?: { depth: number; slug: string; text: string }[];
   minutesRead?: string;
+  category?: string;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags, category = 'Blog Post' } = Astro.props;
 
 // Simple reading time calculation if not provided by remark
 // Standard reading speed is ~200-250 words per minute
@@ -56,6 +57,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
       /* Article Header */
       .article-header {
         margin-bottom: var(--space-16);
+        height: auto; /* Override global.css header height to prevent overlapping */
       }
 
       .article-category {
@@ -96,7 +98,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
 
       .article-title {
         font-size: 3.25rem;
-        line-height: 1.1;
+        line-height: 1.2; /* Improved from 1.1 for better readability */
         margin: 0 0 var(--space-8);
         color: var(--text-primary);
         letter-spacing: -0.04em;
@@ -207,7 +209,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
     <div class="blog-layout">
       <article class="blog-main">
         <header class="article-header fade-in">
-          <div class="article-category">Blog Post</div>
+          <div class="article-category">{category}</div>
           <h1 class="article-title">{title}</h1>
           <div class="article-meta">
             <div class="meta-item">
