@@ -1,8 +1,14 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 ---
 
 <!doctype html>
@@ -11,34 +17,41 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
     <style>
       .hero {
-        padding: var(--space-12) 0 var(--space-16);
+        padding: var(--space-16) 0 var(--space-20);
       }
 
       .hero h1 {
-        font-size: clamp(3rem, 8vw, 4.5rem);
+        font-size: clamp(3.5rem, 10vw, 5.5rem);
         font-weight: 800;
-        letter-spacing: -0.05em;
-        line-height: 1;
-        margin-bottom: var(--space-6);
+        letter-spacing: -0.06em;
+        line-height: 0.95;
+        margin-bottom: var(--space-8);
       }
 
       .hero p {
         font-size: 1.25rem;
         color: var(--text-secondary);
-        max-width: 650px;
+        max-width: 680px;
         line-height: 1.6;
+        margin-bottom: var(--space-6);
+      }
+
+      .hero p strong {
+        color: var(--text-primary);
+        font-weight: 600;
       }
 
       .section-title {
-        font-size: 0.875rem;
-        font-weight: 600;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.15em;
         color: var(--text-muted);
-        margin-bottom: var(--space-8);
+        margin-bottom: var(--space-10);
         display: flex;
         align-items: center;
-        gap: var(--space-4);
+        gap: var(--space-6);
       }
 
       .section-title::after {
@@ -49,65 +62,71 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
       }
 
       section {
-        margin-bottom: var(--space-20);
+        margin-bottom: var(--space-24);
       }
 
       .project-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: var(--space-6);
+        gap: var(--space-4);
       }
 
       .project-card {
-        padding: var(--space-6);
-        border-radius: var(--radius-xl);
+        padding: var(--space-8);
+        border-radius: var(--radius-md);
         border: 1px solid var(--border);
-        background: var(--bg-secondary);
-        transition: all 0.2s ease;
+        background: var(--bg-primary);
+        transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
         text-decoration: none;
         color: inherit;
-        display: block;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
       }
 
       .project-card:hover {
         border-color: var(--accent);
-        background: var(--bg-tertiary);
-        transform: translateY(-2px);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.1);
       }
 
       .project-card h3 {
-        font-size: 1.125rem;
+        font-size: 1.25rem;
         font-weight: 700;
-        margin: 0 0 var(--space-2) 0;
+        margin: 0 0 var(--space-3) 0;
         color: var(--text-primary);
+        letter-spacing: -0.02em;
       }
 
       .project-card p {
         font-size: 0.9375rem;
         color: var(--text-secondary);
         margin: 0;
-        line-height: 1.5;
+        line-height: 1.6;
       }
 
       .blog-list {
         list-style: none;
         padding: 0;
         margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
       }
 
       .blog-item {
-        margin-bottom: var(--space-4);
+        position: relative;
       }
 
       .blog-link {
         display: flex;
         justify-content: space-between;
-        align-items: baseline;
+        align-items: center;
         text-decoration: none;
-        padding: var(--space-3) var(--space-4);
-        margin: 0 calc(var(--space-4) * -1);
+        padding: var(--space-4) var(--space-6);
+        margin: 0 calc(var(--space-6) * -1);
         border-radius: var(--radius-md);
-        transition: background 0.2s;
+        transition: all 0.2s ease;
       }
 
       .blog-link:hover {
@@ -115,38 +134,46 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
       }
 
       .blog-link .title {
-        font-weight: 500;
+        font-weight: 600;
         color: var(--text-primary);
+        font-size: 1.125rem;
+        letter-spacing: -0.01em;
       }
 
       .blog-link .date {
-        font-size: 0.875rem;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
         color: var(--text-muted);
-        font-variant-numeric: tabular-nums;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
       }
 
       .view-all {
         display: inline-flex;
         align-items: center;
         gap: var(--space-2);
-        margin-top: var(--space-6);
+        margin-top: var(--space-10);
         font-size: 0.875rem;
-        font-weight: 600;
+        font-weight: 700;
         color: var(--text-primary);
         text-decoration: none;
+        font-family: var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
       }
 
       .view-all:hover {
-        text-decoration: underline;
+        gap: var(--space-3);
       }
 
       @media (max-width: 640px) {
         .hero h1 {
-          font-size: 2.5rem;
+          font-size: 3rem;
         }
         .blog-link {
           flex-direction: column;
-          gap: var(--space-1);
+          align-items: flex-start;
+          gap: var(--space-2);
         }
       }
     </style>
@@ -157,11 +184,12 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
       <section class="hero">
         <h1 class="text-gradient">alienzj</h1>
         <p>
-          Microbiome Informatics Researcher & Bioinformatics Engineer.
-          Focusing on metagenomics, MAGs, and AI-powered scientific workflows.
+          <strong>Microbiome Informatics Researcher</strong> & Bioinformatics Engineer.
+          Dedicated to deciphering the microbial world through metagenomics, 
+          computational ecology, and AI-powered scientific workflows.
         </p>
         <p>
-          Co-founder of <a href="https://github.com/ohmeta">OhMeta</a> and contributor to 
+          Co-founder of <a href="https://github.com/ohmeta">OhMeta</a> and active contributor to 
           <a href="https://github.com/snakemake">Snakemake</a>, 
           <a href="https://github.com/bioconda">BioConda</a>, and 
           <a href="https://github.com/metagenome-atlas">Metagenome Atlas</a>.
@@ -188,31 +216,33 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
       </section>
 
       <section>
-        <h2 class="section-title">Recent Writing</h2>
+        <h2 class="section-title">Latest Writing</h2>
         <ul class="blog-list">
-          <li class="blog-item">
-            <a href="/blog/velvet-genome-assembler" class="blog-link">
-              <span class="title">Velvet 基因组组装器详解：从论文到 C 代码实现</span>
-              <span class="date">Mar 13, 2026</span>
-            </a>
-          </li>
+          {posts.map((post) => (
+            <li class="blog-item">
+              <a href={`/blog/${post.id}/`} class="blog-link">
+                <span class="title">{post.data.title}</span>
+                <span class="date"><FormattedDate date={post.data.pubDate} /></span>
+              </a>
+            </li>
+          ))}
         </ul>
-        <a href="/blog" class="view-all">Read the blog &rarr;</a>
+        <a href="/blog" class="view-all">Read more articles &rarr;</a>
       </section>
 
       <section>
-        <h2 class="section-title">Connect</h2>
+        <h2 class="section-title">Contact</h2>
         <ul class="blog-list">
           <li class="blog-item">
             <a href="https://github.com/alienzj" class="blog-link">
               <span class="title">GitHub (@alienzj)</span>
-              <span class="date">Code & Contributions</span>
+              <span class="date">Source & Open Science</span>
             </a>
           </li>
           <li class="blog-item">
             <a href="/about" class="blog-link">
               <span class="title">About & CV</span>
-              <span class="date">Bio & Experience</span>
+              <span class="date">Background & Focus</span>
             </a>
           </li>
         </ul>

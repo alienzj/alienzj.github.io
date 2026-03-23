@@ -1,0 +1,472 @@
+---
+title: 'Why Does diamond blastp Stall on HDD? A Deep Dive into Random I/O'
+description: 'Exploring the performance bottleneck of random I/O on mechanical hard drives when running diamond blastp, with benchmarks and technical analysis.'
+pubDate: 'Mar 23 2026'
+heroImage: '../../assets/blog-placeholder-5.jpg'
+tags: ['Bioinformatics', 'Hardware', 'Performance', 'I/O', 'Linux']
+---
+
+import { Image } from 'astro:assets';
+
+> *A conversation that started with "why is parallel never using all my CPU cores" and ended up teaching me more about hard disks than I expected.*
+
+---
+
+## The Setup
+
+I have about 1,000 [Bakta](https://github.com/oschwengers/bakta) jobs for annotating MAGs (metagenome-assembled genomes). Each job runs on 8 threads, and I launch them like this:
+
+```bash
+parallel --progress --jobs 4 :::: bakta.sh
+```
+
+The machine has 32 threads. So 4 jobs × 8 threads = 32 threads, perfectly occupied — at least in theory.
+
+In practice? `parallel` almost never saturates the CPU. The jobs drag on, and when I look at what's happening, almost every task is stuck at the `diamond blastp` step. CPU usage near zero. Nothing moving.
+
+So what's going on?
+
+---
+
+## The First Clue: `iowait`
+
+Running `top` or `iostat -x 1` tells the story immediately. Look at the `%wa` (iowait) column — it's high. The CPU isn't busy computing. It's *waiting*. Waiting for the disk.
+
+The diamond database (`psc.dmnd`, 43 GB) lives on a mechanical hard disk. Every blastp search has to read from it. And that's where things fall apart.
+
+The figure below shows the root cause: 4 concurrent diamond tasks all competing for a single HDD, which can only serve ~207 random reads per second total. CPU utilization collapses to ~15% because the processes spend almost all their time blocked on I/O.
+
+<figure>
+
+<svg width="100%" viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;display:block;margin:1.5em auto;">
+  <rect width="640" height="380" fill="#fafaf9" rx="12"/>
+
+  <!-- Title -->
+  <text x="320" y="32" text-anchor="middle" font-family="monospace,sans-serif" font-size="14" font-weight="600" fill="#2c2c2a">4 tasks competing for one HDD — CPU starved by I/O wait</text>
+
+  <!-- CPU box -->
+  <rect x="20" y="52" width="220" height="210" rx="10" fill="#e1f5ee" stroke="#0f6e56" stroke-width="1"/>
+  <text x="130" y="74" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="600" fill="#085041">CPU (32 threads)</text>
+
+  <!-- 4 task boxes -->
+  <rect x="36" y="86" width="188" height="34" rx="5" fill="#9fe1cb" stroke="#0f6e56" stroke-width="0.8"/>
+  <text x="130" y="108" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#04342c">diamond task 1 — waiting I/O</text>
+
+  <rect x="36" y="128" width="188" height="34" rx="5" fill="#9fe1cb" stroke="#0f6e56" stroke-width="0.8"/>
+  <text x="130" y="150" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#04342c">diamond task 2 — waiting I/O</text>
+
+  <rect x="36" y="170" width="188" height="34" rx="5" fill="#9fe1cb" stroke="#0f6e56" stroke-width="0.8"/>
+  <text x="130" y="192" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#04342c">diamond task 3 — waiting I/O</text>
+
+  <rect x="36" y="212" width="188" height="34" rx="5" fill="#9fe1cb" stroke="#0f6e56" stroke-width="0.8"/>
+  <text x="130" y="234" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#04342c">diamond task 4 — waiting I/O</text>
+
+  <!-- Arrows to HDD -->
+  <line x1="224" y1="103" x2="370" y2="195" stroke="#e24b4a" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="224" y1="145" x2="370" y2="205" stroke="#e24b4a" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="224" y1="187" x2="370" y2="215" stroke="#e24b4a" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="224" y1="229" x2="370" y2="225" stroke="#e24b4a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#e24b4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- Contention label -->
+  <text x="298" y="188" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#a32d2d">4-way I/O</text>
+  <text x="298" y="202" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#a32d2d">contention</text>
+
+  <!-- HDD box -->
+  <rect x="372" y="170" width="150" height="76" rx="8" fill="#fcebeb" stroke="#a32d2d" stroke-width="1"/>
+  <text x="447" y="202" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="600" fill="#501313">Mech. HDD</text>
+  <text x="447" y="220" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#791f1f">~207 IOPS total</text>
+  <text x="447" y="236" text-anchor="middle" font-family="monospace,sans-serif" font-size="10" fill="#791f1f">psc.dmnd (43 GB)</text>
+
+  <!-- CPU utilisation bar -->
+  <text x="20" y="282" font-family="monospace,sans-serif" font-size="11" fill="#444441">CPU utilisation</text>
+  <rect x="20" y="290" width="220" height="16" rx="3" fill="none" stroke="#b4b2a9" stroke-width="0.8"/>
+  <rect x="20" y="290" width="33" height="16" rx="3" fill="#1d9e75"/>
+  <text x="248" y="303" font-family="monospace,sans-serif" font-size="11" fill="#a32d2d">~15% (mostly iowait)</text>
+
+  <!-- HDD utilisation bar -->
+  <text x="372" y="262" font-family="monospace,sans-serif" font-size="11" fill="#444441">HDD utilisation</text>
+  <rect x="372" y="270" width="150" height="16" rx="3" fill="none" stroke="#b4b2a9" stroke-width="0.8"/>
+  <rect x="372" y="270" width="143" height="16" rx="3" fill="#e24b4a"/>
+  <text x="372" y="303" font-family="monospace,sans-serif" font-size="11" fill="#a32d2d">~95% saturated</text>
+
+  <!-- Fix box -->
+  <rect x="20" y="322" width="600" height="44" rx="7" fill="#faeeda" stroke="#ba7517" stroke-width="1"/>
+  <text x="320" y="340" text-anchor="middle" font-family="monospace,sans-serif" font-size="12" font-weight="600" fill="#412402">Root fix: move psc.dmnd (43 GB) + bakta.db (39 GB) to NVMe</text>
+  <text x="320" y="357" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#633806">Eliminates the I/O bottleneck — diamond becomes CPU-bound as intended</text>
+</svg>
+
+<figcaption><em>Figure 1. Four diamond tasks share a single mechanical HDD. The disk is saturated at ~95% utilisation while the CPU idles at ~15%, almost entirely blocked on iowait.</em></figcaption>
+</figure>
+
+---
+
+## Sequential vs Random I/O: The Core of the Problem
+
+Here's the thing that confused me at first. When I run `rsync` to copy data *from* the same HDD, I get ~240 MB/s. So the disk isn't slow, right?
+
+Wrong. Or rather — it depends on what "slow" means.
+
+There are two completely different ways to read data from a hard disk, and they have wildly different performance characteristics.
+
+**Sequential read** (what rsync does): data is stored contiguously on disk. The read head positions itself at the start of the file and sweeps forward in one continuous arc, like a needle playing a vinyl record. It barely needs to move between reads. Result: 150–250 MB/s sustained.
+
+**Random read** (what diamond does): the query jumps to scattered offsets across all 43 GB of `psc.dmnd`. Every jump requires the read head to *physically move* — a **seek**. On a mechanical HDD, seeking takes 5–15 ms. That's not a software limit. That's a spinning platter and a physical arm moving through space.
+
+The figure below shows the difference visually:
+
+<figure>
+
+<svg width="100%" viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;display:block;margin:1.5em auto;">
+  <rect width="640" height="340" fill="#fafaf9" rx="12"/>
+
+  <!-- Left: sequential -->
+  <text x="155" y="30" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="600" fill="#2c2c2a">Sequential read (rsync)</text>
+
+  <!-- Disk platter rings -->
+  <ellipse cx="155" cy="145" rx="115" ry="29" fill="none" stroke="#888780" stroke-width="1"/>
+  <ellipse cx="155" cy="145" rx="76"  ry="19" fill="none" stroke="#b4b2a9" stroke-width="0.6" stroke-dasharray="4 3"/>
+  <ellipse cx="155" cy="145" rx="38"  ry="10" fill="none" stroke="#b4b2a9" stroke-width="0.6" stroke-dasharray="4 3"/>
+
+  <!-- Green arc = head sweeping continuously -->
+  <path d="M 41 138 A 115 29 0 0 1 269 138" fill="none" stroke="#1d9e75" stroke-width="3" stroke-linecap="round"/>
+  <!-- Head arm -->
+  <line x1="155" y1="145" x2="41" y2="138" stroke="#5f5e5a" stroke-width="1.5"/>
+  <circle cx="41" cy="138" r="5" fill="#1d9e75"/>
+  <!-- Direction arrow along arc -->
+  <path d="M 195 122 A 76 19 0 0 1 231 138" fill="none" stroke="#1d9e75" stroke-width="1.5" marker-end="url(#arrowG)"/>
+  <defs>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#1d9e75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#e24b4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <text x="155" y="196" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#085041">Head sweeps continuously</text>
+  <text x="155" y="211" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#085041">Almost no seeking needed</text>
+
+  <rect x="65" y="228" width="180" height="42" rx="6" fill="#e1f5ee" stroke="#0f6e56" stroke-width="0.8"/>
+  <text x="155" y="246" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="700" fill="#085041">~200 MB/s</text>
+  <text x="155" y="262" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#085041">Seeks: near zero</text>
+
+  <!-- Divider -->
+  <line x1="320" y1="18" x2="320" y2="310" stroke="#d3d1c7" stroke-width="0.6" stroke-dasharray="4 4"/>
+
+  <!-- Right: random -->
+  <text x="485" y="30" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="600" fill="#2c2c2a">Random read (diamond)</text>
+
+  <!-- Disk platter rings -->
+  <ellipse cx="485" cy="145" rx="115" ry="29" fill="none" stroke="#888780" stroke-width="1"/>
+  <ellipse cx="485" cy="145" rx="76"  ry="19" fill="none" stroke="#b4b2a9" stroke-width="0.6" stroke-dasharray="4 3"/>
+  <ellipse cx="485" cy="145" rx="38"  ry="10" fill="none" stroke="#b4b2a9" stroke-width="0.6" stroke-dasharray="4 3"/>
+
+  <!-- Scattered read targets -->
+  <circle cx="372" cy="138" r="4" fill="#e24b4a"/>
+  <circle cx="540" cy="130" r="4" fill="#e24b4a"/>
+  <circle cx="400" cy="154" r="4" fill="#e24b4a"/>
+  <circle cx="565" cy="142" r="4" fill="#e24b4a"/>
+  <circle cx="460" cy="126" r="4" fill="#e24b4a"/>
+
+  <!-- Zigzag seek paths -->
+  <line x1="372" y1="138" x2="540" y2="130" stroke="#e24b4a" stroke-width="1.2" stroke-dasharray="3 2" marker-end="url(#arrowR)"/>
+  <line x1="540" y1="130" x2="400" y2="154" stroke="#e24b4a" stroke-width="1.2" stroke-dasharray="3 2" marker-end="url(#arrowR)"/>
+  <line x1="400" y1="154" x2="565" y2="142" stroke="#e24b4a" stroke-width="1.2" stroke-dasharray="3 2" marker-end="url(#arrowR)"/>
+  <line x1="565" y1="142" x2="460" y2="126" stroke="#e24b4a" stroke-width="1.2" stroke-dasharray="3 2" marker-end="url(#arrowR)"/>
+
+  <text x="485" y="196" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#a32d2d">Head jumps to scattered offsets</text>
+  <text x="485" y="211" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#a32d2d">Each seek costs ~10 ms</text>
+
+  <rect x="395" y="228" width="180" height="42" rx="6" fill="#fcebeb" stroke="#a32d2d" stroke-width="0.8"/>
+  <text x="485" y="246" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="700" fill="#a32d2d">~0.8 MB/s</text>
+  <text x="485" y="262" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#a32d2d">207 IOPS (physical ceiling)</text>
+
+  <!-- Bottom note -->
+  <rect x="20" y="288" width="600" height="36" rx="7" fill="#faeeda" stroke="#ba7517" stroke-width="0.8"/>
+  <text x="320" y="306" text-anchor="middle" font-family="monospace,sans-serif" font-size="12" font-weight="600" fill="#412402">Same disk — 250× bandwidth difference — entirely due to access pattern</text>
+  <text x="320" y="320" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#633806">The HDD is not broken. Mechanical seek latency is a physical law.</text>
+</svg>
+
+<figcaption><em>Figure 2. Sequential reads let the head sweep continuously along a track (~200 MB/s). Random reads force the head to physically jump between scattered disk locations, capped at ~207 seeks per second regardless of how fast the disk spins.</em></figcaption>
+</figure>
+
+Think about what that means arithmetically: 1000 ms ÷ 10 ms per seek = **100 seeks per second**, maximum. Even if you could perfectly pipeline them, that's your ceiling. With 4 concurrent jobs competing for the same head, you get even worse.
+
+---
+
+## Benchmarking It: `fio` Tells the Truth
+
+I used `fio` to measure both access patterns on my actual HDD (a LUKS-encrypted 3.6 TB drive mounted at `/mnt/store`):
+
+```bash
+# Random read — simulates how diamond reads the database
+fio --name=rand-read \
+    --filename=/mnt/store/testfile \
+    --rw=randread \
+    --bs=4k \
+    --size=4G \
+    --numjobs=4 \
+    --runtime=30 \
+    --group_reporting \
+    --direct=1
+```
+
+**HDD results:**
+
+```
+IOPS=207, BW=828 KiB/s
+Average latency: 19.3 ms
+```
+
+Then I tested my NVMe SSD (the system drive, mounted at `/`):
+
+```bash
+fio --name=rand-read \
+    --filename=/tmp/testfile \
+    --rw=randread \
+    --bs=4k \
+    --size=4G \
+    --numjobs=4 \
+    --runtime=30 \
+    --group_reporting \
+    --direct=1
+```
+
+**NVMe results:**
+
+```
+IOPS=79,700, BW=311 MiB/s
+Average latency: 0.05 ms
+```
+
+The difference: **385× in IOPS, 386× in latency.**
+
+<figure>
+
+<svg width="100%" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;display:block;margin:1.5em auto;">
+  <rect width="640" height="260" fill="#fafaf9" rx="12"/>
+
+  <!-- IOPS panel -->
+  <text x="200" y="30" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="600" fill="#2c2c2a">Random read IOPS</text>
+
+  <!-- HDD IOPS bar (207 out of 79700 ≈ 0.26% — show as tiny stub) -->
+  <text x="36" y="60" font-family="monospace,sans-serif" font-size="12" fill="#5f5e5a">HDD</text>
+  <rect x="100" y="48" width="3" height="20" rx="1" fill="#e24b4a"/>
+  <text x="110" y="62" font-family="monospace,sans-serif" font-size="12" fill="#a32d2d">207</text>
+
+  <!-- NVMe IOPS bar (full width = 79700) -->
+  <text x="36" y="96" font-family="monospace,sans-serif" font-size="12" fill="#5f5e5a">NVMe</text>
+  <rect x="100" y="84" width="250" height="20" rx="2" fill="#1d9e75"/>
+  <text x="357" y="98" font-family="monospace,sans-serif" font-size="12" fill="#085041">79,700</text>
+
+  <text x="200" y="124" text-anchor="middle" font-family="monospace,sans-serif" font-size="12" font-weight="700" fill="#ba7517">385× difference</text>
+
+  <!-- Divider -->
+  <line x1="430" y1="20" x2="430" y2="220" stroke="#d3d1c7" stroke-width="0.6" stroke-dasharray="4 4"/>
+
+  <!-- Latency panel -->
+  <text x="540" y="30" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="600" fill="#2c2c2a">Avg random latency</text>
+
+  <!-- HDD latency bar (19ms — full width) -->
+  <text x="444" y="60" font-family="monospace,sans-serif" font-size="12" fill="#5f5e5a">HDD</text>
+  <rect x="494" y="48" width="120" height="20" rx="2" fill="#e24b4a"/>
+  <text x="620" y="62" font-family="monospace,sans-serif" font-size="12" fill="#a32d2d">19 ms</text>
+
+  <!-- NVMe latency bar (0.05ms — nearly invisible stub) -->
+  <text x="444" y="96" font-family="monospace,sans-serif" font-size="12" fill="#5f5e5a">NVMe</text>
+  <rect x="494" y="84" width="2" height="20" rx="1" fill="#1d9e75"/>
+  <text x="502" y="98" font-family="monospace,sans-serif" font-size="12" fill="#085041">0.05 ms</text>
+
+  <text x="540" y="124" text-anchor="middle" font-family="monospace,sans-serif" font-size="12" font-weight="700" fill="#ba7517">386× difference</text>
+
+  <!-- Summary boxes -->
+  <rect x="20" y="148" width="290" height="50" rx="7" fill="#fcebeb" stroke="#a32d2d" stroke-width="0.8"/>
+  <text x="165" y="168" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="700" fill="#501313">HDD: 207 IOPS total</text>
+  <text x="165" y="186" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#791f1f">4 tasks → ~52 IOPS each. Not enough.</text>
+
+  <rect x="330" y="148" width="290" height="50" rx="7" fill="#e1f5ee" stroke="#0f6e56" stroke-width="0.8"/>
+  <text x="475" y="168" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="700" fill="#085041">NVMe: 79,700 IOPS total</text>
+  <text x="475" y="186" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#085041">4 tasks → ~20,000 IOPS each. Plenty.</text>
+
+  <rect x="20" y="214" width="600" height="32" rx="6" fill="#faeeda" stroke="#ba7517" stroke-width="0.8"/>
+  <text x="320" y="234" text-anchor="middle" font-family="monospace,sans-serif" font-size="12" font-weight="600" fill="#412402">Moving psc.dmnd to NVMe gives each task a ~385× I/O speedup</text>
+</svg>
+
+<figcaption><em>Figure 3. fio benchmark results on the actual hardware. HDD delivers 207 IOPS at 19 ms average latency; NVMe delivers 79,700 IOPS at 0.05 ms. The gap is entirely explained by physical seek time.</em></figcaption>
+</figure>
+
+With 4 jobs sharing 207 total IOPS, each job gets about 52 IOPS. That's nowhere near enough for diamond to make forward progress — it just sits there, waiting for each tiny read to come back before it can continue.
+
+---
+
+## Why Does diamond Need Random Access At All?
+
+This is the really interesting question. Why can't diamond just read `psc.dmnd` sequentially like rsync does?
+
+The answer lies in how diamond's database is constructed — and what it's optimized for.
+
+### What's Inside `psc.dmnd`
+
+A diamond database is not a flat list of protein sequences. It's a **preprocessed index structure** built for fast similarity search. When you run `diamond makedb`, it does several things:
+
+1. **Chunks sequences into k-mer seeds** — each protein sequence is broken into overlapping short fragments (seeds) of length ~5 amino acids.
+2. **Builds a seed index** — a hash table mapping each seed to the list of database sequences that contain it.
+3. **Stores sequences in a compressed column format** — optimized for SIMD vector comparison, not for human-readable sequential access.
+
+The resulting `.dmnd` file looks roughly like this internally:
+
+```
+[Header / metadata]
+[Seed hash table index]   ← sparse, randomly addressed
+[Sequence data blocks]    ← addressed via offsets in the index
+[Score matrix data]
+```
+
+### What Happens During a Query
+
+When you blast a query protein against the database:
+
+1. Diamond extracts seeds from your query protein.
+2. For each seed, it **looks up the hash table** to find candidate matching database sequences — a random access into the index region.
+3. For each candidate, it **fetches the sequence block** from the sequence data region — another random access, to a different part of the file.
+4. It runs a vectorized alignment (Smith-Waterman or BLOSUM-based scoring) on the fetched sequences.
+5. Repeat for thousands of seeds per query protein.
+
+Steps 2 and 3 are the killers. The index offsets for different seeds point to completely different parts of the 43 GB file. There's no spatial locality — a seed from position 1 in your query protein might point to database offset 2 GB, while the next seed points to offset 38 GB. The disk head has to travel the full distance.
+
+### Why Not Just Cache It?
+
+The OS does try to cache recently-read blocks in RAM. But `psc.dmnd` is 43 GB. Unless you have 43+ GB of free RAM, the cache will constantly be evicted as new blocks come in. With 1,000 different MAG jobs each querying different proteins, the cache hit rate is near zero — every read is a cold miss going to physical disk.
+
+---
+
+## A Computer Science Perspective: The Fundamental Mismatch
+
+What we're seeing is a classic **storage hierarchy mismatch**. Computer scientists think about memory and storage in terms of a hierarchy:
+
+```
+Registers         ~0.3 ns      (tiny, ultrafast)
+L1 Cache          ~1 ns
+L2 Cache          ~4 ns
+L3 Cache          ~10 ns
+DRAM              ~100 ns
+NVMe SSD          ~50,000 ns   (0.05 ms)
+SATA SSD          ~100,000 ns  (0.1 ms)
+HDD (sequential)  ~5,000,000 ns (5 ms — mostly rotational latency)
+HDD (random)      ~10,000,000 ns (10 ms — seek + rotational latency)
+```
+
+Each level is roughly 10–100× slower than the one above it. Random HDD access sits at the very bottom.
+
+diamond is built assuming its database will live on a device with reasonable random I/O — originally, when `psc.dmnd` was smaller (maybe a few GB), even an HDD could keep up. But as protein databases have grown into the tens of gigabytes, the working set has outgrown what HDDs can serve with their seek-limited random I/O.
+
+### The Algorithm Is Right — The Storage Is Wrong
+
+It's worth emphasizing: diamond's access pattern isn't a bug. Hash-indexed seed lookup is the *correct* algorithm for fast sequence similarity search. The alternative — scanning the entire 43 GB database sequentially for every query — would be far worse. The algorithm assumes you have fast random access. SSDs and NVMe drives deliver that. HDDs don't.
+
+This is the same reason databases (PostgreSQL, MySQL, etc.) run much better on SSDs: they also use B-tree indexes that require random reads. It's the same reason Redis keeps everything in RAM. The data structure is designed for a certain access latency, and putting it on slower storage breaks the design assumptions.
+
+---
+
+## Does LUKS Encryption Make It Worse?
+
+I wondered about this since my HDD is LUKS-encrypted (`cryptstore`). The answer is: **barely, if at all**.
+
+LUKS decryption happens in the CPU, using AES-NI hardware acceleration. On modern CPUs, AES-NI can decrypt at ~5–10 GB/s — far faster than the HDD can supply data. The bottleneck is the seek time, not the decryption. LUKS adds maybe 1–2% overhead at these I/O rates.
+
+You can verify this by testing the raw block device directly:
+
+```bash
+sudo fio --name=raw-rand \
+    --filename=/dev/sda \
+    --rw=randread \
+    --bs=4k \
+    --size=4G \
+    --numjobs=4 \
+    --runtime=30 \
+    --group_reporting \
+    --direct=1
+```
+
+If the IOPS on `/dev/sda` matches what you get through `/mnt/store`, encryption is not your problem.
+
+---
+
+## The Fix: Move `psc.dmnd` to NVMe
+
+My system has a 3.7 TB NVMe SSD as the root drive, with `/tmp` mounted on it. The fix is simple in principle:
+
+```bash
+# Check available space first
+df -h /tmp /
+
+# Copy the two big files (82 GB total)
+cp /mnt/store/omics/SDB/bakta/bakta_databases/psc.dmnd /tmp/
+cp /mnt/store/omics/SDB/bakta/bakta_databases/bakta.db /tmp/
+
+# Symlink back so bakta config doesn't need to change
+ln -sf /tmp/psc.dmnd \
+    /mnt/store/omics/SDB/bakta/bakta_databases/psc.dmnd
+ln -sf /tmp/bakta.db \
+    /mnt/store/omics/SDB/bakta/bakta_databases/bakta.db
+```
+
+With 79,700 IOPS available on NVMe versus 207 on HDD, each of the 4 parallel jobs now gets ~20,000 IOPS instead of ~52 IOPS — a ~385× improvement in the step that was the bottleneck.
+
+Once diamond is no longer stalling, the `--jobs 4` setting can potentially be raised (since each job will actually use CPU now), and the 1,000-job queue should complete dramatically faster.
+
+---
+
+## Key Takeaways
+
+**1. "Fast disk" means different things for sequential vs random workloads.**
+Your HDD can copy files at 200+ MB/s. It can only do ~200 random 4K reads per second. These are not contradictory — they reflect the physical reality of spinning platters.
+
+**2. Bioinformatics databases are random-access data structures.**
+Tools like diamond, HMMER, and BLAST are built on indexed data structures that jump around their database files. They assume fast random I/O. When that assumption breaks, you get near-zero CPU utilization despite the disk "working hard."
+
+**3. iowait is the diagnostic signal.**
+When your CPU shows low utilization but your tasks aren't finishing, check `%wa` in `top` or `iostat`. High iowait = your program is spending most of its time waiting for the disk, not computing.
+
+**4. The storage hierarchy matters.**
+NVMe → SATA SSD → HDD is not a small step — each tier is an order of magnitude different in random I/O performance. For any workload that uses indexed data structures (databases, search indexes, genomics tools), this difference is often the dominant factor in runtime.
+
+**5. Encryption is not the culprit here.**
+LUKS/dm-crypt encryption overhead is negligible compared to HDD seek latency. Don't let it distract you from the real bottleneck.
+
+---
+
+## Diagnostic Cheatsheet
+
+```bash
+# Check iowait (look for high %wa)
+top
+
+# Detailed I/O stats by device
+iostat -x 2
+
+# Find which process is doing I/O
+iotop -o
+
+# Test random read IOPS on a path
+fio --name=test --filename=/your/path/testfile \
+    --rw=randread --bs=4k --size=4G \
+    --numjobs=4 --runtime=30 \
+    --group_reporting --direct=1 && rm /your/path/testfile
+
+# Check where a file lives
+df -h /path/to/file
+
+# Check disk type (ROTA=1 is HDD, ROTA=0 is SSD/NVMe)
+lsblk -o NAME,ROTA,SIZE,TYPE,MOUNTPOINTS
+```
+
+---
+
+*Written after debugging a bakta pipeline on a 32-thread workstation with mixed HDD + NVMe storage. The diagnosis took longer than the fix.*

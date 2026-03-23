@@ -17,22 +17,35 @@ const posts = (await getCollection('blog')).sort(
     <BaseHead title={`Blog | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
     <style>
       .page-header {
-        margin-bottom: var(--space-16);
-        text-align: center;
+        margin-bottom: var(--space-20);
+        padding-bottom: var(--space-12);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .category-label {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-muted);
+        margin-bottom: var(--space-4);
+        display: block;
       }
 
       .page-header h1 {
-        font-size: 3rem;
+        font-size: 3.5rem;
         font-weight: 800;
-        letter-spacing: -0.04em;
-        margin-bottom: var(--space-4);
+        letter-spacing: -0.05em;
+        margin-bottom: var(--space-6);
+        line-height: 1;
       }
 
       .page-header p {
         font-size: 1.25rem;
         color: var(--text-secondary);
-        max-width: 600px;
-        margin: 0 auto;
+        max-width: 650px;
+        line-height: 1.6;
       }
 
       .post-list {
@@ -41,7 +54,7 @@ const posts = (await getCollection('blog')).sort(
         margin: 0;
         display: flex;
         flex-direction: column;
-        gap: var(--space-12);
+        gap: var(--space-1);
       }
 
       .post-item {
@@ -49,13 +62,14 @@ const posts = (await getCollection('blog')).sort(
       }
 
       .post-link {
-        display: block;
+        display: flex;
+        flex-direction: column;
         text-decoration: none;
         color: inherit;
-        padding: var(--space-6);
-        margin: calc(var(--space-6) * -1);
-        border-radius: var(--radius-xl);
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: var(--space-8) var(--space-10);
+        margin: 0 calc(var(--space-10) * -1);
+        border-radius: var(--radius-md);
+        transition: all 0.2s ease;
       }
 
       .post-link:hover {
@@ -63,40 +77,52 @@ const posts = (await getCollection('blog')).sort(
       }
 
       .post-meta {
-        font-size: 0.875rem;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 600;
         color: var(--text-muted);
-        margin-bottom: var(--space-2);
+        margin-bottom: var(--space-3);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
         display: flex;
         align-items: center;
-        gap: var(--space-2);
+        gap: var(--space-3);
+      }
+
+      .post-meta .dot {
+        width: 4px;
+        height: 4px;
+        background: var(--border-strong);
+        border-radius: 50%;
       }
 
       .post-title {
-        font-size: 1.5rem;
+        font-size: 1.875rem;
         font-weight: 700;
-        margin: 0 0 var(--space-3) 0;
+        margin: 0 0 var(--space-4) 0;
         color: var(--text-primary);
-        letter-spacing: -0.02em;
+        letter-spacing: -0.03em;
         line-height: 1.2;
       }
 
       .post-description {
         margin: 0;
         color: var(--text-secondary);
-        font-size: 1rem;
+        font-size: 1.0625rem;
         line-height: 1.6;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        max-width: 800px;
       }
 
-      @media (max-width: 640px) {
+      @media (max-width: 768px) {
         .page-header h1 {
-          font-size: 2.25rem;
+          font-size: 2.75rem;
+        }
+        .post-link {
+          padding: var(--space-6) var(--space-4);
+          margin: 0 calc(var(--space-4) * -1);
         }
         .post-title {
-          font-size: 1.25rem;
+          font-size: 1.5rem;
         }
       }
     </style>
@@ -105,8 +131,9 @@ const posts = (await getCollection('blog')).sort(
     <Header />
     <main class="fade-in">
       <div class="page-header">
+        <span class="category-label">Archive</span>
         <h1 class="text-gradient">Blog</h1>
-        <p>Thoughts on bioinformatics, genomics, and AI for Science</p>
+        <p>Research notes, technical deep dives, and thoughts on the future of microbiome informatics.</p>
       </div>
 
       <ul class="post-list">
@@ -115,6 +142,8 @@ const posts = (await getCollection('blog')).sort(
             <a href={`/blog/${post.id}/`} class="post-link">
               <div class="post-meta">
                 <FormattedDate date={post.data.pubDate} />
+                <span class="dot"></span>
+                <span>{post.data.tags ? post.data.tags[0] : 'Article'}</span>
               </div>
               <h2 class="post-title">{post.data.title}</h2>
               <p class="post-description">{post.data.description}</p>
