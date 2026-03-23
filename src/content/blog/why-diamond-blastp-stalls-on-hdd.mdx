@@ -41,14 +41,14 @@ The figure below shows the root cause: 4 concurrent diamond tasks all competing 
 <svg width="100%" viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;display:block;margin:1.5em auto;">
   <rect width="640" height="380" fill="#fafaf9" rx="12"/>
 
-  <!-- Title -->
+  {/*  Title  */}
   <text x="320" y="32" text-anchor="middle" font-family="monospace,sans-serif" font-size="14" font-weight="600" fill="#2c2c2a">4 tasks competing for one HDD — CPU starved by I/O wait</text>
 
-  <!-- CPU box -->
+  {/*  CPU box  */}
   <rect x="20" y="52" width="220" height="210" rx="10" fill="#e1f5ee" stroke="#0f6e56" stroke-width="1"/>
   <text x="130" y="74" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="600" fill="#085041">CPU (32 threads)</text>
 
-  <!-- 4 task boxes -->
+  {/*  4 task boxes  */}
   <rect x="36" y="86" width="188" height="34" rx="5" fill="#9fe1cb" stroke="#0f6e56" stroke-width="0.8"/>
   <text x="130" y="108" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#04342c">diamond task 1 — waiting I/O</text>
 
@@ -61,7 +61,7 @@ The figure below shows the root cause: 4 concurrent diamond tasks all competing 
   <rect x="36" y="212" width="188" height="34" rx="5" fill="#9fe1cb" stroke="#0f6e56" stroke-width="0.8"/>
   <text x="130" y="234" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#04342c">diamond task 4 — waiting I/O</text>
 
-  <!-- Arrows to HDD -->
+  {/*  Arrows to HDD  */}
   <line x1="224" y1="103" x2="370" y2="195" stroke="#e24b4a" stroke-width="1.5" marker-end="url(#arr)"/>
   <line x1="224" y1="145" x2="370" y2="205" stroke="#e24b4a" stroke-width="1.5" marker-end="url(#arr)"/>
   <line x1="224" y1="187" x2="370" y2="215" stroke="#e24b4a" stroke-width="1.5" marker-end="url(#arr)"/>
@@ -73,29 +73,29 @@ The figure below shows the root cause: 4 concurrent diamond tasks all competing 
     </marker>
   </defs>
 
-  <!-- Contention label -->
+  {/*  Contention label  */}
   <text x="298" y="188" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#a32d2d">4-way I/O</text>
   <text x="298" y="202" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#a32d2d">contention</text>
 
-  <!-- HDD box -->
+  {/*  HDD box  */}
   <rect x="372" y="170" width="150" height="76" rx="8" fill="#fcebeb" stroke="#a32d2d" stroke-width="1"/>
   <text x="447" y="202" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="600" fill="#501313">Mech. HDD</text>
   <text x="447" y="220" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#791f1f">~207 IOPS total</text>
   <text x="447" y="236" text-anchor="middle" font-family="monospace,sans-serif" font-size="10" fill="#791f1f">psc.dmnd (43 GB)</text>
 
-  <!-- CPU utilisation bar -->
+  {/*  CPU utilisation bar  */}
   <text x="20" y="282" font-family="monospace,sans-serif" font-size="11" fill="#444441">CPU utilisation</text>
   <rect x="20" y="290" width="220" height="16" rx="3" fill="none" stroke="#b4b2a9" stroke-width="0.8"/>
   <rect x="20" y="290" width="33" height="16" rx="3" fill="#1d9e75"/>
   <text x="248" y="303" font-family="monospace,sans-serif" font-size="11" fill="#a32d2d">~15% (mostly iowait)</text>
 
-  <!-- HDD utilisation bar -->
+  {/*  HDD utilisation bar  */}
   <text x="372" y="262" font-family="monospace,sans-serif" font-size="11" fill="#444441">HDD utilisation</text>
   <rect x="372" y="270" width="150" height="16" rx="3" fill="none" stroke="#b4b2a9" stroke-width="0.8"/>
   <rect x="372" y="270" width="143" height="16" rx="3" fill="#e24b4a"/>
   <text x="372" y="303" font-family="monospace,sans-serif" font-size="11" fill="#a32d2d">~95% saturated</text>
 
-  <!-- Fix box -->
+  {/*  Fix box  */}
   <rect x="20" y="322" width="600" height="44" rx="7" fill="#faeeda" stroke="#ba7517" stroke-width="1"/>
   <text x="320" y="340" text-anchor="middle" font-family="monospace,sans-serif" font-size="12" font-weight="600" fill="#412402">Root fix: move psc.dmnd (43 GB) + bakta.db (39 GB) to NVMe</text>
   <text x="320" y="357" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#633806">Eliminates the I/O bottleneck — diamond becomes CPU-bound as intended</text>
@@ -125,20 +125,20 @@ The figure below shows the difference visually:
 <svg width="100%" viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;display:block;margin:1.5em auto;">
   <rect width="640" height="340" fill="#fafaf9" rx="12"/>
 
-  <!-- Left: sequential -->
+  {/*  Left: sequential  */}
   <text x="155" y="30" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="600" fill="#2c2c2a">Sequential read (rsync)</text>
 
-  <!-- Disk platter rings -->
+  {/*  Disk platter rings  */}
   <ellipse cx="155" cy="145" rx="115" ry="29" fill="none" stroke="#888780" stroke-width="1"/>
   <ellipse cx="155" cy="145" rx="76"  ry="19" fill="none" stroke="#b4b2a9" stroke-width="0.6" stroke-dasharray="4 3"/>
   <ellipse cx="155" cy="145" rx="38"  ry="10" fill="none" stroke="#b4b2a9" stroke-width="0.6" stroke-dasharray="4 3"/>
 
-  <!-- Green arc = head sweeping continuously -->
+  {/*  Green arc = head sweeping continuously  */}
   <path d="M 41 138 A 115 29 0 0 1 269 138" fill="none" stroke="#1d9e75" stroke-width="3" stroke-linecap="round"/>
-  <!-- Head arm -->
+  {/*  Head arm  */}
   <line x1="155" y1="145" x2="41" y2="138" stroke="#5f5e5a" stroke-width="1.5"/>
   <circle cx="41" cy="138" r="5" fill="#1d9e75"/>
-  <!-- Direction arrow along arc -->
+  {/*  Direction arrow along arc  */}
   <path d="M 195 122 A 76 19 0 0 1 231 138" fill="none" stroke="#1d9e75" stroke-width="1.5" marker-end="url(#arrowG)"/>
   <defs>
     <marker id="arrowG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -156,25 +156,25 @@ The figure below shows the difference visually:
   <text x="155" y="246" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="700" fill="#085041">~200 MB/s</text>
   <text x="155" y="262" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#085041">Seeks: near zero</text>
 
-  <!-- Divider -->
+  {/*  Divider  */}
   <line x1="320" y1="18" x2="320" y2="310" stroke="#d3d1c7" stroke-width="0.6" stroke-dasharray="4 4"/>
 
-  <!-- Right: random -->
+  {/*  Right: random  */}
   <text x="485" y="30" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="600" fill="#2c2c2a">Random read (diamond)</text>
 
-  <!-- Disk platter rings -->
+  {/*  Disk platter rings  */}
   <ellipse cx="485" cy="145" rx="115" ry="29" fill="none" stroke="#888780" stroke-width="1"/>
   <ellipse cx="485" cy="145" rx="76"  ry="19" fill="none" stroke="#b4b2a9" stroke-width="0.6" stroke-dasharray="4 3"/>
   <ellipse cx="485" cy="145" rx="38"  ry="10" fill="none" stroke="#b4b2a9" stroke-width="0.6" stroke-dasharray="4 3"/>
 
-  <!-- Scattered read targets -->
+  {/*  Scattered read targets  */}
   <circle cx="372" cy="138" r="4" fill="#e24b4a"/>
   <circle cx="540" cy="130" r="4" fill="#e24b4a"/>
   <circle cx="400" cy="154" r="4" fill="#e24b4a"/>
   <circle cx="565" cy="142" r="4" fill="#e24b4a"/>
   <circle cx="460" cy="126" r="4" fill="#e24b4a"/>
 
-  <!-- Zigzag seek paths -->
+  {/*  Zigzag seek paths  */}
   <line x1="372" y1="138" x2="540" y2="130" stroke="#e24b4a" stroke-width="1.2" stroke-dasharray="3 2" marker-end="url(#arrowR)"/>
   <line x1="540" y1="130" x2="400" y2="154" stroke="#e24b4a" stroke-width="1.2" stroke-dasharray="3 2" marker-end="url(#arrowR)"/>
   <line x1="400" y1="154" x2="565" y2="142" stroke="#e24b4a" stroke-width="1.2" stroke-dasharray="3 2" marker-end="url(#arrowR)"/>
@@ -187,7 +187,7 @@ The figure below shows the difference visually:
   <text x="485" y="246" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="700" fill="#a32d2d">~0.8 MB/s</text>
   <text x="485" y="262" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#a32d2d">207 IOPS (physical ceiling)</text>
 
-  <!-- Bottom note -->
+  {/*  Bottom note  */}
   <rect x="20" y="288" width="600" height="36" rx="7" fill="#faeeda" stroke="#ba7517" stroke-width="0.8"/>
   <text x="320" y="306" text-anchor="middle" font-family="monospace,sans-serif" font-size="12" font-weight="600" fill="#412402">Same disk — 250× bandwidth difference — entirely due to access pattern</text>
   <text x="320" y="320" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#633806">The HDD is not broken. Mechanical seek latency is a physical law.</text>
@@ -252,40 +252,40 @@ The difference: **385× in IOPS, 386× in latency.**
 <svg width="100%" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;display:block;margin:1.5em auto;">
   <rect width="640" height="260" fill="#fafaf9" rx="12"/>
 
-  <!-- IOPS panel -->
+  {/*  IOPS panel  */}
   <text x="200" y="30" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="600" fill="#2c2c2a">Random read IOPS</text>
 
-  <!-- HDD IOPS bar (207 out of 79700 ≈ 0.26% — show as tiny stub) -->
+  {/*  HDD IOPS bar (207 out of 79700 ≈ 0.26% — show as tiny stub)  */}
   <text x="36" y="60" font-family="monospace,sans-serif" font-size="12" fill="#5f5e5a">HDD</text>
   <rect x="100" y="48" width="3" height="20" rx="1" fill="#e24b4a"/>
   <text x="110" y="62" font-family="monospace,sans-serif" font-size="12" fill="#a32d2d">207</text>
 
-  <!-- NVMe IOPS bar (full width = 79700) -->
+  {/*  NVMe IOPS bar (full width = 79700)  */}
   <text x="36" y="96" font-family="monospace,sans-serif" font-size="12" fill="#5f5e5a">NVMe</text>
   <rect x="100" y="84" width="250" height="20" rx="2" fill="#1d9e75"/>
   <text x="357" y="98" font-family="monospace,sans-serif" font-size="12" fill="#085041">79,700</text>
 
   <text x="200" y="124" text-anchor="middle" font-family="monospace,sans-serif" font-size="12" font-weight="700" fill="#ba7517">385× difference</text>
 
-  <!-- Divider -->
+  {/*  Divider  */}
   <line x1="430" y1="20" x2="430" y2="220" stroke="#d3d1c7" stroke-width="0.6" stroke-dasharray="4 4"/>
 
-  <!-- Latency panel -->
+  {/*  Latency panel  */}
   <text x="540" y="30" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="600" fill="#2c2c2a">Avg random latency</text>
 
-  <!-- HDD latency bar (19ms — full width) -->
+  {/*  HDD latency bar (19ms — full width)  */}
   <text x="444" y="60" font-family="monospace,sans-serif" font-size="12" fill="#5f5e5a">HDD</text>
   <rect x="494" y="48" width="120" height="20" rx="2" fill="#e24b4a"/>
   <text x="620" y="62" font-family="monospace,sans-serif" font-size="12" fill="#a32d2d">19 ms</text>
 
-  <!-- NVMe latency bar (0.05ms — nearly invisible stub) -->
+  {/*  NVMe latency bar (0.05ms — nearly invisible stub)  */}
   <text x="444" y="96" font-family="monospace,sans-serif" font-size="12" fill="#5f5e5a">NVMe</text>
   <rect x="494" y="84" width="2" height="20" rx="1" fill="#1d9e75"/>
   <text x="502" y="98" font-family="monospace,sans-serif" font-size="12" fill="#085041">0.05 ms</text>
 
   <text x="540" y="124" text-anchor="middle" font-family="monospace,sans-serif" font-size="12" font-weight="700" fill="#ba7517">386× difference</text>
 
-  <!-- Summary boxes -->
+  {/*  Summary boxes  */}
   <rect x="20" y="148" width="290" height="50" rx="7" fill="#fcebeb" stroke="#a32d2d" stroke-width="0.8"/>
   <text x="165" y="168" text-anchor="middle" font-family="monospace,sans-serif" font-size="13" font-weight="700" fill="#501313">HDD: 207 IOPS total</text>
   <text x="165" y="186" text-anchor="middle" font-family="monospace,sans-serif" font-size="11" fill="#791f1f">4 tasks → ~52 IOPS each. Not enough.</text>
