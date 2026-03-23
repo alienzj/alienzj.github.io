@@ -5,7 +5,6 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
-import TableOfContents from '../components/TableOfContents.astro';
 
 type Props = CollectionEntry<'blog'>['data'] & {
   headings: { depth: number; slug: string; text: string }[];
@@ -41,28 +40,17 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
       }
 
       .blog-layout {
-        display: grid;
-        grid-template-columns: 1fr minmax(0, var(--max-width-content)) 280px;
-        gap: var(--space-12);
+        display: flex;
+        justify-content: center;
         max-width: var(--max-width-site);
         margin: 0 auto;
         padding: var(--space-16) var(--space-6) var(--space-24);
       }
 
       .blog-main {
-        grid-column: 2;
+        width: 100%;
+        max-width: var(--max-width-content);
         min-width: 0;
-      }
-
-      .blog-sidebar {
-        grid-column: 3;
-        position: sticky;
-        top: calc(var(--header-height) + var(--space-12));
-        height: fit-content;
-        max-height: calc(100vh - var(--header-height) - var(--space-16));
-        overflow-y: auto;
-        padding-left: var(--space-6);
-        border-left: 1px solid var(--border);
       }
 
       /* Article Header */
@@ -173,23 +161,6 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
         line-height: 1.75;
       }
 
-      /* Sidebar widgets */
-      .sidebar-widget {
-        margin-bottom: var(--space-12);
-      }
-
-      .widget-title {
-        font-family: var(--font-mono);
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--text-primary);
-        margin-bottom: var(--space-4);
-        padding-bottom: var(--space-2);
-        border-bottom: 1px solid var(--border);
-      }
-
       /* Footer */
       .post-footer {
         margin-top: var(--space-24);
@@ -216,17 +187,6 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
       }
 
       /* Responsive */
-      @media (max-width: 1100px) {
-        .blog-layout {
-          grid-template-columns: 1fr minmax(0, var(--max-width-content));
-          gap: var(--space-8);
-          padding-top: var(--space-12);
-        }
-        .blog-sidebar {
-          display: none;
-        }
-      }
-
       @media (max-width: 768px) {
         .article-title {
           font-size: 2.5rem;
@@ -296,23 +256,6 @@ const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.prop
           </a>
         </footer>
       </article>
-
-      <aside class="blog-sidebar">
-        <div class="sidebar-widget">
-          <div class="widget-title">Table of Contents</div>
-          <TableOfContents />
-        </div>
-        
-        <div class="sidebar-widget">
-          <div class="widget-title">Information</div>
-          <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5;">
-            <p>Published on <strong><FormattedDate date={pubDate} /></strong></p>
-            {tags && tags.length > 0 && (
-              <p>Topics: {tags.join(', ')}</p>
-            )}
-          </div>
-        </div>
-      </aside>
     </div>
     <Footer />
 
