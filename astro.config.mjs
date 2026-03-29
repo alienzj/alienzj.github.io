@@ -6,7 +6,7 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-        site: 'https://alienzj.tech',
+        site: 'https://alienzj.org',
         integrations: [mdx(), sitemap()],
         markdown: {
                 shikiConfig: {
@@ -17,7 +17,7 @@ export default defineConfig({
                 },
         },
         image: {
-                domains: ['alienzj.tech'],
+                domains: ['alienzj.org'],
         },
 });
 
