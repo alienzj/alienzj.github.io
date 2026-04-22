@@ -1,0 +1,84 @@
+---
+import Layout from '../layouts/BlogPost.astro';
+---
+
+<Layout
+	title="Terms of Service"
+	description="Terms of Service for alienzj's personal tools and vdirsyncer integration."
+	pubDate={new Date('2026-04-22')}
+    category="Legal"
+>
+	<div class="legal-container">
+		<p>
+            By using the Google Cloud API integration provided by <strong>alienzj</strong> for 
+            <strong>vdirsyncer</strong>, you agree to the following terms.
+		</p>
+
+		<section>
+			<h2>1. Purpose of Use</h2>
+			<p>
+				This application is provided for personal use only. It is intended to allow 
+                the synchronization of personal data (such as Google Calendar) with 
+                local clients using the <code>vdirsyncer</code> CLI tool.
+			</p>
+		</section>
+
+		<section>
+			<h2>2. Disclaimer of Warranty</h2>
+			<p>
+				The software and API configuration are provided "as is", without warranty 
+                of any kind, express or implied. In no event shall the author be liable 
+                for any claim, damages, or other liability arising from the use of this tool.
+			</p>
+		</section>
+
+		<section>
+			<h2>3. Responsibility</h2>
+			<p>
+				You are responsible for maintaining the confidentiality of your own 
+                credentials and for all activities that occur under your Google account.
+			</p>
+		</section>
+
+		<section>
+			<h2>4. Changes to Terms</h2>
+			<p>
+				The author reserves the right to modify these terms at any time. 
+                Continued use of the integration constitutes acceptance of the new terms.
+			</p>
+		</section>
+
+		<section>
+			<h2>5. Governing Law</h2>
+			<p>
+				These terms are governed by and construed in accordance with the laws of 
+                the jurisdiction in which the author resides.
+			</p>
+		</section>
+	</div>
+</Layout>
+
+<style>
+	.legal-container {
+		max-width: 720px;
+		margin: 0 auto;
+	}
+
+	section {
+		margin-bottom: var(--space-8);
+	}
+
+	h2 {
+		font-size: 1.2rem;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--text-muted);
+		border-bottom: 1px solid var(--border-color);
+		padding-bottom: var(--space-2);
+		margin-bottom: var(--space-4);
+	}
+
+    p {
+        margin-bottom: var(--space-4);
+    }
+</style>
