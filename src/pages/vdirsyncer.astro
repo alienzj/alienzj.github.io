@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/BlogPost.astro';
+import { Image } from 'astro:assets';
+import vdirsyncerImage from '../assets/vdirsyncer.webp';
 ---
 
 <Layout
@@ -13,6 +15,10 @@ import Layout from '../layouts/BlogPost.astro';
             This page serves as the home for my personal integration of <strong>vdirsyncer</strong> 
             with Google Cloud services.
 		</p>
+
+        <div class="hero-image">
+            <Image src={vdirsyncerImage} alt="vdirsyncer integration" class="vdir-img" />
+        </div>
 
 		<section>
 			<h2>What is this?</h2>
@@ -66,6 +72,20 @@ import Layout from '../layouts/BlogPost.astro';
 
     p {
         margin-bottom: var(--space-4);
+    }
+
+    .hero-image {
+        margin: var(--space-8) 0;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .vdir-img {
+        width: 100%;
+        height: auto;
+        display: block;
     }
 
     a {
