@@ -1,0 +1,241 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+export interface TocItem {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+export interface SidebarGroup {
+  section: string;
+  items: { slug: string; title: string }[];
+}
+
+interface Props {
+  title: string;
+  description?: string;
+  sidebar: SidebarGroup[];
+  currentSlug: string;
+  headings?: TocItem[];
+}
+
+const { title, description, sidebar, currentSlug, headings = [] } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description || title} />
+  </head>
+  <body>
+    <Header />
+    <div class="docs-layout">
+      <aside class="sidebar">
+        <nav class="sidebar-nav">
+          {sidebar.map((group) => (
+            <div class="sidebar-group">
+              <div class="sidebar-group-title">{group.section}</div>
+              <ul class="sidebar-items">
+                {group.items.map((item) => (
+                  <li>
+                    <a
+                      href={`/dotfiles/${item.slug}/`}
+                      class={item.slug === currentSlug ? 'active' : ''}
+                    >
+                      {item.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+      </aside>
+
+      <main class="doc-content">
+        <article class="prose">
+          <slot />
+        </article>
+
+        {headings.length > 1 && (
+          <aside class="toc">
+            <div class="toc-title">On this page</div>
+            <nav class="toc-links">
+              {headings
+                .filter((h) => h.depth >= 2 && h.depth <= 3)
+                .map((h) => (
+                  <a
+                    href={`#${h.slug}`}
+                    class={`toc-link toc-depth-${h.depth}`}
+                  >
+                    {h.text}
+                  </a>
+                ))}
+            </nav>
+          </aside>
+        )}
+      </main>
+    </div>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .docs-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr 200px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-6);
+    gap: var(--space-10);
+    align-items: start;
+  }
+
+  .sidebar {
+    position: sticky;
+    top: calc(var(--space-16) + 64px);
+    max-height: calc(100vh - 64px - var(--space-16));
+    overflow-y: auto;
+    padding-right: var(--space-4);
+    border-right: 1px solid var(--border);
+  }
+
+  .sidebar-group {
+    margin-bottom: var(--space-6);
+  }
+
+  .sidebar-group-title {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin-bottom: var(--space-2);
+    padding: 0 var(--space-2);
+  }
+
+  .sidebar-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sidebar-items li {
+    margin: 0;
+  }
+
+  .sidebar-items a {
+    display: block;
+    padding: var(--space-1) var(--space-2);
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transition: all 0.15s;
+  }
+
+  .sidebar-items a:hover {
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+  }
+
+  .sidebar-items a.active {
+    color: var(--accent);
+    background: var(--bg-tertiary);
+    font-weight: 600;
+  }
+
+  .doc-content {
+    min-width: 0;
+  }
+
+  .prose {
+    max-width: 720px;
+  }
+
+  .prose :global(pre) {
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+  }
+
+  .prose :global(h2) {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--space-2);
+    margin-top: var(--space-16);
+  }
+
+  .prose :global(h3) {
+    margin-top: var(--space-10);
+  }
+
+  .toc {
+    position: sticky;
+    top: calc(var(--space-16) + 64px);
+    max-height: calc(100vh - 64px - var(--space-16));
+    overflow-y: auto;
+  }
+
+  .toc-title {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .toc-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .toc-link {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    padding-left: var(--space-3);
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+
+  .toc-link:hover {
+    color: var(--text-primary);
+    border-left-color: var(--border-strong);
+  }
+
+  .toc-depth-3 {
+    padding-left: var(--space-6);
+  }
+
+  @media (max-width: 1200px) {
+    .docs-layout {
+      grid-template-columns: 240px 1fr;
+    }
+    .toc {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .docs-layout {
+      grid-template-columns: 1fr;
+      padding: var(--space-4);
+    }
+    .sidebar {
+      display: none;
+    }
+  }
+</style>

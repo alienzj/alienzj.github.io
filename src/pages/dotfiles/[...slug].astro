@@ -1,0 +1,43 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import DocLayout from '../../layouts/DocLayout.astro';
+import { getDocMeta, groupBySection } from '../../lib/doc-categories';
+
+export async function getStaticPaths() {
+  const docs = await getCollection('dotfiles');
+  return docs.map((doc) => ({
+    params: { slug: doc.id },
+    props: doc,
+  }));
+}
+
+type Props = CollectionEntry<'dotfiles'>;
+const doc = Astro.props;
+const { Content, headings } = await render(doc);
+
+const meta = getDocMeta(doc.id);
+
+// Build sidebar from all docs
+const allDocs = await getCollection('dotfiles');
+const sidebar = groupBySection(allDocs.map((d) => ({ slug: d.id })));
+---
+
+<DocLayout
+  title={`${meta.title} | Dotfiles`}
+  sidebar={sidebar}
+  currentSlug={doc.id}
+  headings={headings}
+>
+  <h1>{meta.title}</h1>
+  <Content />
+  <footer style="margin-top: var(--space-20); padding-top: var(--space-8); border-top: 1px solid var(--border); font-size: 0.8125rem; color: var(--text-muted);">
+    <a
+      href={`https://github.com/alienzj/dotfiles/edit/dev/docs/${doc.id}.md`}
+      style="color: var(--text-muted); text-decoration: underline;"
+      target="_blank"
+      rel="noopener"
+    >
+      Edit this page on GitHub
+    </a>
+  </footer>
+</DocLayout>

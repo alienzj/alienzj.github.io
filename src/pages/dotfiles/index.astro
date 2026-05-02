@@ -1,0 +1,183 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { groupBySection } from '../../lib/doc-categories';
+
+const docs = await getCollection('dotfiles');
+const sidebar = groupBySection(docs.map((d) => ({ slug: d.id })));
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title="Dotfiles | alienzj" description="NixOS dotfiles documentation — modular flake, compositor setup, security hardening, and infrastructure configuration." />
+    <style>
+      .page-header {
+        margin-bottom: var(--space-16);
+        padding-bottom: var(--space-10);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .breadcrumb {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: var(--space-4);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      .page-header h1 {
+        font-size: 3.25rem;
+        font-weight: 800;
+        letter-spacing: -0.05em;
+        margin-bottom: var(--space-6);
+        line-height: 1;
+      }
+
+      .page-header p {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        max-width: 650px;
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      .repo-links {
+        display: flex;
+        gap: var(--space-4);
+        margin-top: var(--space-8);
+      }
+
+      .repo-link {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+        font-family: var(--font-mono);
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-decoration: none;
+        padding: var(--space-2) var(--space-4);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        transition: all 0.2s;
+      }
+
+      .repo-link:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+
+      .doc-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: var(--space-8);
+      }
+
+      .doc-section {
+        margin-bottom: var(--space-4);
+      }
+
+      .section-title {
+        font-family: var(--font-mono);
+        font-size: 0.6875rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-muted);
+        margin-bottom: var(--space-4);
+        padding-bottom: var(--space-2);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .doc-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
+      }
+
+      .doc-link {
+        display: block;
+        padding: var(--space-2) var(--space-3);
+        margin: 0 calc(var(--space-3) * -1);
+        border-radius: var(--radius-sm);
+        text-decoration: none;
+        color: var(--text-secondary);
+        font-size: 0.9375rem;
+        transition: all 0.15s;
+      }
+
+      .doc-link:hover {
+        color: var(--text-primary);
+        background: var(--bg-tertiary);
+      }
+
+      .doc-link .arrow {
+        opacity: 0;
+        transition: opacity 0.15s;
+        margin-left: var(--space-1);
+      }
+
+      .doc-link:hover .arrow {
+        opacity: 1;
+      }
+
+      @media (max-width: 768px) {
+        .page-header h1 {
+          font-size: 2.5rem;
+        }
+        .doc-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main class="fade-in" style="max-width: 1100px; margin: 0 auto; padding: var(--space-8) var(--space-6);">
+      <div class="page-header">
+        <div class="breadcrumb">Documentation</div>
+        <h1 class="text-gradient">Dotfiles</h1>
+        <p>
+          A modular NixOS flake composing 16+ hosts with impermanent root,
+          secure boot, and a custom CLI toolchain. Forked from hlissner's
+          dotfiles, heavily extended for bioinformatics infrastructure.
+        </p>
+        <div class="repo-links">
+          <a href="https://github.com/alienzj/dotfiles" class="repo-link" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+          <a href="/dotfiles/CLAUDE" class="repo-link">
+            Agent Guide &rarr;
+          </a>
+        </div>
+      </div>
+
+      <div class="doc-grid">
+        {sidebar.map((group) => (
+          <div class="doc-section">
+            <div class="section-title">{group.section}</div>
+            <ul class="doc-list">
+              {group.items.map((item) => (
+                <li>
+                  <a href={`/dotfiles/${item.slug}/`} class="doc-link">
+                    {item.title}<span class="arrow">&rarr;</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
