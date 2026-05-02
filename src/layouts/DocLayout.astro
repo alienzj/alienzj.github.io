@@ -59,25 +59,25 @@ const { title, description, sidebar, currentSlug, headings = [] } = Astro.props;
         <article class="prose">
           <slot />
         </article>
-
-        {headings.length > 1 && (
-          <aside class="toc">
-            <div class="toc-title">On this page</div>
-            <nav class="toc-links">
-              {headings
-                .filter((h) => h.depth >= 2 && h.depth <= 3)
-                .map((h) => (
-                  <a
-                    href={`#${h.slug}`}
-                    class={`toc-link toc-depth-${h.depth}`}
-                  >
-                    {h.text}
-                  </a>
-                ))}
-            </nav>
-          </aside>
-        )}
       </main>
+
+      {headings.length > 1 && (
+        <aside class="toc">
+          <div class="toc-title">On this page</div>
+          <nav class="toc-links">
+            {headings
+              .filter((h) => h.depth >= 2 && h.depth <= 3)
+              .map((h) => (
+                <a
+                  href={`#${h.slug}`}
+                  class={`toc-link toc-depth-${h.depth}`}
+                >
+                  {h.text}
+                </a>
+              ))}
+          </nav>
+        </aside>
+      )}
     </div>
     <Footer />
   </body>
