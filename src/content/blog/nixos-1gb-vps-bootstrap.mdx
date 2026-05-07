@@ -257,7 +257,7 @@ exit $EXIT_CODE
 
 ## The Principles
 
-1. **ZRAM is essential for <2GB RAM installs.** Set it up on both the host (before kexec) and the installer (after kexec). kexec replaces the kernel, so ZRAM must be recreated.
+1. **ZRAM is essential for `<2GB` RAM installs.** Set it up on both the host (before kexec) and the installer (after kexec). kexec replaces the kernel, so ZRAM must be recreated.
 
 2. **`--no-disko-deps` for low-RAM VPS.** The kexec installer already contains partitioning tools. Copying them to tmpfs wastes ~400MB.
 
