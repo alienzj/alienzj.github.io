@@ -1,0 +1,289 @@
+---
+title: 'Bootstrapping NixOS on a 1GB VPS: 5 Bugs, 65% Closure Reduction, and a Working Script'
+description: 'A deep debugging journey: using nixos-anywhere and disko on a 962MB RAM VPS. OOM kills, SIGBUS crashes, SSH failures, persistence bugs, and how we solved each one.'
+pubDate: 'May 07 2026'
+tags: ['NixOS', 'DevOps', 'Infrastructure', 'Debugging', 'nixos-anywhere', 'disko', 'Linux']
+---
+
+import { Image } from 'astro:assets';
+
+> *How do you install NixOS on a VPS with only 962MB RAM? Five bugs, four days of debugging, and a 65% smaller system closure later, here's the complete story.*
+
+---
+
+## The Goal
+
+I have a sing-box proxy node running on a [DMIT](https://dmit.io) VPS. The plan was simple: replace Arch Linux with my declarative NixOS configuration. One command: `nixos-anywhere --flake .#vps-ultraman vps_ultraman_root`.
+
+It didn't work. Here's why, and how we fixed it.
+
+## The Environment
+
+| | Value |
+|---|---|
+| **RAM** | 962MB |
+| **Disk** | 20GB (virtualized `/dev/vda`) |
+| **CPU** | 1 core, AMD EPYC 9654 |
+| **OS (target)** | Arch Linux (minimal) |
+| **OS (destination)** | NixOS 26.05 unstable |
+| **Config** | sing-box server, Tailscale, Btrfs + impermanence |
+
+## Bug #1: OOM During nix copy
+
+**Symptom:** SSH to the target timed out during `nix copy --to`.
+
+**Investigation:** `nixos-anywhere` first copies the disko partitioning tool and its dependencies to the target's `/nix/store`. The NixOS installer is booted via kexec and runs entirely in RAM — root is tmpfs, and `/nix/store` is a tmpfs-backed overlay. On a 962MB system, `tmpfs` is capped at **482MB** (half of RAM). The disko dependency closure is ~400MB — it barely fits, and when it doesn't, the OOM killer takes out sshd.
+
+**The first clue:** The installer's `dmesg` showed:
+```
+Memory: 626288K/1048004K available
+Freeing initrd memory: 344548K
+```
+
+That 336MB initrd plus the kernel left only ~626MB usable.
+
+**Fix:** Two things. First, set up **4GB ZRAM swap** on the Arch host *before* running `nixos-anywhere`, and again on the NixOS installer after kexec (since kexec replaces the kernel, ZRAM doesn't survive). Second, use `nixos-anywhere --no-disko-deps`, which skips copying the partitioning tools — the kexec installer image already contains them.
+
+```bash
+# On Arch (Phase 0)
+modprobe zram
+echo 4G > /sys/block/zram0/disksize
+mkswap /dev/zram0 && swapon /dev/zram0
+
+# After kexec (on NixOS installer)
+# Same commands, but on the new kernel
+```
+
+This is the approach recommended in [nixos-anywhere issue #609](https://github.com/nix-community/nixos-anywhere/issues/609).
+
+## Bug #2: udevadm SIGBUS During Disko
+
+**Symptom:** Disko crashed at `udevadm trigger --subsystem-match=block` with a bus error (SIGBUS, exit code 135).
+
+**Investigation:** The disko script runs `sgdisk` to create a new GPT partition table on `/dev/vda`, then calls `udevadm trigger` so the kernel picks up the new partitions. On this VPS's virtualized storage, the kernel holds stale partition table references. When `udevadm` scans block devices, it reads sectors beyond the new partition boundaries and the kernel delivers a bus error.
+
+The dmesg confirmed it:
+```
+udevadm: attempt to access beyond end of device
+vda1: rw=0, sector=14442744, nr_sectors = 8 limit=2048
+```
+
+**Fix:** The helper script finds the disko script in `/nix/store/*-disko` and patches it to replace `udevadm trigger --subsystem-match=block` and `udevadm settle --timeout=120` with `sleep 2`. The same replacement is applied to the `disk-deactivate` sub-script.
+
+```bash
+# Core of the patching logic
+D=$(ls -td /nix/store/*-disko 2>/dev/null | grep -v "disko-[0-9]" | head -1)
+cp "$D" /tmp/d
+sed -i "s/udevadm trigger --subsystem-match=block/sleep 2 #p/" /tmp/d
+sed -i "s/udevadm settle --timeout 120/sleep 2 #p/" /tmp/d
+mount --bind /tmp/d "$D"   # Override the read-only nix store path
+```
+
+## Bug #3: System Closure Won't Fit in tmpfs
+
+**Symptom:** Even with `--no-disko-deps`, the *system* closure copy OOM'd. The original closure was **7.6GB** — impossible to stage in 482MB tmpfs.
+
+**Investigation:** Why was a sing-box proxy node 7.6GB? We analyzed the closure with:
+
+```bash
+nix path-info -rS '.#nixosConfigurations."vps-ultraman".config.system.build.toplevel' \
+  | sort -rn | head -40
+```
+
+The results were eye-opening:
+
+| Package | Size | Why on a VPS? |
+|---------|------|---------------|
+| clang/clang-tools/lldb/llvm | 7GB | `dev.cc.enable = true` |
+| rust + docs + clippy | 3.5GB | `dev.rust.enable = true` |
+| hyprland + grimblast + Qt/Wayland | 4.5GB | **Bug**: unconditional in `hey.nix` |
+| linux-firmware (all) | 787MB | `hardware.enableRedistributableFirmware` |
+| zbar (barcode scanner) | 620MB | **Bug**: unconditional in `hey.nix` |
+| microvm | 503MB | **Bug**: unconditional import |
+
+**Fix (multi-step):**
+
+1. **Desktop tools leak:** `modules/hey.nix` unconditionally added `grim`, `grimblast`, `zbar`, `wl-clipboard`, etc. to `environment.systemPackages`. These were already present in `modules/desktop/default.nix` for Wayland hosts. Fixed by removing them from `hey.nix`.
+
+2. **Firmware:** Added `hardware.enableRedistributableFirmware = mkDefault false` to the `cpu/qemu` profile. VMs only need virtio drivers.
+
+3. **MicroVM:** The `modules/services/virt/microvm.nix` unconditionally imported the microvm host module on all hosts. (The conditional import fix caused infinite recursion — left for a future refactor.)
+
+4. **Host-specific cleanup:** Disabled `dev.cc`, `dev.rust`, `dev.python`, `hardening.apparmor` on the VPS config.
+
+5. **Persistent overlay:** After disko creates `/mnt/nix` on btrfs, the helper bind-mounts it as the nix store overlay upper dir. The 2.6GB system closure writes to disk instead of tmpfs:
+
+```bash
+# After disko creates /mnt/nix on btrfs:
+umount /nix/store
+umount /nix/.rw-store
+mkdir -p /mnt/nix/.rw-store/store /mnt/nix/.rw-store/work
+mount --bind /mnt/nix/.rw-store /nix/.rw-store
+mount -t overlay overlay \
+    -o lowerdir=/nix/.ro-store,upperdir=/nix/.rw-store/store,workdir=/nix/.rw-store/work \
+    /nix/store
+```
+
+**Result:** Closure dropped from **7.6GB to 2.6GB** (65% reduction, 972 paths).
+
+## Bug #4: SSH Dead After Successful Boot
+
+**Symptom:** NixOS booted to TTY, but `sshd.service` failed with:
+```
+sshd.service: start request repeated too quickly.
+/etc/ssh/sshd_config: No such file or directory
+```
+
+**Investigation:** The host keys *did* exist in `/etc/ssh`, but `sshd_config` didn't. How?
+
+The answer is in the interaction between NixOS activation and **impermanence**. My configuration uses `environment.persistence` to persist directories across reboots (the root is tmpfs). The SSH module had:
+
+```nix
+environment.persistence."/persist".directories = ["/etc/ssh"];
+```
+
+Here's the boot sequence:
+
+1. **`local-fs.target`**: Impermanence bind-mounts `/persist/etc/ssh` → `/etc/ssh`. On first boot, `/persist/etc/ssh` is **empty** — it was just created by a prior activation script.
+
+2. **NixOS activation**: Creates `/etc/ssh/sshd_config` as a symlink to `/nix/store/...-sshd.conf-final`. But `/etc/ssh` is now backed by the empty `/persist/etc/ssh`. The symlink gets written, but...
+
+3. **Bind mount hides it**: The empty directory was mounted *before* activation created the symlink. Wait — if the mount runs first, then activation writes into the mount (i.e., into `/persist/etc/ssh`), the file should be there. But the `createPersistentStorageDirs` activation script that creates the parent directories runs *during* activation, potentially racing with `environment.etc` symlink creation.
+
+4. **Host keys survive**: sshd's `preStart` generates host keys *after* the bind mount is already in place, so they land in `/persist/etc/ssh/`. But `sshd_config` is created by activation, which ran before `preStart` but may have lost the race with directory creation.
+
+**The principle:** Never persist a directory that contains files created by NixOS activation (`environment.etc`, `home.file`, `home.configFile`). Persist individual files instead.
+
+**Fix:**
+```nix
+# Before (broken):
+environment.persistence."/persist".directories = ["/etc/ssh"];
+
+# After (fixed):
+environment.persistence."/persist".files = [
+  "/etc/ssh/ssh_host_ed25519_key"
+  "/etc/ssh/ssh_host_ed25519_key.pub"
+];
+```
+
+`sshd_config` is a nix store symlink — it doesn't need persistence. Only the host keys do. This fix also applied to `podman.nix` which had the same pattern (`/etc/containers` directory persist hiding `registries.conf`).
+
+We also changed `services.openssh.startWhenNeeded` from `true` (socket activation) to `false` (persistent daemon). Socket activation saves ~5MB RAM but adds complexity that can fail silently.
+
+**Full writeup:** [docs/persistence.md](https://github.com/alienzj/dotfiles/blob/dev/docs/persistence.md)
+
+## Bug #5: No TTY Login Possible
+
+**Symptom:** Booted to `Welcome to NixOS 26.05 - tty1` but couldn't login. No root password set.
+
+**Investigation:** The agenix-based `hashedPasswordFile` only activates if an encrypted `.age` file exists for the host — which requires pre-existing host keys from Bug #4. Chicken and egg.
+
+**Fix:** Added `modules.security.password.mode` option:
+```nix
+password = {
+  mode = mkOpt (types.enum ["bootstrap" "deploy" "none"]) "deploy";
+};
+```
+
+Set `password.mode = "bootstrap"` on vps-ultraman. This sets `users.users.root.initialPassword = "nixos"` and `users.mutableUsers = true` — giving console TTY access during initial setup. After bootstrap, switch to `"deploy"` for agenix-based secure passwords.
+
+## The Working Script
+
+All the fixes are bundled into a single portable script: [scripts/bootstrap_vps-ultraman.sh](https://github.com/alienzj/dotfiles/blob/dev/scripts/bootstrap_vps-ultraman.sh)
+
+```bash
+#!/usr/bin/env bash
+# Bootstrap vps-ultraman (1GB RAM VPS) — single command, no parallel terminals.
+#
+# ./scripts/bootstrap_vps-ultraman.sh
+#
+# What it does:
+#   0. Prep VPS (cpio, 4GB ZRAM, 4GB disk swap)
+#   1. Fork background helper (ZRAM on installer, udevadm patch, persistent overlay)
+#   2. Run nixos-anywhere in foreground via hey ops bootstrap --no-disko-deps
+#   3. Kill helper on exit
+set -euo pipefail
+
+SSH_TARGET="${1:-vps_ultraman_root}"
+SSH_OPTS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=5"
+MAX_WAIT=300
+
+log() { echo "[bootstrap] $(date '+%H:%M:%S') $*"; }
+
+# Phase 0: Prep target VPS (foreground)
+log "Phase 0: Preparing target VPS..."
+ssh $SSH_OPTS "$SSH_TARGET" '
+    if command -v pacman &>/dev/null; then
+        pacman -S --noconfirm cpio 2>&1 | tail -1
+    elif command -v apt &>/dev/null; then
+        apt update -qq && apt install -y -qq cpio 2>&1 | tail -1
+    fi
+    modprobe zram 2>/dev/null || true
+    echo 4G > /sys/block/zram0/disksize 2>/dev/null || true
+    mkswap /dev/zram0 2>/dev/null && swapon /dev/zram0 2>/dev/null
+    swapoff /swapfile 2>/dev/null || true
+    rm -f /swapfile
+    fallocate -l 4G /swapfile 2>/dev/null
+    chmod 600 /swapfile
+    mkswap /swapfile 2>/dev/null && swapon /swapfile 2>/dev/null
+    echo "Ready: $(free -h | head -2 | tail -1)"
+    swapon --show
+' 2>&1
+log "Phase 0 complete."
+
+# Phase 1+2: Background helper (forked, runs in parallel with nixos-anywhere)
+(
+    # Wait for kexec
+    while ssh $SSH_OPTS "$SSH_TARGET" 'grep -q "Arch Linux" /etc/os-release' 2>/dev/null; do
+        sleep 3
+    done
+    # ... (ZRAM on installer, disko patching, persistent overlay)
+    # Full script: https://github.com/alienzj/dotfiles/blob/dev/scripts/bootstrap_vps-ultraman.sh
+) &
+HELPER_PID=$!
+trap 'kill $HELPER_PID 2>/dev/null || true' EXIT
+
+# Phase 3: Run nixos-anywhere (foreground)
+log "Starting nixos-anywhere..."
+nix run github:nix-community/nixos-anywhere -- \
+    --no-disko-deps \
+    --flake ".#vps-ultraman" \
+    "$SSH_TARGET"
+EXIT_CODE=$?
+
+log "Bootstrap finished (exit $EXIT_CODE)."
+exit $EXIT_CODE
+```
+
+## The Principles
+
+1. **ZRAM is essential for <2GB RAM installs.** Set it up on both the host (before kexec) and the installer (after kexec). kexec replaces the kernel, so ZRAM must be recreated.
+
+2. **`--no-disko-deps` for low-RAM VPS.** The kexec installer already contains partitioning tools. Copying them to tmpfs wastes ~400MB.
+
+3. **Analyze closure sizes before bootstrapping.** `nix path-info -rS` can reveal multi-gigabyte leaks like unconditional desktop tools on a server.
+
+4. **Never persist directories containing NixOS-generated files.** Impermanence bind-mounts run before activation. File-level persistence avoids the race.
+
+5. **Persistent sshd beats socket activation.** The 5MB RAM savings aren't worth the debugging complexity.
+
+6. **Always have a bootstrap password.** A TTY fallback saves you when SSH fails on first boot.
+
+## Files Changed
+
+The full changeset spans 17 files across the dotfiles repository (tag `v0.3.0`):
+
+- [modules/security.nix](https://github.com/alienzj/dotfiles/blob/dev/modules/security.nix) — `resolved`, `hardening` submodule, `password.mode`
+- [modules/services/net/ssh.nix](https://github.com/alienzj/dotfiles/blob/dev/modules/services/net/ssh.nix) — file-level persistence, `startWhenNeeded` option
+- [modules/hey.nix](https://github.com/alienzj/dotfiles/blob/dev/modules/hey.nix) — removed desktop tools from server closure
+- [modules/profiles/hardware/cpu/qemu.nix](https://github.com/alienzj/dotfiles/blob/dev/modules/profiles/hardware/cpu/qemu.nix) — disabled firmware on VMs
+- [bin/screenshot.zsh](https://github.com/alienzj/dotfiles/blob/dev/bin/screenshot.zsh) — replaced grimblast with grim+hyprctl
+- [scripts/bootstrap_vps-ultraman.sh](https://github.com/alienzj/dotfiles/blob/dev/scripts/bootstrap_vps-ultraman.sh) — the working entry point
+- [docs/persistence.md](https://github.com/alienzj/dotfiles/blob/dev/docs/persistence.md) — persistence best practices
+- [docs/hosts/vps-ultraman.md](https://github.com/alienzj/dotfiles/blob/dev/docs/hosts/vps-ultraman.md) — host case study
+
+## References
+
+- [nixos-anywhere issue #609](https://github.com/nix-community/nixos-anywhere/issues/609) — ZRAM for low-RAM systems
+- [impermanence](https://github.com/nix-community/impermanence) — the persistence module whose mount ordering caused Bug #4
+- [disko](https://github.com/nix-community/disko) — declarative disk partitioning
