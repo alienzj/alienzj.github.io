@@ -5,6 +5,11 @@ export interface DocMeta {
 }
 
 const docs: Record<string, DocMeta> = {
+  // Root docs
+  README: { section: 'Architecture', title: 'README — Project Overview' },
+  CLAUDE: { section: 'Architecture', title: 'CLAUDE.md — Agent Instructions' },
+  CHANGELOG: { section: 'Architecture', title: 'Changelog' },
+
   // Architecture
   'nix-expressions': { section: 'Architecture', title: 'Nix Expressions & Module System' },
   packages: { section: 'Architecture', title: 'Package Hierarchy & Derivations' },
@@ -27,11 +32,13 @@ const docs: Record<string, DocMeta> = {
   security: { section: 'Security', title: 'Security Overview' },
   'security-hardening': { section: 'Security', title: 'Security Hardening' },
   'security-auth-logic': { section: 'Security', title: 'Authentication Logic' },
+  'vulnerability-response': { section: 'Security', title: 'Vulnerability Response' },
   'git-signing': { section: 'Security', title: 'Git SSH Signing' },
 
-  // Networking
+  // Networking + SSH
   'networking-vpn': { section: 'Networking', title: 'VPN & Tailscale' },
   'networking-proxy': { section: 'Networking', title: 'Proxy & Sing-box' },
+  ssh: { section: 'Networking', title: 'SSH Architecture' },
   'web-services': { section: 'Networking', title: 'Web Services & Nginx' },
 
   // Services
@@ -41,6 +48,7 @@ const docs: Record<string, DocMeta> = {
 
   // Storage & Hardware
   'storage-disko': { section: 'Storage & Hardware', title: 'Storage & Disko' },
+  persistence: { section: 'Storage & Hardware', title: 'Persistence & Impermanence' },
   hardware: { section: 'Storage & Hardware', title: 'Hardware Profiles' },
   'power-management': { section: 'Storage & Hardware', title: 'Power Management' },
 

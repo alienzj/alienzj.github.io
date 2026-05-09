@@ -32,7 +32,7 @@ const projects = defineCollection({
 });
 
 const dotfiles = defineCollection({
-	loader: glob({ base: './src/content/dotfiles/docs', pattern: '**/*.md' }),
+	loader: glob({ base: './src/content/dotfiles', pattern: ['docs/**/*.md', '*.md'] }),
 	schema: z.object({
 		title: z.string().optional(),
 		description: z.string().optional(),
